@@ -1,0 +1,14 @@
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\bin\Debug\SWStool.exe.config
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\bin\Debug\SWStool.exe
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\bin\Debug\SWStool.pdb
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\bin\Debug\DocX.dll
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\obj\Debug\SWStool.csprojResolveAssemblyReference.cache
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\obj\Debug\MainWindow.baml
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\obj\Debug\MainWindow.g.cs
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\obj\Debug\App.g.cs
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\obj\Debug\SWStool_MarkupCompile.cache
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\obj\Debug\SWStool.g.resources
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\obj\Debug\SWStool.Properties.Resources.resources
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\obj\Debug\SWStool.csproj.GenerateResource.Cache
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\obj\Debug\SWStool.exe
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\obj\Debug\SWStool.pdb

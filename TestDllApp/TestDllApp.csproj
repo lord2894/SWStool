@@ -42,8 +42,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TermRules">
-      <HintPath>..\SWStool\bin\Debug\TermRules.dll</HintPath>
+    <Reference Include="TermRules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TermRules\bin\Debug\TermRules.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

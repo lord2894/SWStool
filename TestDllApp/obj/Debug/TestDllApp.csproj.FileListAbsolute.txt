@@ -4,5 +4,5 @@ C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\TestDllApp\bin\Debug\
 C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\TestDllApp\obj\Debug\TestDllApp.csprojResolveAssemblyReference.cache
 C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\TestDllApp\obj\Debug\TestDllApp.exe
 C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\TestDllApp\obj\Debug\TestDllApp.pdb
-C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\TestDllApp\bin\Debug\TermRules.dll
 C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\TestDllApp\bin\Debug\TermRules.pdb
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\TestDllApp\bin\Debug\TermRules.dll

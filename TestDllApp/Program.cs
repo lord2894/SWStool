@@ -12,7 +12,7 @@ namespace TestDllApp
         static void Main(string[] args)
         {
             string inputFile = "TextA.txt";
-            TermRules.Rules rules = new Rules(inputFile);
+            TermRules.Rules rules = new Rules(inputFile, Dictionary.IT_TERM);
             rules.ApplyRules();
         }
     }
