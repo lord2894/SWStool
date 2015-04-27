@@ -4,7 +4,9 @@
         Title="MainWindow" Height="429.104" Width="666.791">
     <Grid>
         <DocumentViewer x:Name="DocViewer" VerticalAlignment="Top" Margin="0,0,219,0"/>
-        <TreeView HorizontalAlignment="Left" Height="398" Margin="445,0,0,0" VerticalAlignment="Top" Width="214"/>
+        <TreeView HorizontalAlignment="Left" Height="398" Margin="445,0,0,0" VerticalAlignment="Top" Width="214">
+            <ListBox x:Name="ListBoxT" Height="100" Margin="0,258,0,-342" VerticalAlignment="Top" Width="100"/>
+        </TreeView>
 
     </Grid>
 </Window>

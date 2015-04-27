@@ -70,13 +70,15 @@ namespace TermRules
 	        }
 	        return -1;
         }
-        public int findINList(List<SynTerm> v, pair<string, string> str)
+        public int findINList(List<SynTerm> v, pair<SynTermAlternative, SynTermAlternative> str)
         {
             if (v == null || str == null) return -1;
 	        for (int i = 0; i<v.Count; i++)
 	        {
-		        if ((v[i].alternatives.first.alternative == str.first && v[i].alternatives.second.alternative == str.second) 
-                    || (v[i].alternatives.first.alternative == str.second && v[i].alternatives.second.alternative == str.first))
+		        if ((v[i].alternatives.first.alternative == str.first.alternative   && 
+                    v[i].alternatives.second.alternative == str.second.alternative) || 
+                    (v[i].alternatives.first.alternative == str.second.alternative  && 
+                    v[i].alternatives.second.alternative == str.first.alternative))
 			        return i;
 	        }
 	        return -1;
@@ -105,6 +107,41 @@ namespace TermRules
             for (int i = 0; i < ind.Count; i++)
             {
                 if (v[ind[i]].Pattern == str) return ind[i];
+            }
+            return -1;
+        }
+        public int findPattern(List<SynTerm> v, List<int> ind, string str)
+        {
+            if (v == null || ind == null || str == null) return -1;
+            for (int i = 0; i < ind.Count; i++)
+            {
+                if (v[ind[i]].Pattern == str) return ind[i];
+            }
+            return -1;
+        }
+        public int findPattern(List<CombComponent> v, string str)
+        {
+            if (v == null || str == null) return -1;
+            for (int i = 0; i < v.Count; i++)
+            {
+                if (v[i].Pattern == str) return i;
+            }
+            return -1;
+        }
+        public int findPattern(List<NonDictComponent> v, string str)
+        {
+            if (v == null || str == null) return -1;
+            for (int i = 0; i < v.Count; i++)
+            {
+                if (v[i].Pattern == str) return i;
+            }
+            return -1;
+        }
+        public int findBlock(List<NonDictBlock> v, string str)
+        {
+            for (int i=0; i<v.Count; i++)
+            {
+                if (v[i].Block == str) return i; 
             }
             return -1;
         }
@@ -339,5 +376,5 @@ namespace TermRules
 	        }
 	        return res;
         }
-    }
+        }
 }

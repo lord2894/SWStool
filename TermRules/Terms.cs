@@ -7,8 +7,17 @@ using System.Drawing;
 
 namespace TermRules
 {
+    public enum KindOfTerm
+    {
+        AuthTerm,
+        DictTerm,
+        NonDictTerm,
+        CombTerm,
+        SynTerm
+    }
     public class Term
     {
+        public KindOfTerm kind;
         public string TermWord;
         public string TermFragment;
         //public List<string> Patterns;
@@ -25,25 +34,30 @@ namespace TermRules
         }
         ~Term() { }
     }
+    public class NonDictBlock
+    {
+        public string Block;
+        public List<NonDictComponent> Components;
+        public NonDictBlock()
+        {
+            Components = new List<NonDictComponent>();
+        }
+    }
     public class NonDictComponent
     {
         public string Component;
-        public List<string> Patterns;
-        public int PatCounter;
-        NonDictComponent()
-        {
-            Patterns = new List<string>();
-        }
+        public string Pattern;
+        public string NPattern;
     }
     public class NonDictTerm : Term
     {
-        public List<List<NonDictComponent>> Components;
-        public List<string> Patterns;
+        public List<NonDictBlock> Components;
+        public string Pattern;
         public int PatCounter;
         public NonDictTerm()
         {
-            Patterns = new List<string>();
-            Components = new List<List<NonDictComponent>>();
+            //Patterns = new List<string>();
+            Components = new List<NonDictBlock>();
         }
         ~NonDictTerm() { }
     }
@@ -51,13 +65,14 @@ namespace TermRules
     {
 	    public string TermWord;
         public string TermFragment;
-        public List<string> Patterns;
+        public string Pattern;
+        public string NPattern;
         public int PatCounter;
         public int frequency;
 	    public List<Point> Pos;	    
 	    public CombComponent() 
         {
-            Patterns = new List<string>(); 
+            //Patterns = new List<string>(); 
             Pos = new List<Point>();
         }
 	    ~CombComponent() {}
@@ -65,11 +80,9 @@ namespace TermRules
     public class CombTerm : Term
     {
         public List<CombComponent> Components;
-        public List<string> Patterns;
-        public int PatCounter;
         public CombTerm() 
         {
-            Patterns = new List<string>();
+            //Patterns = new List<string>();
             Components = new List<CombComponent>();
         }
         ~CombTerm() { }
@@ -77,14 +90,18 @@ namespace TermRules
     public class SynTermAlternative
     {
         public string alternative;
+        public string PatternPart;
+        public string NPattern;
         public string Pattern;
     }
     public class SynTerm
     {
+        public KindOfTerm kind;
         public bool setToDel;
         public int frequency;
         public List<TermTree> Pos;
         public pair<SynTermAlternative, SynTermAlternative> alternatives;
+        public string Pattern;
         public string TermFragment;
         public SynTerm()
         {

@@ -26,9 +26,19 @@ namespace TermRules
                         Range range = new Range(MR.TermsAr[i].Pos[j].range.inf);
                         if (MR.rootTermsTree.FindRangeExtension(range) != null)
                         {
+                            TermTree e = MR.rootTermsTree.FindRange(range);
+                            for (int k = 0; k < e.indexElement.Count; k++)
+                                for (int t = 0; t < MR.TermsAr[e.indexElement[k]].Pos.Count; t++)
+                                {
+                                    if (MR.TermsAr[e.indexElement[k]].Pos[t] == e)
+                                    {
+                                        MR.TermsAr[e.indexElement[k]].Pos.RemoveAt(t);
+                                        t--;
+                                    }
+                                }
                             //count++;
                             MR.rootTermsTree.DeleteRange(MR.TermsAr[i].Pos[j].range);
-                            MR.TermsAr[i].Pos.RemoveAt(j);
+                            //MR.TermsAr[i].Pos.RemoveAt(j);
                             //delete MR.TermsAr[i].Pos[j];
                             //MR.TermsAr[i].Pos.erase(MR.TermsAr[i].Pos.begin() + );
                             //vector<TermTree*>(MR.TermsAr[i].Pos).swap(MR.TermsAr[i].Pos);
@@ -64,7 +74,7 @@ namespace TermRules
                 for (int i = 0; i < MR.TermsAr.Count; i++)
                 {
                     for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
-                        MR.TermsAr[i].Pos[j].indexElement = i;
+                        if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
                 }
                 if (size != MR.TermsAr.Count)
                 {
@@ -86,14 +96,25 @@ namespace TermRules
                     //int count = 0; 
                     for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
                     {
-                        if (MR.rootTermsTree.FindRangeExtension(MR.TermsAr[i].Pos[j].range) != null)
+                        Range range = new Range(MR.TermsAr[i].Pos[j].range.inf);
+                        if (MR.rootTermsTree.FindRangeExtension(range) != null)
                         {
+                            TermTree e = MR.rootTermsTree.FindRange(range);
+                            for (int k = 0; k < e.indexElement.Count; k++)
+                                for (int t = 0; t < MR.TermsAr[e.indexElement[k]].Pos.Count; t++)
+                                {
+                                    if (MR.TermsAr[e.indexElement[k]].Pos[t] == e)
+                                    {
+                                        MR.TermsAr[e.indexElement[k]].Pos.RemoveAt(t);
+                                        t--;
+                                    }
+                                }
                             //count++;
-                            MR.rootTermsTree.DeleteRange(MR.TermsAr[i].Pos[j].range);
+                            MR.rootTermsTree.DeleteRange(range);
                             //delete MR.TermsAr[i].Pos[j];
                             //MR.TermsAr[i].Pos.erase(MR.TermsAr[i].Pos.begin() + j);
                             //vector<TermTree*>(MR.TermsAr[i].Pos).swap(MR.TermsAr[i].Pos);
-                            MR.TermsAr[i].Pos.RemoveAt(j);
+                            //MR.TermsAr[i].Pos.RemoveAt(j);
                             j--;
                         }
                     }
@@ -126,7 +147,7 @@ namespace TermRules
                 for (int i = 0; i < MR.TermsAr.Count; i++)
                 {
                     for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
-                        MR.TermsAr[i].Pos[j].indexElement = i;
+                        if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
                 }
                 if (size != MR.TermsAr.Count)
                 {
@@ -148,14 +169,25 @@ namespace TermRules
                     //int count = 0; 
                     for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
                     {
-                        if (MR.rootTermsTree.FindRangeExtension(MR.TermsAr[i].Pos[j].range) != null)
+                        Range range = new Range(MR.TermsAr[i].Pos[j].range.inf);
+                        if (MR.rootTermsTree.FindRangeExtension(range) != null)
                         {
+                            TermTree e = MR.rootTermsTree.FindRange(range);
+                            for (int k = 0; k < e.indexElement.Count; k++)
+                                for (int t = 0; t < MR.TermsAr[e.indexElement[k]].Pos.Count; t++)
+                                {
+                                    if (MR.TermsAr[e.indexElement[k]].Pos[t] == e)
+                                    {
+                                        MR.TermsAr[e.indexElement[k]].Pos.RemoveAt(t);
+                                        t--;
+                                    }
+                                }
                             //count++;
-                            MR.rootTermsTree.DeleteRange(MR.TermsAr[i].Pos[j].range);
+                            MR.rootTermsTree.DeleteRange(range);
                             //delete MR.TermsAr[i].Pos[j];
                             //MR.TermsAr[i].Pos.erase(MR.TermsAr[i].Pos.begin() + j);
                             //vector<TermTree*>(MR.TermsAr[i].Pos).swap(MR.TermsAr[i].Pos);
-                            MR.TermsAr[i].Pos.RemoveAt(j);
+                            //MR.TermsAr[i].Pos.RemoveAt(j);
                             j--;
                         }
                     }
@@ -188,7 +220,7 @@ namespace TermRules
                 for (int i = 0; i < MR.TermsAr.Count; i++)
                 {
                     for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
-                        MR.TermsAr[i].Pos[j].indexElement = i;
+                        if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
                 }
                 if (size != MR.TermsAr.Count)
                 {
@@ -206,10 +238,22 @@ namespace TermRules
                 {
                     while (MR.TermsAr[i].Pos.Count > 0)
                     {
+                        for (int k = 0; k < MR.TermsAr[i].Pos[0].indexElement.Count; k++)
+                            if (MR.TermsAr[i].Pos[0].indexElement[k] != i)
+                            {
+                                for (int p=0; p<MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos.Count; p++)
+                                {
+                                    if (MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos[p] == MR.TermsAr[i].Pos[0])
+                                    {
+                                        MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos.RemoveAt(p);
+                                        p--;
+                                    }
+                                }
+                            }
+                        MR.TermsAr[i].Pos.RemoveAt(0);
                         MR.rootTermsTree.DeleteRange(MR.TermsAr[i].Pos[0].range);
                         //MR.TermsAr[i].Pos.erase(MR.TermsAr[i].Pos.begin() );
-                        //vector<TermTree*>(MR.TermsAr[i].Pos).swap(MR.TermsAr[i].Pos);
-                        MR.TermsAr[i].Pos.RemoveAt(0);
+                        //vector<TermTree*>(MR.TermsAr[i].Pos).swap(MR.TermsAr[i].Pos);                        
                     }
                     //MR.TermsAr.erase(MR.TermsAr.begin() + i);
                     //vector<Term>(MR.TermsAr).swap(MR.TermsAr);
@@ -221,7 +265,7 @@ namespace TermRules
             for (int i = 0; i < MR.TermsAr.Count; i++)
             {
                 for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
-                    MR.TermsAr[i].Pos[j].indexElement = i;
+                    if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
             }
         }
         public void DelElementsWhichSetToDel(SynTerms MR)
@@ -233,10 +277,23 @@ namespace TermRules
                 {
                     while (MR.TermsAr[i].Pos.Count > 0)
                     {
+                        for (int k = 0; k < MR.TermsAr[i].Pos[0].indexElement.Count; k++)
+                            if (MR.TermsAr[i].Pos[0].indexElement[k] != i)
+                            {
+                                for (int p = 0; p < MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos.Count; p++)
+                                {
+                                    if (MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos[p] == MR.TermsAr[i].Pos[0])
+                                    {
+                                        MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos.RemoveAt(p);
+                                        p--;
+                                    }
+                                }
+                            }
+                        MR.TermsAr[i].Pos.RemoveAt(0);
                         MR.rootTermsTree.DeleteRange(MR.TermsAr[i].Pos[0].range);
                         //MR.TermsAr[i].Pos.erase(MR.TermsAr[i].Pos.begin());
                         //vector<TermTree*>(MR.TermsAr[i].Pos).swap(MR.TermsAr[i].Pos);
-                        MR.TermsAr[i].Pos.RemoveAt(i);
+                        
                     }
                     //MR.TermsAr.erase(MR.TermsAr.begin() + i);
                     //vector<SynTerm>(MR.TermsAr).swap(MR.TermsAr);
@@ -248,7 +305,7 @@ namespace TermRules
             for (int i = 0; i < MR.TermsAr.Count; i++)
             {
                 for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
-                    MR.TermsAr[i].Pos[j].indexElement = i;
+                    if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
             }
         }
         public Point GetRealPos(string fragment, string term, Point pos)

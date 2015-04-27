@@ -41,6 +41,7 @@ namespace SWStool
                 string filename = dlg.FileName;
                 var doc = DocX.Load(filename);
                 DocViewer.Document = null;
+                //ListBoxT.Items.IndexOf(ListBoxT.SelectedItems[i]);
 
             }
 
