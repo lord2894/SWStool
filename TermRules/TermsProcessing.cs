@@ -15,7 +15,8 @@ namespace TermRules
         F_TERM
     }
     public class TermsProcessing
-    {        
+    {
+        
         public Terms MainTermsAr;
         public Terms AuthTermsAr;
         public Terms DictTermsAr;
@@ -48,19 +49,20 @@ namespace TermRules
             CombTermsAr = new CombTerms();
             Directory.CreateDirectory(tmpPath + "\\" + folderPath);
             PatternsModel = new List<pair<string, string>>();
-            DictPatterns = new List<pair<string, string>>();
+            DictPatterns = new List<pair<string, string>>();            
         }
        
         //AuthTerms
         public void GetXMLAuthTerms(Terms AuthTermsAr)
         {
+            string BAT_output = tmpPath + "\\" + folderPath + "\\AuthTerms.bat";
             string patternsName = "";
             string curPattern = "";
             StreamReader fs = new StreamReader(programmPath + "\\Patterns\\AUTH_TERM.txt", Encoding.GetEncoding("Windows-1251"));
             curPattern = fs.ReadLine();
             if (curPattern != null)
             {
-                curPattern = curPattern.Substring(0, curPattern.IndexOf('='));
+                curPattern = curPattern.Substring(0, curPattern.IndexOf('=')).Trim();
                 curPattern = curPattern.Trim();
                 if (curPattern.IndexOf("DefIns") == -1 && curPattern.IndexOf("DefIns") == -1)
                 {
@@ -77,7 +79,7 @@ namespace TermRules
                             pair<string, string> new_p = new pair<string, string>();
                             patternsName = patternsName + " " + curPattern;
                             new_p.first = curPattern;
-                            new_p.second = curPattern.Substring(len);
+                            new_p.second = curPattern.Substring(len).Trim();
                             PatternsModel.Add(new_p);
                         }
                         len = 0;
@@ -89,7 +91,7 @@ namespace TermRules
                     if (curPattern == null) break;
                     if (curPattern != "")
                     {
-                        curPattern = curPattern.Substring(0, curPattern.IndexOf('='));
+                        curPattern = curPattern.Substring(0, curPattern.IndexOf('=')).Trim();
                         curPattern = curPattern.Trim();
                         if (curPattern.IndexOf("DefIns") == -1 && curPattern.IndexOf("DefXXX") == -1)
                         {
@@ -106,7 +108,7 @@ namespace TermRules
                                     pair<string, string> new_p = new pair<string, string>();
                                     patternsName = patternsName + " " + curPattern;
                                     new_p.first = curPattern;
-                                    new_p.second = curPattern.Substring(len);
+                                    new_p.second = curPattern.Substring(len).Trim();
                                     PatternsModel.Add(new_p);
                                 }
                                 len = 0;
@@ -116,13 +118,13 @@ namespace TermRules
                 }
                 string LSPL_exe = programmPath + "\\bin\\lspl-find.exe";
                 string LSPL_patterns = programmPath + "\\Patterns\\AUTH_TERM.txt";
-                string LSPL_output = tmpPath + "\\" + folderPath + "\\AuthTermsOutput.xml";
-                string BAT_output = tmpPath + "\\" + folderPath + "\\AuthTerms.bat";
+                string LSPL_output = tmpPath + "\\" + folderPath + "\\AuthTermsOutput.xml";                
                 StreamWriter sw = new StreamWriter(BAT_output, false, Encoding.GetEncoding("cp866"));
                 sw.WriteLine("\"" + LSPL_exe + "\" -i \"" + inputFile + "\" -p \"" + LSPL_patterns + "\" -o \"" + LSPL_output + "\" " + patternsName);
+                sw.Close();
                 System.Diagnostics.Process.Start(BAT_output).WaitForExit();
                 GetAuthTerms(AuthTermsAr);
-                sw.Close();
+                
             }
             else
             {
@@ -209,7 +211,7 @@ namespace TermRules
                                             newEl.setToDel = false;
                                             newEl.Pos.Add(null);
                                             newEl.TermFragment = cur_fragment;
-                                            newEl.Pattern = cur_pat.Substring("Def".Length);
+                                            newEl.Pattern = cur_pat.Substring("Def".Length).Trim();
                                             newEl.kind = KindOfTerm.AuthTerm;
                                             if (e == null)
                                             {                                               
@@ -254,7 +256,7 @@ namespace TermRules
                                             newEl.setToDel = false;
                                             newEl.Pos.Add(null);
                                             newEl.TermFragment = cur_fragment;
-                                            newEl.Pattern = cur_pat.Substring("SDef".Length);
+                                            newEl.Pattern = cur_pat.Substring("SDef".Length).Trim();
                                             newEl.kind = KindOfTerm.AuthTerm;
                                             if (e == null)
                                             {                                               
@@ -284,21 +286,24 @@ namespace TermRules
                                             }
                                         }
                                     }
-                                    else if (cur_pat.IndexOf("NPDef") != -1)
+                                    else if (cur_pat.IndexOf("NPDef") == 0)
                                     {
                                         string word = xml.Value.Trim();
                                         word = word.Replace('[', '<');
                                         word = word.Replace(']', '>');
-                                        Range cur_range = new Range(cur_pos);
-                                        TermTree e = AuthTermsAr.rootTermsTree.FindRange(cur_range);
-                                        if (e != null)
-                                        {
-                                            //int k = e.indexElement;
-                                            int k = find.findPattern(AuthTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPDef".Length));
-                                            AuthTermsAr.TermsAr[k].NPattern = word;
-                                        }
+                                        //Range cur_range = new Range(cur_pos);
+                                        //TermTree e = AuthTermsAr.rootTermsTree.FindRange(cur_range);
+                                        //if (e != null)
+                                        //{
+                                        //    //int k = e.indexElement;
+                                        //    int k = find.findPattern(AuthTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPDef".Length).Trim());
+                                        //    AuthTermsAr.TermsAr[k].NPattern = aux.NormalizeNPattern(word);
+                                        //}
+                                        int f = find.findFragmentINList(AuthTermsAr.TermsAr, cur_fragment);
+                                        if (f != -1)
+                                            AuthTermsAr.TermsAr[f].NPattern = aux.NormalizeNPattern(word);
                                     }
-                                    else if (cur_pat.IndexOf("NPSDef") != -1)
+                                    else if (cur_pat.IndexOf("NPSDef") == 0)
                                     {
                                         string word = xml.Value.Trim();
                                         word = word.Replace('[', '<');
@@ -308,8 +313,8 @@ namespace TermRules
                                         if (e != null)
                                         {
                                             //int k = e.indexElement;
-                                            int k = find.findPattern(AuthTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPSDef".Length));
-                                            AuthTermsAr.TermsAr[k].NPattern = word;
+                                            int k = find.findPattern(AuthTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPSDef".Length).Trim());
+                                            AuthTermsAr.TermsAr[k].NPattern = aux.NormalizeNPattern(word);
                                         }
                                     }
                                  }
@@ -331,7 +336,7 @@ namespace TermRules
             curPattern = fs.ReadLine();
             if (curPattern != null)
             {
-                curPattern = curPattern.Substring(0, curPattern.IndexOf('='));
+                curPattern = curPattern.Substring(0, curPattern.IndexOf('=')).Trim();
                 curPattern = curPattern.Trim();
                 if (curPattern.IndexOf("CT") != -1)
                 {
@@ -342,7 +347,7 @@ namespace TermRules
                         pair<string, string> new_p = new pair<string, string>();
                         patternsName = patternsName + " " + curPattern;
                         new_p.first = curPattern;
-                        new_p.second = curPattern.Substring(len);
+                        new_p.second = curPattern.Substring(len).Trim();
                         PatternsModel.Add(new_p);
                     }
                     len = 0;
@@ -353,7 +358,7 @@ namespace TermRules
                     if (curPattern == null) break;
                     if (curPattern != "")
                     {
-                        curPattern = curPattern.Substring(0, curPattern.IndexOf('='));
+                        curPattern = curPattern.Substring(0, curPattern.IndexOf('=')).Trim();
                         curPattern = curPattern.Trim();
                         if (curPattern.IndexOf("CT") != -1)
                         {
@@ -364,7 +369,7 @@ namespace TermRules
                                 pair<string, string> new_p = new pair<string, string>();
                                 patternsName = patternsName + " " + curPattern;
                                 new_p.first = curPattern;
-                                new_p.second = curPattern.Substring(len);
+                                new_p.second = curPattern.Substring(len).Trim();
                                 PatternsModel.Add(new_p);
                             }
                             len = 0;
@@ -377,11 +382,11 @@ namespace TermRules
                 string BAT_output = tmpPath + "\\" + folderPath + "\\CombTerms.bat";
                 StreamWriter sw = new StreamWriter(BAT_output, false, Encoding.GetEncoding("cp866"));
                 sw.WriteLine("\"" + LSPL_exe + "\" -i \"" + inputFile + "\" -p \"" + LSPL_patterns + "\" -o \"" + LSPL_output + "\" "+patternsName);
+                sw.Close();
                 System.Diagnostics.Process.Start(BAT_output).WaitForExit();
                 GetCombTerms(CombTermsAr);
                 patternsName = FormCombComponentsPatterns(CombTermsAr);
-                GetXMLCombComponentsTerms(CombTermsAr, patternsName);
-                sw.Close();
+                GetXMLCombComponentsTerms(CombTermsAr, patternsName);                
             }
             else
             {
@@ -395,19 +400,22 @@ namespace TermRules
             string CombComponentsPatterns = tmpPath + "\\" + folderPath + "\\COMP_COMB_TERM.txt";
             string patterns = "";
             StreamWriter sw = new StreamWriter(CombComponentsPatterns, false, Encoding.GetEncoding("Windows-1251"));
+            aux.PrintConstantPatterns(sw);
             for (int i = 0; i < CombTermsAr.TermsAr.Count; i++)
             {
                 for (int j = 0; j < CombTermsAr.TermsAr[i].Components.Count; j++)
                 {
-                    sw.WriteLine("CCP" + 
+                    //CombTermsAr.TermsAr[i].Components[j].NPattern = aux.NormalizeNPattern(CombTermsAr.TermsAr[i].Components[j].NPattern);
+                    sw.WriteLine("CCP" +
                         CombTermsAr.TermsAr[i].Components[j].Pattern + "-" +
-                        CombTermsAr.TermsAr[i].Pattern               + "=" + 
+                        CombTermsAr.TermsAr[i].Pattern + " = " +
                         CombTermsAr.TermsAr[i].Components[j].NPattern);
-                    patterns = patterns+" "+"CCP" + CombTermsAr.TermsAr[i].Components[j].Pattern;
+                    patterns = patterns + " " + "CCP" + CombTermsAr.TermsAr[i].Components[j].Pattern + "-" + CombTermsAr.TermsAr[i].Pattern;
                 }
             }
             sw.Close();
             return patterns;
+            
         }
         public void GetXMLCombComponentsTerms(CombTerms CombTermsAr, string patterns)
         {
@@ -501,7 +509,7 @@ namespace TermRules
                                             newEl.Pos.Add(cur_pos);
                                             newEl.TermWord = word;
                                             newEl.TermFragment = cur_fragment;
-                                            newEl.Pattern = cur_pat.Substring("CCP".Length);
+                                            newEl.Pattern = cur_pat.Substring("CCP".Length).Trim();
                                             CompV.Add(newEl);
 
                                         }
@@ -527,8 +535,8 @@ namespace TermRules
                     TermTree e = CombTermsAr.rootTermsTree.FindRangeExtension(cur_range);
                     while (e != null)
                     {
-                        int curTerm = find.findPattern(CombTermsAr.TermsAr, e.indexElement, CompV[0].Pattern.Substring(0, CompV[0].Pattern.IndexOf('-')));
-                        int curComp = find.findPattern(CombTermsAr.TermsAr[curTerm].Components, CompV[0].Pattern.Substring(CompV[0].Pattern.IndexOf('-')));
+                        int curTerm = find.findPattern(CombTermsAr.TermsAr, e.indexElement, CompV[0].Pattern.Substring(0, CompV[0].Pattern.IndexOf('-')).Trim());
+                        int curComp = find.findPattern(CombTermsAr.TermsAr[curTerm].Components, CompV[0].Pattern.Substring(CompV[0].Pattern.IndexOf('-') + 1).Trim());
                         //int curComp = find.findINList(CombTermsAr.TermsAr[curTerm].Components, CompV[0].TermWord);
                         if (curComp != -1)
                         {
@@ -627,7 +635,7 @@ namespace TermRules
                                             newEl.TermWord = word;
                                             newEl.frequency = 1;
                                             newEl.TermFragment = cur_fragment;
-                                            newEl.Pattern = cur_pat.Substring("FCT".Length);
+                                            newEl.Pattern = cur_pat.Substring("FCT".Length).Trim();
                                             newEl.PatCounter = 0;
                                             newEl.kind = KindOfTerm.CombTerm;
                                             if (e == null)
@@ -661,7 +669,7 @@ namespace TermRules
                                     else if (cur_pat.IndexOf("CT") == 0)
                                     {
                                         string word = xml.Value.Trim();
-                                        string cur_main_pat = cur_pat.Substring("CT".Length, cur_pat.Length-"CT".Length-cur_pat.IndexOf('-'));
+                                        string cur_main_pat = cur_pat.Substring("CT".Length, cur_pat.IndexOf('-') - "CT".Length).Trim();
                                         Range cur_range = new Range(cur_pos);
                                         TermTree e = CombTermsAr.rootTermsTree.FindRange(cur_range);
                                         if (e != null)
@@ -673,7 +681,7 @@ namespace TermRules
                                                 newEl.TermWord = word;
                                                 newEl.TermFragment = cur_fragment;
                                                 newEl.frequency = 1;
-                                                newEl.Pattern = cur_pat.Substring(cur_pat.IndexOf('-'));
+                                                newEl.Pattern = cur_pat.Substring(cur_pat.IndexOf('-') + 1).Trim();
                                                 CombTermsAr.TermsAr[cur_Term].Components.Add(newEl);
                                             }
                                         }
@@ -687,17 +695,17 @@ namespace TermRules
                                         TermTree e = CombTermsAr.rootTermsTree.FindRange(cur_range);
                                         if (e != null)
                                         {
-                                            int k = find.findPattern(CombTermsAr.TermsAr,e.indexElement,cur_pat.Substring("NPFCT".Length));
+                                            int k = find.findPattern(CombTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPFCT".Length).Trim());
                                             if (k != -1)
-                                                CombTermsAr.TermsAr[k].NPattern = word;
+                                                CombTermsAr.TermsAr[k].NPattern = aux.NormalizeNPattern(word);
                                         }
                                     }
-                                    else if (cur_pat == "NPCT")
+                                    else if (cur_pat.IndexOf("NPCT") == 0)
                                     {
                                         string word = xml.Value.Trim();
                                         word = word.Replace('[', '<');
                                         word = word.Replace(']', '>');
-                                        string cur_main_pat = cur_pat.Substring("NPCT".Length, cur_pat.Length - cur_pat.IndexOf('-') - "NPCT".Length);
+                                        string cur_main_pat = cur_pat.Substring("NPCT".Length, cur_pat.IndexOf('-') - "NPCT".Length).Trim();
                                          Range cur_range = new Range(cur_pos);
                                         TermTree e = CombTermsAr.rootTermsTree.FindRange(cur_range);
                                         if (e != null)
@@ -705,9 +713,9 @@ namespace TermRules
                                             int k = find.findPattern(CombTermsAr.TermsAr, e.indexElement, cur_main_pat);
                                             if (k != -1)
                                             {
-                                                int a = find.findPattern(CombTermsAr.TermsAr[k].Components, cur_pat.Substring(cur_pat.IndexOf('-')));
+                                                int a = find.findPattern(CombTermsAr.TermsAr[k].Components, cur_pat.Substring(cur_pat.IndexOf('-') + 1).Trim());
                                                 if (a != -1)
-                                                    CombTermsAr.TermsAr[k].Components[a].NPattern = word;
+                                                    CombTermsAr.TermsAr[k].Components[a].NPattern = aux.NormalizeNPattern(word);
                                             }
                                         }                                        
                                     }
@@ -1064,7 +1072,7 @@ namespace TermRules
                                                     newEl.TermWord = word;
                                                     newEl.frequency = 1;
                                                     newEl.TermFragment = cur_fragment;
-                                                    newEl.Pattern = cur_pat.Substring("F".Length);
+                                                    newEl.Pattern = cur_pat.Substring("F".Length).Trim();
                                                     newEl.kind = KindOfTerm.NonDictTerm;
                                                     TermTree e = NonDictTermsAr.rootTermsTree.FindRange(cur_range);
                                                     if (e == null)
@@ -1104,18 +1112,18 @@ namespace TermRules
                                                 TermTree e = NonDictTermsAr.rootTermsTree.FindRange(cur_range);
                                                 if (e != null)
                                                 {
-                                                    int cur_term = find.findPattern(NonDictTermsAr.TermsAr, e.indexElement, cur_pat.Substring("Ca".Length, cur_pat.IndexOf('-') - "Ca".Length));
+                                                    int cur_term = find.findPattern(NonDictTermsAr.TermsAr, e.indexElement, cur_pat.Substring("Ca".Length, cur_pat.IndexOf('-') - "Ca".Length).Trim());
                                                     if (cur_term != -1)
                                                     {
                                                         int block = find.findBlock(NonDictTermsAr.TermsAr[cur_term].Blocks, cur_pat[1].ToString());
                                                         if (block != -1)
                                                         {
-                                                            int cur_comp = find.findPattern(NonDictTermsAr.TermsAr[cur_term].Blocks[block].Components, cur_pat.Substring(cur_pat.IndexOf('-')));
+                                                            int cur_comp = find.findPattern(NonDictTermsAr.TermsAr[cur_term].Blocks[block].Components, cur_pat.Substring(cur_pat.IndexOf('-') + 1).Trim());
                                                             if (cur_comp == -1)
                                                             {
                                                                 NonDictComponent newEl = new NonDictComponent();
                                                                 newEl.Component = word;
-                                                                newEl.Pattern = cur_pat.Substring(cur_pat.IndexOf('-'));
+                                                                newEl.Pattern = cur_pat.Substring(cur_pat.IndexOf('-') + 1).Trim();
                                                                 NonDictTermsAr.TermsAr[cur_term].Blocks[block].Components.Add(newEl);
                                                             }
                                                         }
@@ -1125,7 +1133,7 @@ namespace TermRules
                                                             newBl.Block = cur_pat[1].ToString();
                                                             NonDictComponent newEl = new NonDictComponent();
                                                             newEl.Component = word;
-                                                            newEl.Pattern = cur_pat.Substring(cur_pat.IndexOf('-'));
+                                                            newEl.Pattern = cur_pat.Substring(cur_pat.IndexOf('-') + 1).Trim();
                                                             newBl.Components.Add(newEl);
                                                             NonDictTermsAr.TermsAr[cur_term].Blocks.Add(newBl);
                                                         }
@@ -1144,25 +1152,25 @@ namespace TermRules
                                                     {
                                                         case 'F':
                                                             {
-                                                                int k = find.findPattern(NonDictTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPF".Length));
+                                                                int k = find.findPattern(NonDictTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPF".Length).Trim());
                                                                 if (k!=-1)
                                                                 {
-                                                                    NonDictTermsAr.TermsAr[k].NPattern = word;
+                                                                    NonDictTermsAr.TermsAr[k].NPattern = aux.NormalizeNPattern(word);
                                                                 }
                                                                 break;
                                                             }
                                                         case 'C':
                                                             {
-                                                                int cur_term = find.findPattern(NonDictTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPCa".Length, cur_pat.IndexOf('-') - "NPCa".Length));
+                                                                int cur_term = find.findPattern(NonDictTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPCa".Length, cur_pat.IndexOf('-') - "NPCa".Length).Trim());
                                                                 if (cur_term != -1)
                                                                 {
                                                                     int block = find.findBlock(NonDictTermsAr.TermsAr[cur_term].Blocks, cur_pat[4].ToString());
                                                                     if (block != -1)
                                                                     {
-                                                                        int cur_comp = find.findPattern(NonDictTermsAr.TermsAr[cur_term].Blocks[block].Components, cur_pat.Substring(cur_pat.IndexOf('-')));
+                                                                        int cur_comp = find.findPattern(NonDictTermsAr.TermsAr[cur_term].Blocks[block].Components, cur_pat.Substring(cur_pat.IndexOf('-') + 1).Trim());
                                                                         if (cur_comp != -1)
                                                                         {
-                                                                            NonDictTermsAr.TermsAr[cur_term].Blocks[block].Components[cur_comp].NPattern = word;
+                                                                            NonDictTermsAr.TermsAr[cur_term].Blocks[block].Components[cur_comp].NPattern = aux.NormalizeNPattern(word);
                                                                         }
                                                                     }                                                                    
                                                                 }
@@ -1302,14 +1310,14 @@ namespace TermRules
                                         int y = word.IndexOf(" - ");
                                         if (y != -1)
                                         {
-                                            string PartsPatterns = cur_pat.Substring(cur_pat.IndexOf('-')+1);
+                                            string PartsPatterns = cur_pat.Substring(cur_pat.IndexOf('-') + 1).Trim();
                                             alt.first.alternative = word.Substring(0, y);
                                             alt.first.PatternPart = "A";
-                                            alt.first.Pattern = PartsPatterns.Substring(0,PartsPatterns.IndexOf('-'));
+                                            alt.first.Pattern = PartsPatterns.Substring(0, PartsPatterns.IndexOf('-')).Trim();
 
-                                            alt.second.alternative = word.Substring(y + 3, word.Length - (y + 3));
+                                            alt.second.alternative = word.Substring(y + 3, word.Length - (y + 3)).Trim();
                                             alt.second.PatternPart = "B";
-                                            alt.second.Pattern = PartsPatterns.Substring(PartsPatterns.IndexOf('-') + 1);
+                                            alt.second.Pattern = PartsPatterns.Substring(PartsPatterns.IndexOf('-') + 1).Trim();
                                             
                                             int k = find.findINList(SynTermsAr.TermsAr, alt);
                                             if (k == -1)
@@ -1364,19 +1372,19 @@ namespace TermRules
                                         if (e != null)
                                         {
                                             int last_def = cur_pat.LastIndexOf('-');
-                                            string main_pat = cur_pat.Substring(cur_pat.IndexOf('-') + 1, last_def - (cur_pat.IndexOf('-') + 1));
+                                            string main_pat = cur_pat.Substring(cur_pat.IndexOf('-') + 1, last_def - (cur_pat.IndexOf('-') + 1)).Trim();
                                             int main_syn = find.findPattern(SynTermsAr.TermsAr, e.indexElement, main_pat);
-                                            string pattern_part = cur_pat.Substring(last_def + 1);
+                                            string pattern_part = cur_pat.Substring(last_def + 1).Trim();
                                             switch(pattern_part)
                                             {
                                                 case "A":
                                                     {
-                                                        SynTermsAr.TermsAr[main_syn].alternatives.first.NPattern = word;
+                                                        SynTermsAr.TermsAr[main_syn].alternatives.first.NPattern = aux.NormalizeNPattern(word);
                                                         break;
                                                     }
                                                 case "B":
                                                     {
-                                                        SynTermsAr.TermsAr[main_syn].alternatives.second.NPattern = word;
+                                                        SynTermsAr.TermsAr[main_syn].alternatives.second.NPattern = aux.NormalizeNPattern(word);
                                                         break;
                                                     }
                                             }

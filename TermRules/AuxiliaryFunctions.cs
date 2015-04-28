@@ -4,12 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.IO;
 
 namespace TermRules
 {
     public class AuxiliaryFunctions
     {
-        public AuxiliaryFunctions() { }
+        public List<string> ConstantPatterns;
+        public AuxiliaryFunctions() 
+        {
+            ConstantPatterns = new List<string>();
+            ConstantPatterns.Add("AP = A1 (A1) =text> A1 | Pa1 (Pa1) =text> Pa1");
+            ConstantPatterns.Add("NE = \"не\" =text> \"не\"");
+            //ConstantPatterns.Add("");
+            //ConstantPatterns.Add("");
+        }
         public void getFrequency_(Terms MR)
         {
             int size = MR.TermsAr.Count;
@@ -365,6 +374,63 @@ namespace TermRules
                 }
             }
             return pos;
+        }
+        public string NormalizeNPattern(string NPattern)
+        {
+            bool change = true;
+            int open_t = -1;
+            int close_t = 0;
+            //int prev_close_t = 0;
+            string newNP = "";
+            while (change)
+            {
+                change = false;
+                open_t = NPattern.IndexOf("<", open_t + 1);
+                //List<string> splitPattern = new List<string>(CombTermsAr.TermsAr[i].Components[j].NPattern.Split("<>".ToCharArray()));
+                if (open_t != -1 &&
+                    (NPattern[open_t - 1] >= '0' &&
+                     NPattern[open_t - 1] <= '9'))
+                {
+                    newNP = newNP + NPattern.Substring(close_t, open_t - close_t + 1);
+                    //prev_close_t = close_t;
+                    close_t = NPattern.IndexOf(">", open_t + 1);
+                    newNP = newNP + NPattern.Substring(open_t + 1, close_t - (open_t + 1)).Trim().ToLower().Replace(" ", "");
+                    change = true;
+                }
+                else
+                {
+                    int p = open_t;
+                    while (p != -1) // Костыль, можно изящнее
+                    {
+                        p = NPattern.IndexOf("<", p + 1);
+                        if (p != -1 &&
+                            (NPattern[p - 1] >= '0' &&
+                             NPattern[p - 1] <= '9'))
+                            break;
+                    }
+                    if (p != -1)
+                    {
+                        open_t = p;
+                        newNP = newNP + NPattern.Substring(close_t, open_t - close_t + 1);
+                        //prev_close_t = close_t;
+                        close_t = NPattern.IndexOf(">", open_t + 1);
+                        newNP = newNP + NPattern.Substring(open_t + 1, close_t - (open_t + 1)).Trim().ToLower().Replace(" ", "");
+                        change = true;
+                    }
+                    else
+                    {
+                        newNP = newNP + NPattern.Substring(close_t);
+                    }
+
+                }
+
+            }
+            return newNP.Replace("=TEXT>", "=text>");
+        }
+        public void PrintConstantPatterns(StreamWriter sw)
+        {
+            foreach (string str in ConstantPatterns)
+                sw.WriteLine(str);
         }
     }
 }
