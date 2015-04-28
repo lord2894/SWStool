@@ -17,6 +17,7 @@ namespace TermRules
     }
     public class Term
     {
+        //public List<Point> Positions; //необходимо, особенно для словарных терминов
         public KindOfTerm kind;
         public string TermWord;
         public string TermFragment;
@@ -51,13 +52,11 @@ namespace TermRules
     }
     public class NonDictTerm : Term
     {
-        public List<NonDictBlock> Components;
-        public string Pattern;
-        public int PatCounter;
+        public List<NonDictBlock> Blocks;
         public NonDictTerm()
         {
             //Patterns = new List<string>();
-            Components = new List<NonDictBlock>();
+            Blocks = new List<NonDictBlock>();
         }
         ~NonDictTerm() { }
     }
@@ -105,6 +104,7 @@ namespace TermRules
         public string TermFragment;
         public SynTerm()
         {
+            kind = KindOfTerm.SynTerm;
             alternatives = new pair<SynTermAlternative, SynTermAlternative>();
             Pos = new List<TermTree>();
         }
@@ -155,7 +155,7 @@ namespace TermRules
     public class ComponentInElement
     {
         public int Element;
+        public int Block;
         public int Component;
-        public int Version;
     }
 }

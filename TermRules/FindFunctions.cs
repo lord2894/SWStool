@@ -233,22 +233,22 @@ namespace TermRules
         public ComponentInElement findINListComponents(List<NonDictTerm> v, string str)
         {
             if (v == null || str == null) return null;
-	        ComponentInElement result  = new ComponentInElement();
-	        result.Component=-1;
-	        result.Element=-1;
-	        result.Version=-1;
+	        ComponentInElement result  = new ComponentInElement();	        
+	        result.Element =-1;
+            result.Block = -1;
+            result.Component = -1;	        
 	        for (int i=0; i<v.Count;i++)
 	        {
-		        for (int k=0; k<v[i].Components.Count; k++)
+		        for (int k=0; k<v[i].Blocks.Count; k++)
 		        {
-			        int s=v[i].Components[k].Count;
+			        int s=v[i].Blocks[k].Components.Count;
 			        for(int j=0; j<s; j++)
 			        {
-				        if (v[i].Components[k][j].Component == str)
+				        if (v[i].Blocks[k].Components[j].Component == str)
 				        {
 					        result.Element=i;
-					        result.Component=j;
-					        result.Version=k;
+					        result.Block=k;
+                            result.Component = j;
 					        return result;
 				        }
 			        }
@@ -260,9 +260,9 @@ namespace TermRules
         {
             if (v == null || str == null) return null;
 	        ComponentInElement result = new ComponentInElement();
-	        result.Component=-1;
-	        result.Element=-1;
-	        result.Version=-1;
+            result.Element = -1;
+            result.Block = -1;
+            result.Component = -1;	       
 	        for (int i=0; i<v.Count;i++)
 	        {
 		        int s=v[i].Components.Count;
@@ -281,15 +281,15 @@ namespace TermRules
         public int findEqualVariants(NonDictTerm v, List<string> var)
         {
             if (v == null || var == null) return -1;
-	        for (int i=0 ; i<v.Components.Count ; i++)
+	        for (int i=0 ; i<v.Blocks.Count ; i++)
 	        {
 		        bool f=false;
-		        if (v.Components[i].Count != var.Count)
+		        if (v.Blocks[i].Components.Count != var.Count)
 			        continue;
-		        for (int j=0 ; j<v.Components[i].Count; j++)
+		        for (int j=0 ; j<v.Blocks[i].Components.Count; j++)
 		        {
 			        f=false;
-			        if(v.Components[i][j].Component == var[j])
+			        if(v.Blocks[i].Components[j].Component == var[j])
 				        f=true;
 			        if(f == false) break;
 		        }
@@ -300,15 +300,15 @@ namespace TermRules
         public int findEqualVariants(NonDictTerm v, List<NonDictComponent> var)
         {
             if (v == null || var == null) return -1;
-            for (int i = 0; i < v.Components.Count; i++)
+            for (int i = 0; i < v.Blocks.Count; i++)
             {
                 bool f = false;
-                if (v.Components[i].Count != var.Count)
+                if (v.Blocks[i].Components.Count != var.Count)
                     continue;
-                for (int j = 0; j < v.Components[i].Count; j++)
+                for (int j = 0; j < v.Blocks[i].Components.Count; j++)
                 {
                     f = false;
-                    if (v.Components[i][j].Component == var[j].Component)
+                    if (v.Blocks[i].Components[j].Component == var[j].Component)
                         f = true;
                     if (f == false) break;
                 }

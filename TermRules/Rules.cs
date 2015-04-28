@@ -168,14 +168,14 @@ namespace TermRules
 		        if (res != -1)
 		        {
 			        bool del = false;
-			        for (int j = 0; j < NonDictTermsAr.TermsAr[i].Components.Count; j++)
+			        for (int j = 0; j < NonDictTermsAr.TermsAr[i].Blocks.Count; j++)
 			        {
 				        bool isDictComponents = false;
 				        List<int> countDictComponents = new List<int>();
-				        for (int k = 0; k < NonDictTermsAr.TermsAr[i].Components[j].Count; k++)
+				        for (int k = 0; k < NonDictTermsAr.TermsAr[i].Blocks[j].Components.Count; k++)
 				        {
 					        isDictComponents = false;
-					        int r = find.findINList(DictTermsAr.TermsAr, NonDictTermsAr.TermsAr[i].Components[j][k].Component);
+					        int r = find.findINList(DictTermsAr.TermsAr, NonDictTermsAr.TermsAr[i].Blocks[j].Components[k].Component);
 					        if (r != -1)
 					        {
 						        //isDictComponents = true;
@@ -184,7 +184,7 @@ namespace TermRules
 					        //if (!isDictComponents) break;
 				        }
 				        //if (isDictComponents)
-				        if (countDictComponents.Count == NonDictTermsAr.TermsAr[i].Components[j].Count)
+				        if (countDictComponents.Count == NonDictTermsAr.TermsAr[i].Blocks[j].Components.Count)
 				        {
 					        del = true;
 					        while (countDictComponents.Count > 0)
@@ -193,22 +193,46 @@ namespace TermRules
 						        //DictTermsToDel.insert(DictTermsToDel.end(), countDictComponents.begin(), countDictComponents.end());
 						        if (find.findINList(MainArrayTermsAr.TermsAr, DictTermsAr.TermsAr[countDictComponents[0]].TermWord) == -1)
 						        {
-                                    Term newEl = new Term(); ;
+                                    Term newEl = new Term();
 							        newEl.frequency = DictTermsAr.TermsAr[countDictComponents[0]].frequency;
-							        newEl.TermWord = DictTermsAr.TermsAr[countDictComponents[0]].TermWord;
-							        newEl.Pos.Add(null);
-                                    newEl.TermFragment = DictTermsAr.TermsAr[i].TermFragment;
-							        MainArrayTermsAr.rootTermsTree.AddRange(DictTermsAr.TermsAr[countDictComponents[0]].Pos[0].range);
-							        MainArrayTermsAr.TermsAr.Add(newEl);
+                                    newEl.kind = KindOfTerm.DictTerm;
+                                    newEl.NPattern = DictTermsAr.TermsAr[countDictComponents[0]].NPattern;
+                                    newEl.PatCounter = 0;
+                                    newEl.Pattern = DictTermsAr.TermsAr[countDictComponents[0]].Pattern;
+                                    newEl.Pos.Add(null);
+                                    newEl.setToDel = false;
+                                    newEl.TermFragment = DictTermsAr.TermsAr[countDictComponents[0]].TermFragment;
+                                    newEl.TermWord = DictTermsAr.TermsAr[countDictComponents[0]].TermWord;
 							        TermTree e = MainArrayTermsAr.rootTermsTree.FindRange(DictTermsAr.TermsAr[countDictComponents[0]].Pos[0].range);
-							        e.indexElement = MainArrayTermsAr.TermsAr.Count - 1;
-							        MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos[MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos.Count - 1] = e;
+                                    if (e == null)
+                                    {
+                                        MainArrayTermsAr.rootTermsTree.AddRange(DictTermsAr.TermsAr[countDictComponents[0]].Pos[0].range);
+                                        e = MainArrayTermsAr.rootTermsTree.FindRange(DictTermsAr.TermsAr[countDictComponents[0]].Pos[0].range);
+                                        MainArrayTermsAr.TermsAr.Add(newEl);
+                                        e.indexElement.Add(MainArrayTermsAr.TermsAr.Count - 1);
+                                        MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos[MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos.Count - 1] = e;
+                                    }
+                                    else
+                                    {
+                                        MainArrayTermsAr.TermsAr.Add(newEl);
+                                        if (!e.indexElement.Contains(MainArrayTermsAr.TermsAr.Count - 1)) e.indexElement.Add(MainArrayTermsAr.TermsAr.Count - 1);
+                                        MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos[MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos.Count - 1] = e;
+                                    }
 							        for (int k = 1; k < DictTermsAr.TermsAr[countDictComponents[0]].Pos.Count; k++)
 							        {
-								        MainArrayTermsAr.rootTermsTree.AddRange(DictTermsAr.TermsAr[countDictComponents[0]].Pos[k].range);
-								        e = MainArrayTermsAr.rootTermsTree.FindRange(DictTermsAr.TermsAr[countDictComponents[0]].Pos[k].range);
-								        e.indexElement = MainArrayTermsAr.TermsAr.Count - 1;
-								        MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos.Add(e);
+                                        TermTree node = MainArrayTermsAr.rootTermsTree.FindRange(DictTermsAr.TermsAr[countDictComponents[0]].Pos[k].range);
+                                        if (node == null)
+                                        {
+                                            MainArrayTermsAr.rootTermsTree.AddRange(DictTermsAr.TermsAr[countDictComponents[0]].Pos[k].range);
+                                            e = MainArrayTermsAr.rootTermsTree.FindRange(DictTermsAr.TermsAr[countDictComponents[0]].Pos[k].range);
+                                            if (!e.indexElement.Contains(MainArrayTermsAr.TermsAr.Count - 1)) e.indexElement.Add(MainArrayTermsAr.TermsAr.Count - 1);
+                                            MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos.Add(node);
+                                        }
+                                        else
+                                        {
+                                            if (!e.indexElement.Contains(MainArrayTermsAr.TermsAr.Count - 1)) e.indexElement.Add(MainArrayTermsAr.TermsAr.Count - 1);
+                                            MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos.Add(node);
+                                        }
 							        }
 							        countDictComponents.RemoveAt(0);							        
 						        }
@@ -225,7 +249,7 @@ namespace TermRules
 					        {
 						        isDictComponents = false;
 						        TermTree e = NonDictTermsAr.rootTermsTree.FindRangeExtension(DictTermsAr.TermsAr[countDictComponents[0]].Pos[k].range);
-						        if (e != null && e.indexElement==i)
+						        if (e != null && e.indexElement.Contains(i))
 						        {
 							        isDictComponents = true;
 							        //countDictComponents.Add(r);
@@ -239,21 +263,45 @@ namespace TermRules
 						        if (find.findINList(MainArrayTermsAr.TermsAr, NonDictTermsAr.TermsAr[i].TermWord) == -1)
 						        {
 							        Term newEl = new Term();
-							        newEl.frequency =NonDictTermsAr.TermsAr[i].frequency;
-							        newEl.TermWord = NonDictTermsAr.TermsAr[i].TermWord;
-							        newEl.Pos.Add(null);
+							        newEl.frequency = NonDictTermsAr.TermsAr[i].frequency;
+                                    newEl.kind = KindOfTerm.NonDictTerm;
+                                    newEl.NPattern = NonDictTermsAr.TermsAr[i].NPattern;
+                                    newEl.PatCounter = 0;
+                                    newEl.Pattern = NonDictTermsAr.TermsAr[i].Pattern;
+                                    newEl.Pos.Add(null);
+                                    newEl.setToDel = false;
                                     newEl.TermFragment = NonDictTermsAr.TermsAr[i].TermFragment;
-							        MainArrayTermsAr.rootTermsTree.AddRange(NonDictTermsAr.TermsAr[i].Pos[0].range);
-							        MainArrayTermsAr.TermsAr.Add(newEl);
-							        TermTree e = MainArrayTermsAr.rootTermsTree.FindRange(NonDictTermsAr.TermsAr[i].Pos[0].range);
-							        e.indexElement = i;
-							        MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos[MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos.Count - 1] = e;
+                                    newEl.TermWord = NonDictTermsAr.TermsAr[i].TermWord;
+                                    TermTree e = MainArrayTermsAr.rootTermsTree.FindRange(NonDictTermsAr.TermsAr[i].Pos[0].range);
+                                    if (e == null)
+                                    {
+                                        MainArrayTermsAr.rootTermsTree.AddRange(NonDictTermsAr.TermsAr[i].Pos[0].range);
+                                        e = MainArrayTermsAr.rootTermsTree.FindRange(NonDictTermsAr.TermsAr[i].Pos[0].range);
+                                        MainArrayTermsAr.TermsAr.Add(newEl);
+                                        e.indexElement.Add(MainArrayTermsAr.TermsAr.Count - 1);
+                                        MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos[MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos.Count - 1] = e;
+                                    }
+                                    else
+                                    {
+                                        MainArrayTermsAr.TermsAr.Add(newEl);
+                                        if (!e.indexElement.Contains(MainArrayTermsAr.TermsAr.Count - 1)) e.indexElement.Add(MainArrayTermsAr.TermsAr.Count - 1);
+                                        MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos[MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos.Count - 1] = e;
+                                    }
 							        for (int k = 1; k < NonDictTermsAr.TermsAr[i].Pos.Count; k++)
 							        {
-								        MainArrayTermsAr.rootTermsTree.AddRange(NonDictTermsAr.TermsAr[i].Pos[k].range);
-								        e = MainArrayTermsAr.rootTermsTree.FindRange(NonDictTermsAr.TermsAr[i].Pos[k].range);
-								        e.indexElement = MainArrayTermsAr.TermsAr.Count - 1;
-								        MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos.Add(e);
+                                        TermTree node = MainArrayTermsAr.rootTermsTree.FindRange(NonDictTermsAr.TermsAr[i].Pos[k].range);
+                                        if (node == null)
+                                        {
+                                            MainArrayTermsAr.rootTermsTree.AddRange(NonDictTermsAr.TermsAr[i].Pos[k].range);
+                                            e = MainArrayTermsAr.rootTermsTree.FindRange(NonDictTermsAr.TermsAr[i].Pos[k].range);
+                                            if (!e.indexElement.Contains(MainArrayTermsAr.TermsAr.Count - 1)) e.indexElement.Add(MainArrayTermsAr.TermsAr.Count - 1);
+                                            MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos.Add(node);
+                                        }
+                                        else
+                                        {
+                                            if (!e.indexElement.Contains(MainArrayTermsAr.TermsAr.Count - 1)) e.indexElement.Add(MainArrayTermsAr.TermsAr.Count - 1);
+                                            MainArrayTermsAr.TermsAr[MainArrayTermsAr.TermsAr.Count - 1].Pos.Add(node);
+                                        }
 							        }
 							        countDictComponents.RemoveAt(0);
 						        }
@@ -264,7 +312,12 @@ namespace TermRules
 			        {
 				        for (int k = 0; k < NonDictTermsAr.TermsAr[i].Pos.Count; k++)
 				        {
-					        NonDictTermsAr.rootTermsTree.DeleteRange(NonDictTermsAr.TermsAr[i].Pos[k].range);
+                            int l = NonDictTermsAr.TermsAr[i].Pos[k].indexElement.FindIndex(item => item == i);
+                            NonDictTermsAr.TermsAr[i].Pos[k].indexElement.RemoveAt(l);
+                            if (NonDictTermsAr.TermsAr[i].Pos[k].indexElement.Count == 0)
+                            {
+                                NonDictTermsAr.rootTermsTree.DeleteRange(NonDictTermsAr.TermsAr[i].Pos[k].range);
+                            }					        
 					        NonDictTermsAr.TermsAr[i].Pos.RemoveAt(k);
 					        k--;
 				        }
@@ -273,7 +326,12 @@ namespace TermRules
 				        s_ND = NonDictTermsAr.TermsAr.Count;
 				        for (int k = 0; k < CombTermsAr.TermsAr[res].Pos.Count; k++)
 				        {
-					        CombTermsAr.rootTermsTree.DeleteRange(CombTermsAr.TermsAr[res].Pos[k].range);
+                            int l = CombTermsAr.TermsAr[res].Pos[k].indexElement.FindIndex(item => item == res);
+                            CombTermsAr.TermsAr[res].Pos[k].indexElement.RemoveAt(l);
+                            if (CombTermsAr.TermsAr[res].Pos[k].indexElement.Count == 0)
+                            {
+                                CombTermsAr.rootTermsTree.DeleteRange(CombTermsAr.TermsAr[res].Pos[k].range);
+                            }					        
 					        CombTermsAr.TermsAr[res].Pos.RemoveAt(k);
 					        k--;
 				        }
@@ -282,12 +340,12 @@ namespace TermRules
 				        for (int p = 0; p < NonDictTermsAr.TermsAr.Count; p++)
 				        {
 					        for (int j = 0; j < NonDictTermsAr.TermsAr[p].Pos.Count; j++)
-						        NonDictTermsAr.TermsAr[p].Pos[j].indexElement = p;
+                                if (!NonDictTermsAr.TermsAr[p].Pos[j].indexElement.Contains(p)) NonDictTermsAr.TermsAr[p].Pos[j].indexElement.Add(p);
 				        }
 				        for (int p = 0; p < CombTermsAr.TermsAr.Count; p++)
 				        {
 					        for (int j = 0; j < CombTermsAr.TermsAr[p].Pos.Count; j++)
-						        CombTermsAr.TermsAr[p].Pos[j].indexElement = p;
+                                if (!CombTermsAr.TermsAr[p].Pos[j].indexElement.Contains(p)) CombTermsAr.TermsAr[p].Pos[j].indexElement.Add(p);
 				        }
 				        //==================================
 			        }
@@ -306,7 +364,7 @@ namespace TermRules
         }
         public void Rule4_Msyn_to_M(Terms MainTermsAr, SynTerms SynTermsAr)
         {
-            FindFunctions find = new FindFunctions();
+            //FindFunctions find = new FindFunctions();
 	        for (int i = 0; i < SynTermsAr.TermsAr.Count; i++)
 	        {
 		        int first_alt = find.findINList(MainTermsAr.TermsAr, SynTermsAr.TermsAr[i].alternatives.first.alternative);
@@ -316,27 +374,39 @@ namespace TermRules
 			        SynTermsAr.TermsAr[i].setToDel = true;
 			        Term newEl = new Term();
 			        newEl.frequency = MainTermsAr.TermsAr[first_alt].frequency;
-			        newEl.TermWord = SynTermsAr.TermsAr[i].alternatives.second.alternative;
-			        newEl.setToDel = false;
+                    newEl.kind = KindOfTerm.SynTerm;
+                    newEl.NPattern = SynTermsAr.TermsAr[i].alternatives.second.NPattern;
+                    newEl.PatCounter = 0;
+                    newEl.Pattern = SynTermsAr.TermsAr[i].alternatives.second.Pattern;
+                    //newEl.Pos.Add(null);
+                    newEl.setToDel = false;
                     newEl.TermFragment = SynTermsAr.TermsAr[i].TermFragment;
+                    newEl.TermWord = SynTermsAr.TermsAr[i].alternatives.second.alternative;
 			        MainTermsAr.TermsAr.Add(newEl);
 			        for (int j = 1; j < MainTermsAr.TermsAr[first_alt].Pos.Count; j++)
 			        {
 				        MainTermsAr.TermsAr[MainTermsAr.TermsAr.Count - 1].Pos.Add(MainTermsAr.TermsAr[first_alt].Pos[j]);
+                        if (!MainTermsAr.TermsAr[first_alt].Pos[j].indexElement.Contains(MainTermsAr.TermsAr.Count - 1)) MainTermsAr.TermsAr[first_alt].Pos[j].indexElement.Add(MainTermsAr.TermsAr.Count - 1);
 			        }
 		        }
 		        else if (first_alt == -1 && second_alt != -1)
 		        {
 			        SynTermsAr.TermsAr[i].setToDel = true;
 			        Term newEl = new Term();
-			        newEl.frequency = MainTermsAr.TermsAr[second_alt].frequency;
-			        newEl.TermWord = SynTermsAr.TermsAr[i].alternatives.first.alternative;
-			        newEl.setToDel = false;
+                    newEl.frequency = MainTermsAr.TermsAr[second_alt].frequency;
+                    newEl.kind = KindOfTerm.SynTerm;
+                    newEl.NPattern = SynTermsAr.TermsAr[i].alternatives.first.NPattern;
+                    newEl.PatCounter = 0;
+                    newEl.Pattern = SynTermsAr.TermsAr[i].alternatives.first.Pattern;
+                    //newEl.Pos.Add(null);
+                    newEl.setToDel = false;
                     newEl.TermFragment = SynTermsAr.TermsAr[i].TermFragment;
+                    newEl.TermWord = SynTermsAr.TermsAr[i].alternatives.first.alternative;			       
 			        MainTermsAr.TermsAr.Add(newEl);
 			        for (int j = 1; j < MainTermsAr.TermsAr[second_alt].Pos.Count; j++)
 			        {
 				        MainTermsAr.TermsAr[MainTermsAr.TermsAr.Count - 1].Pos.Add(MainTermsAr.TermsAr[second_alt].Pos[j]);
+                        if (!MainTermsAr.TermsAr[second_alt].Pos[j].indexElement.Contains(MainTermsAr.TermsAr.Count - 1)) MainTermsAr.TermsAr[second_alt].Pos[j].indexElement.Add(MainTermsAr.TermsAr.Count - 1);
 			        }
 		        }
 	        }
