@@ -151,8 +151,9 @@ namespace CheckPatterns
             StreamWriter sw = new StreamWriter("TERM_F3.txt", false, Encoding.GetEncoding("Windows-1251"));
             string priviousWord = "";
             int cur_lat = 65;
-            foreach (string pat in PatternLines)
+            foreach (string current_pat in PatternLines)
             {
+                string pat = current_pat.Trim();
                 if (pat != "")
                 {
                     int ind_s = pat.IndexOf("<");
@@ -161,7 +162,7 @@ namespace CheckPatterns
                     {
                         if (ind_s < ind_k)
                         {
-                            int ind_s_c = pat.IndexOf(">", ind_s+1);
+                            int ind_s_c = pat.IndexOf(">", ind_s + 1);
                             int ind_s_z = pat.IndexOf(",", ind_s + 1);
                             if ((ind_s_z != -1 && ind_s_c < ind_s_z) || (ind_s_z == -1))
                             {
@@ -179,7 +180,7 @@ namespace CheckPatterns
                                     priviousWord = cur_pat;
                                 }
                             }
-                            else if (ind_s_z != -1 && ind_s_z<ind_s_c)
+                            else if (ind_s_z != -1 && ind_s_z < ind_s_c)
                             {
                                 string cur_pat = pat.Substring(ind_s + 1, ind_s_z - (ind_s + 1));
                                 if (cur_pat == priviousWord)
@@ -198,7 +199,7 @@ namespace CheckPatterns
                         }
                         else
                         {
-                            int ind_k_c = pat.IndexOf("\"", ind_k+1);
+                            int ind_k_c = pat.IndexOf("\"", ind_k + 1);
                             string cur_pat = pat.Substring(ind_k + 1, ind_k_c - (ind_k + 1));
 
                             if (cur_pat == priviousWord)
@@ -217,44 +218,44 @@ namespace CheckPatterns
                     }
                     else if (ind_s != -1)
                     {
-                        int ind_s_c = pat.IndexOf(">", ind_s+1);
-                            int ind_s_z = pat.IndexOf(",", ind_s + 1);
-                            if ((ind_s_z != -1 && ind_s_c < ind_s_z) || (ind_s_z == -1))
+                        int ind_s_c = pat.IndexOf(">", ind_s + 1);
+                        int ind_s_z = pat.IndexOf(",", ind_s + 1);
+                        if ((ind_s_z != -1 && ind_s_c < ind_s_z) || (ind_s_z == -1))
+                        {
+                            string cur_pat = pat.Substring(ind_s + 1, ind_s_c - (ind_s + 1));
+                            if (cur_pat == priviousWord)
                             {
-                                string cur_pat = pat.Substring(ind_s + 1, ind_s_c - (ind_s + 1));
-                                if (cur_pat == priviousWord)
-                                {
-                                    cur_lat++;
-                                    sw.WriteLine(cur_pat + "-" + ((char)cur_lat).ToString().ToUpper() + " = " + pat);
-                                    priviousWord = cur_pat;
-                                }
-                                else
-                                {
-                                    cur_lat = 65;
-                                    sw.WriteLine(cur_pat + "-" + ((char)cur_lat).ToString().ToUpper() + " = " + pat);
-                                    priviousWord = cur_pat;
-                                }
+                                cur_lat++;
+                                sw.WriteLine(cur_pat + "-" + ((char)cur_lat).ToString().ToUpper() + " = " + pat);
+                                priviousWord = cur_pat;
                             }
-                            else if (ind_s_z != -1 && ind_s_z<ind_s_c)
+                            else
                             {
-                                string cur_pat = pat.Substring(ind_s + 1, ind_s_z - (ind_s + 1));
-                                if (cur_pat == priviousWord)
-                                {
-                                    cur_lat++;
-                                    sw.WriteLine(cur_pat + "-" + ((char)cur_lat).ToString().ToUpper() + " = " + pat);
-                                    priviousWord = cur_pat;
-                                }
-                                else
-                                {
-                                    cur_lat = 65;
-                                    sw.WriteLine(cur_pat + "-" + ((char)cur_lat).ToString().ToUpper() + " = " + pat);
-                                    priviousWord = cur_pat;
-                                }
+                                cur_lat = 65;
+                                sw.WriteLine(cur_pat + "-" + ((char)cur_lat).ToString().ToUpper() + " = " + pat);
+                                priviousWord = cur_pat;
                             }
+                        }
+                        else if (ind_s_z != -1 && ind_s_z < ind_s_c)
+                        {
+                            string cur_pat = pat.Substring(ind_s + 1, ind_s_z - (ind_s + 1));
+                            if (cur_pat == priviousWord)
+                            {
+                                cur_lat++;
+                                sw.WriteLine(cur_pat + "-" + ((char)cur_lat).ToString().ToUpper() + " = " + pat);
+                                priviousWord = cur_pat;
+                            }
+                            else
+                            {
+                                cur_lat = 65;
+                                sw.WriteLine(cur_pat + "-" + ((char)cur_lat).ToString().ToUpper() + " = " + pat);
+                                priviousWord = cur_pat;
+                            }
+                        }
                     }
                     else if (ind_k != -1)
                     {
-                        int ind_k_c = pat.IndexOf("\"", ind_k+1);
+                        int ind_k_c = pat.IndexOf("\"", ind_k + 1);
                         string cur_pat = pat.Substring(ind_k + 1, ind_k_c - (ind_k + 1));
 
                         if (cur_pat == priviousWord)
@@ -273,9 +274,10 @@ namespace CheckPatterns
                 }
                 else
                 {
-                    sw.WriteLine("\r\n");
+                    sw.WriteLine("\n");
                 }
             }
+            sw.Close();
         }
         static void Main(string[] args)
         {
@@ -288,7 +290,7 @@ namespace CheckPatterns
             List<int> wrongPatterns = new List<int>();
             //List<string> wrongPatterns = new List<string>();
             StreamReader fs = new StreamReader(PatternsFile, Encoding.GetEncoding("Windows-1251"));
-            
+
             while (true)
             {
                 curPattern = fs.ReadLine();
