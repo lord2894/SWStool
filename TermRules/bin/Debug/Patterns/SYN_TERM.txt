@@ -21,8 +21,8 @@ PMSPPN = Pa1 N1 <Pa1=N1> (N1) =text> Pa1 N1 <Pa1~>N1>
 
 TermSynN = MSPN1 ["\("MSPN2"\)"] <MSPN1.c=MSPN2.c> (MSPN1) =text> MSPN1
 TermSynNN = MSPNN1 ["\("MSPNN2"\)"] <MSPNN1.c=MSPNN2.c> (MSPNN1) =text> MSPNN1
-TermSynAN = MSPAN1 ["\("MSPAN2"\)"] <MSPAN1.c=MSP2AN.c> (MSPAN1) =text> MSPAN1
-TermSynAN = MSPAN1 ["\("MSPAN2"\)"] <MSPAN1.c=MSP2AN.c> (MSPAN1) =text> MSPAN1
+TermSynAN = MSPAN1 ["\("MSPAN2"\)"] <MSPAN1.c=MSPAN2.c> (MSPAN1) =text> MSPAN1
+TermSynPN = MSPPN1 ["\("MSPPN2"\)"] <MSPPN1.c=MSPPN2.c> (MSPPN1) =text> MSPPN1
 TermSynAAN = MSPAAN1 ["\("MSPAAN2"\)"] <MSPAAN1.c=MSPAAN2.c> (MSPAAN1) =text> MSPAAN1
 TermSynAPN = MSPAPN1 ["\("MSPAPN2"\)"] <MSPAPN1.c=MSPAPN2.c> (MSPAPN1) =text> MSPAPN1
 TermSynPAN = MSPPAN1 ["\("MSPPAN2"\)"] <MSPPAN1.c=MSPPAN2.c> (MSPPAN1) =text> MSPPAN1
@@ -479,7 +479,7 @@ NPSYN-N-AAN-A = NPMSPN1 "\("NPMSPAAN2"\)" (NPMSPN1) =text> #NPMSPN1
 NPSYN-N-AAN-B = NPMSPN1 "\("NPMSPAAN2"\)" (NPMSPN1) =text> #NPMSPAAN2
 NPSYN-N-AAN-A = NPMSPN1 "\(" ["или"] NPMSPAAN2 "\)" <NPMSPN1.c=NPMSPAAN2.c> =text> #NPMSPN1
 NPSYN-N-AAN-B = NPMSPN1 "\(" ["или"] NPMSPAAN2 "\)" <NPMSPN1.c=NPMSPAAN2.c> =text> #NPMSPAAN2
-NPSYN-N-AAN=A = NPMSPN1 "," "или" ["просто"] NPMSPAAN2 =text> #NPMSPN1
+NPSYN-N-AAN-A = NPMSPN1 "," "или" ["просто"] NPMSPAAN2 =text> #NPMSPN1
 NPSYN-N-AAN-B = NPMSPN1 "," "или" ["просто"] NPMSPAAN2 =text> #NPMSPAAN2
 NPSYN-N-AAN-A = NPTermN1<c=acc> "будем" ["также"] "называть" NPTermAAN2<c=ins> =text> #NPTermN1 
 NPSYN-N-AAN-B = NPTermN1<c=acc> "будем" ["также"] "называть" NPTermAAN2<c=ins> =text> #NPTermAAN2 
@@ -499,7 +499,7 @@ NPSYN-N-APN-A = NPMSPN1 "\("NPMSPAPN2"\)" (NPMSPN1) =text> #NPMSPN1
 NPSYN-N-APN-B = NPMSPN1 "\("NPMSPAPN2"\)" (NPMSPN1) =text> #NPMSPAPN2
 NPSYN-N-APN-A = NPMSPN1 "\(" ["или"] NPMSPAPN2 "\)" <NPMSPN1.c=NPMSPAPN2.c> =text> #NPMSPN1
 NPSYN-N-APN-B = NPMSPN1 "\(" ["или"] NPMSPAPN2 "\)" <NPMSPN1.c=NPMSPAPN2.c> =text> #NPMSPAPN2
-NPSYN-N-APN=A = NPMSPN1 "," "или" ["просто"] NPMSPAPN2 =text> #NPMSPN1
+NPSYN-N-APN-A = NPMSPN1 "," "или" ["просто"] NPMSPAPN2 =text> #NPMSPN1
 NPSYN-N-APN-B = NPMSPN1 "," "или" ["просто"] NPMSPAPN2 =text> #NPMSPAPN2
 NPSYN-N-APN-A = NPTermN1<c=acc> "будем" ["также"] "называть" NPTermAPN2<c=ins> =text> #NPTermN1 
 NPSYN-N-APN-B = NPTermN1<c=acc> "будем" ["также"] "называть" NPTermAPN2<c=ins> =text> #NPTermAPN2 
@@ -519,7 +519,7 @@ NPSYN-N-PAN-A = NPMSPN1 "\("NPMSPPAN2"\)" (NPMSPN1) =text> #NPMSPN1
 NPSYN-N-PAN-B = NPMSPN1 "\("NPMSPPAN2"\)" (NPMSPN1) =text> #NPMSPPAN2
 NPSYN-N-PAN-A = NPMSPN1 "\(" ["или"] NPMSPPAN2 "\)" <NPMSPN1.c=NPMSPPAN2.c> =text> #NPMSPN1
 NPSYN-N-PAN-B = NPMSPN1 "\(" ["или"] NPMSPPAN2 "\)" <NPMSPN1.c=NPMSPPAN2.c> =text> #NPMSPPAN2
-NPSYN-N-PAN=A = NPMSPN1 "," "или" ["просто"] NPMSPPAN2 =text> #NPMSPN1
+NPSYN-N-PAN-A = NPMSPN1 "," "или" ["просто"] NPMSPPAN2 =text> #NPMSPN1
 NPSYN-N-PAN-B = NPMSPN1 "," "или" ["просто"] NPMSPPAN2 =text> #NPMSPPAN2
 NPSYN-N-PAN-A = NPTermN1<c=acc> "будем" ["также"] "называть" NPTermPAN2<c=ins> =text> #NPTermN1 
 NPSYN-N-PAN-B = NPTermN1<c=acc> "будем" ["также"] "называть" NPTermPAN2<c=ins> =text> #NPTermPAN2 
@@ -539,7 +539,7 @@ NPSYN-N-PPN-A = NPMSPN1 "\("NPMSPPPN2"\)" (NPMSPN1) =text> #NPMSPN1
 NPSYN-N-PPN-B = NPMSPN1 "\("NPMSPPPN2"\)" (NPMSPN1) =text> #NPMSPPPN2
 NPSYN-N-PPN-A = NPMSPN1 "\(" ["или"] NPMSPPPN2 "\)" <NPMSPN1.c=NPMSPPPN2.c> =text> #NPMSPN1
 NPSYN-N-PPN-B = NPMSPN1 "\(" ["или"] NPMSPPPN2 "\)" <NPMSPN1.c=NPMSPPPN2.c> =text> #NPMSPPPN2
-NPSYN-N-PPN=A = NPMSPN1 "," "или" ["просто"] NPMSPPPN2 =text> #NPMSPN1
+NPSYN-N-PPN-A = NPMSPN1 "," "или" ["просто"] NPMSPPPN2 =text> #NPMSPN1
 NPSYN-N-PPN-B = NPMSPN1 "," "или" ["просто"] NPMSPPPN2 =text> #NPMSPPPN2
 NPSYN-N-PPN-A = NPTermN1<c=acc> "будем" ["также"] "называть" NPTermPPN2<c=ins> =text> #NPTermN1 
 NPSYN-N-PPN-B = NPTermN1<c=acc> "будем" ["также"] "называть" NPTermPPN2<c=ins> =text> #NPTermPPN2 

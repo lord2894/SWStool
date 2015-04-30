@@ -400,7 +400,7 @@ namespace TermRules
             string CombComponentsPatterns = tmpPath + "\\" + folderPath + "\\COMP_COMB_TERM.txt";
             string patterns = "";
             StreamWriter sw = new StreamWriter(CombComponentsPatterns, false, Encoding.GetEncoding("Windows-1251"));
-            aux.PrintConstantPatterns(sw);
+            //aux.PrintConstantPatterns(sw);
             for (int i = 0; i < CombTermsAr.TermsAr.Count; i++)
             {
                 for (int j = 0; j < CombTermsAr.TermsAr[i].Components.Count; j++)
@@ -970,7 +970,7 @@ namespace TermRules
                             }
                     }
                     int k = find.findINList(PatternsModel, curPattern, 1);
-                    if (k == -1)
+                    if (k == -1 && len != 0)
                     {
                         pair<string, string> new_p = new pair<string, string>();
                         patternsName = patternsName + " " + curPattern.Trim();

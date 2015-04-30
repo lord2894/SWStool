@@ -284,8 +284,10 @@ namespace CheckPatterns
             Program pr = new Program();
             List<string> PatternLines = new List<string>();
             //string programmPath = Application.StartupPath.ToString();
-            string programmPath = "C:\\Users\\Kir\\Documents\\Visual Studio 2013\\Projects\\TermsStrategy\\Debug\\Patterns";
-            string PatternsFile = programmPath + "\\TERM_F2.txt";
+            //string programmPath = "C:\\Users\\Kir\\Documents\\Visual Studio 2013\\Projects\\TermsStrategy\\Debug\\Patterns";
+            string programmPath = "C:\\Users\\Kir\\Documents\\Visual Studio 2013\\Projects\\SWStool\\CheckPatterns\\bin\\Debug";
+            //string PatternsFile = programmPath + "\\TERM_F2.txt";
+            string PatternsFile = programmPath + "\\SYN_TERM.txt";
             string curPattern = "";
             List<int> wrongPatterns = new List<int>();
             //List<string> wrongPatterns = new List<string>();
@@ -298,7 +300,8 @@ namespace CheckPatterns
                 PatternLines.Add(curPattern);
             }
             fs.Close();
-            pr.SetName(PatternLines);
+            //pr.SetName(PatternLines);
+            pr.checkS(PatternLines);
         }
     }
 }

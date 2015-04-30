@@ -28,63 +28,39 @@ namespace TermRules
                 change = false;
                 for (int i = 0; i < MR.TermsAr.Count; i++)
                 {
-                    //vector<pair<unsigned, unsigned>> POS_forDelete;
-                    //int count = 0; 
                     for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
                     {
                         Range range = new Range(MR.TermsAr[i].Pos[j].range.inf);
-                        if (MR.rootTermsTree.FindRangeExtension(range) != null)
+                        TermTree e = MR.rootTermsTree.FindRangeExtension(range);
+                        if (e != null)
                         {
-                            TermTree e = MR.rootTermsTree.FindRange(range);
-                            for (int k = 0; k < e.indexElement.Count; k++)
-                                for (int t = 0; t < MR.TermsAr[e.indexElement[k]].Pos.Count; t++)
-                                {
-                                    if (MR.TermsAr[e.indexElement[k]].Pos[t] == e)
-                                    {
-                                        MR.TermsAr[e.indexElement[k]].Pos.RemoveAt(t);
-                                        t--;
-                                    }
-                                }
-                            //count++;
-                            MR.rootTermsTree.DeleteRange(MR.TermsAr[i].Pos[j].range);
-                            //MR.TermsAr[i].Pos.RemoveAt(j);
-                            //delete MR.TermsAr[i].Pos[j];
-                            //MR.TermsAr[i].Pos.erase(MR.TermsAr[i].Pos.begin() + );
-                            //vector<TermTree*>(MR.TermsAr[i].Pos).swap(MR.TermsAr[i].Pos);
+                            TermTree cur_treeEl = MR.TermsAr[i].Pos[j];
+                            for (int k = 0; k < cur_treeEl.indexElement.Count; k++)
+                            {
+                                int ind_del_pos = MR.TermsAr[cur_treeEl.indexElement[k]].Pos.FindIndex(item => item == cur_treeEl);
+                                if (ind_del_pos != -1)
+                                    MR.TermsAr[cur_treeEl.indexElement[k]].Pos.RemoveAt(ind_del_pos);
+                            }                                
+                            MR.rootTermsTree.DeleteRange(range);
                             j--;
                         }
                     }
                     if (MR.TermsAr[i].Pos.Count == 0)
                     {
-                        //for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
-                        //{
-                        //POS_forDelete.push_back(MR.TermsAr[i].Pos[j]->inf);
-                        //	MR.rootTermsTree = DeleteRange(MR.rootTermsTree, MR.TermsAr[i].Pos[j]->inf);
-                        //	//delete MR.TermsAr[i].Pos[j];
-                        //	MR.TermsAr[i].Pos.erase(MR.TermsAr[i].Pos.begin() + j);
-                        //	vector<TermTree*>(MR.TermsAr[i].Pos).swap(MR.TermsAr[i].Pos);
-                        //	j--;
-                        //}
                         MR.TermsAr.RemoveAt(i);
-                        //MR.TermsAr.erase(MR.TermsAr.begin() + i);
-                        //vector<Term>(MR.TermsAr).swap(MR.TermsAr);
+                        ChangeIdexesInTree(MR, i);
                         i--;
                     }
                     else
                     {
-                        //for (int i = 0; i < POS_forDelete.Count; i++)
-                        //{
-                        //	TermTree* e = FindRange(MR.rootTermsTree, POS_forDelete[i]);
-                        //	DeleteRange(MR.rootTermsTree, POS_forDelete[i]);
-                        //}	
                         MR.TermsAr[i].frequency = MR.TermsAr[i].Pos.Count;
                     }
                 }
-                for (int i = 0; i < MR.TermsAr.Count; i++)
-                {
-                    for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
-                        if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
-                }
+                //for (int i = 0; i < MR.TermsAr.Count; i++)
+                //{
+                //    for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
+                //        if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
+                //}
                 if (size != MR.TermsAr.Count)
                 {
                     change = true;
@@ -101,62 +77,33 @@ namespace TermRules
                 change = false;
                 for (int i = 0; i < MR.TermsAr.Count; i++)
                 {
-                    //vector<pair<unsigned, unsigned>> POS_forDelete;
-                    //int count = 0; 
                     for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
                     {
                         Range range = new Range(MR.TermsAr[i].Pos[j].range.inf);
-                        if (MR.rootTermsTree.FindRangeExtension(range) != null)
+                        TermTree e = MR.rootTermsTree.FindRangeExtension(range);
+                        if (e != null)
                         {
-                            TermTree e = MR.rootTermsTree.FindRange(range);
-                            for (int k = 0; k < e.indexElement.Count; k++)
-                                for (int t = 0; t < MR.TermsAr[e.indexElement[k]].Pos.Count; t++)
-                                {
-                                    if (MR.TermsAr[e.indexElement[k]].Pos[t] == e)
-                                    {
-                                        MR.TermsAr[e.indexElement[k]].Pos.RemoveAt(t);
-                                        t--;
-                                    }
-                                }
-                            //count++;
+                            TermTree cur_treeEl = MR.TermsAr[i].Pos[j];
+                            for (int k = 0; k < cur_treeEl.indexElement.Count; k++)
+                            {
+                                int ind_del_pos = MR.TermsAr[cur_treeEl.indexElement[k]].Pos.FindIndex(item => item == cur_treeEl);
+                                if (ind_del_pos != -1)
+                                    MR.TermsAr[cur_treeEl.indexElement[k]].Pos.RemoveAt(ind_del_pos);
+                            }
                             MR.rootTermsTree.DeleteRange(range);
-                            //delete MR.TermsAr[i].Pos[j];
-                            //MR.TermsAr[i].Pos.erase(MR.TermsAr[i].Pos.begin() + j);
-                            //vector<TermTree*>(MR.TermsAr[i].Pos).swap(MR.TermsAr[i].Pos);
-                            //MR.TermsAr[i].Pos.RemoveAt(j);
                             j--;
                         }
                     }
                     if (MR.TermsAr[i].Pos.Count == 0)
                     {
-                        //for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
-                        //{
-                        //POS_forDelete.push_back(MR.TermsAr[i].Pos[j]->inf);
-                        //	MR.rootTermsTree = DeleteRange(MR.rootTermsTree, MR.TermsAr[i].Pos[j]->inf);
-                        //	//delete MR.TermsAr[i].Pos[j];
-                        //	MR.TermsAr[i].Pos.erase(MR.TermsAr[i].Pos.begin() + j);
-                        //	vector<TermTree*>(MR.TermsAr[i].Pos).swap(MR.TermsAr[i].Pos);
-                        //	j--;
-                        //}
-                        //MR.TermsAr.erase(MR.TermsAr.begin() + i);
-                        //vector<NonDictTerm>(MR.TermsAr).swap(MR.TermsAr);
                         MR.TermsAr.RemoveAt(i);
+                        ChangeIdexesInTree(MR, i);
                         i--;
                     }
                     else
                     {
-                        //for (int i = 0; i < POS_forDelete.Count; i++)
-                        //{
-                        //	TermTree* e = FindRange(MR.rootTermsTree, POS_forDelete[i]);
-                        //	DeleteRange(MR.rootTermsTree, POS_forDelete[i]);
-                        //}	
                         MR.TermsAr[i].frequency = MR.TermsAr[i].Pos.Count;
                     }
-                }
-                for (int i = 0; i < MR.TermsAr.Count; i++)
-                {
-                    for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
-                        if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
                 }
                 if (size != MR.TermsAr.Count)
                 {
@@ -174,63 +121,39 @@ namespace TermRules
                 change = false;
                 for (int i = 0; i < MR.TermsAr.Count; i++)
                 {
-                    //vector<pair<unsigned, unsigned>> POS_forDelete;
-                    //int count = 0; 
                     for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
                     {
                         Range range = new Range(MR.TermsAr[i].Pos[j].range.inf);
-                        if (MR.rootTermsTree.FindRangeExtension(range) != null)
+                        TermTree e = MR.rootTermsTree.FindRangeExtension(range);
+                        if (e != null)
                         {
-                            TermTree e = MR.rootTermsTree.FindRange(range);
-                            for (int k = 0; k < e.indexElement.Count; k++)
-                                for (int t = 0; t < MR.TermsAr[e.indexElement[k]].Pos.Count; t++)
-                                {
-                                    if (MR.TermsAr[e.indexElement[k]].Pos[t] == e)
-                                    {
-                                        MR.TermsAr[e.indexElement[k]].Pos.RemoveAt(t);
-                                        t--;
-                                    }
-                                }
-                            //count++;
+                            TermTree cur_treeEl = MR.TermsAr[i].Pos[j];
+                            for (int k = 0; k < cur_treeEl.indexElement.Count; k++)
+                            {
+                                int ind_del_pos = MR.TermsAr[cur_treeEl.indexElement[k]].Pos.FindIndex(item => item == cur_treeEl);
+                                if (ind_del_pos != -1)
+                                    MR.TermsAr[cur_treeEl.indexElement[k]].Pos.RemoveAt(ind_del_pos);
+                            }
                             MR.rootTermsTree.DeleteRange(range);
-                            //delete MR.TermsAr[i].Pos[j];
-                            //MR.TermsAr[i].Pos.erase(MR.TermsAr[i].Pos.begin() + j);
-                            //vector<TermTree*>(MR.TermsAr[i].Pos).swap(MR.TermsAr[i].Pos);
-                            //MR.TermsAr[i].Pos.RemoveAt(j);
                             j--;
                         }
                     }
                     if (MR.TermsAr[i].Pos.Count == 0)
                     {
-                        //for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
-                        //{
-                        //POS_forDelete.push_back(MR.TermsAr[i].Pos[j]->inf);
-                        //	MR.rootTermsTree = DeleteRange(MR.rootTermsTree, MR.TermsAr[i].Pos[j]->inf);
-                        //	//delete MR.TermsAr[i].Pos[j];
-                        //	MR.TermsAr[i].Pos.erase(MR.TermsAr[i].Pos.begin() + j);
-                        //	vector<TermTree*>(MR.TermsAr[i].Pos).swap(MR.TermsAr[i].Pos);
-                        //	j--;
-                        //}
-                        //MR.TermsAr.erase(MR.TermsAr.begin() + i);
-                        //vector<SynTerm>(MR.TermsAr).swap(MR.TermsAr);
                         MR.TermsAr.RemoveAt(i);
+                        ChangeIdexesInTree(MR, i);
                         i--;
                     }
                     else
                     {
-                        //for (int i = 0; i < POS_forDelete.Count; i++)
-                        //{
-                        //	TermTree* e = FindRange(MR.rootTermsTree, POS_forDelete[i]);
-                        //	DeleteRange(MR.rootTermsTree, POS_forDelete[i]);
-                        //}	
                         MR.TermsAr[i].frequency = MR.TermsAr[i].Pos.Count;
                     }
                 }
-                for (int i = 0; i < MR.TermsAr.Count; i++)
-                {
-                    for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
-                        if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
-                }
+                //for (int i = 0; i < MR.TermsAr.Count; i++)
+                //{
+                //    for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
+                //        if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
+                //}
                 if (size != MR.TermsAr.Count)
                 {
                     change = true;
@@ -245,37 +168,30 @@ namespace TermRules
             {
                 if (MR.TermsAr[i].setToDel)
                 {
-                    while (MR.TermsAr[i].Pos.Count > 0)
+                    for (int j=0; j<MR.TermsAr[i].Pos.Count; j++)
                     {
-                        for (int k = 0; k < MR.TermsAr[i].Pos[0].indexElement.Count; k++)
-                            if (MR.TermsAr[i].Pos[0].indexElement[k] != i)
-                            {
-                                for (int p=0; p<MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos.Count; p++)
-                                {
-                                    if (MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos[p] == MR.TermsAr[i].Pos[0])
-                                    {
-                                        MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos.RemoveAt(p);
-                                        p--;
-                                    }
-                                }
-                            }
-                        MR.TermsAr[i].Pos.RemoveAt(0);
-                        MR.rootTermsTree.DeleteRange(MR.TermsAr[i].Pos[0].range);
-                        //MR.TermsAr[i].Pos.erase(MR.TermsAr[i].Pos.begin() );
-                        //vector<TermTree*>(MR.TermsAr[i].Pos).swap(MR.TermsAr[i].Pos);                        
+                        int ind_to_del = MR.TermsAr[i].Pos[j].indexElement.FindIndex(item => item == i);
+                        if (ind_to_del != -1)
+                        {
+                            MR.TermsAr[i].Pos[j].indexElement.RemoveAt(ind_to_del);
+                        }
+                        if (MR.TermsAr[i].Pos[j].indexElement.Count == 0)
+                        {
+                            Range del_range = new Range(MR.TermsAr[i].Pos[j].range.inf);
+                            MR.rootTermsTree.DeleteRange(del_range);
+                        }
                     }
-                    //MR.TermsAr.erase(MR.TermsAr.begin() + i);
-                    //vector<Term>(MR.TermsAr).swap(MR.TermsAr);
                     MR.TermsAr.RemoveAt(i);
-                    i--;
+                    ChangeIdexesInTree(MR, i);
                     sizeMR = MR.TermsAr.Count;
+                    i--;
                 }
             }
-            for (int i = 0; i < MR.TermsAr.Count; i++)
-            {
-                for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
-                    if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
-            }
+            //for (int i = 0; i < MR.TermsAr.Count; i++)
+            //{
+            //    for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
+            //        if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
+            //}
         }
         public void DelElementsWhichSetToDel(SynTerms MR)
         {
@@ -284,38 +200,25 @@ namespace TermRules
             {
                 if (MR.TermsAr[i].setToDel)
                 {
-                    while (MR.TermsAr[i].Pos.Count > 0)
+                    for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
                     {
-                        for (int k = 0; k < MR.TermsAr[i].Pos[0].indexElement.Count; k++)
-                            if (MR.TermsAr[i].Pos[0].indexElement[k] != i)
-                            {
-                                for (int p = 0; p < MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos.Count; p++)
-                                {
-                                    if (MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos[p] == MR.TermsAr[i].Pos[0])
-                                    {
-                                        MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos.RemoveAt(p);
-                                        p--;
-                                    }
-                                }
-                            }
-                        MR.TermsAr[i].Pos.RemoveAt(0);
-                        MR.rootTermsTree.DeleteRange(MR.TermsAr[i].Pos[0].range);
-                        //MR.TermsAr[i].Pos.erase(MR.TermsAr[i].Pos.begin());
-                        //vector<TermTree*>(MR.TermsAr[i].Pos).swap(MR.TermsAr[i].Pos);
-                        
+                        int ind_to_del = MR.TermsAr[i].Pos[j].indexElement.FindIndex(item => item == i);
+                        if (ind_to_del != -1)
+                        {
+                            MR.TermsAr[i].Pos[j].indexElement.RemoveAt(ind_to_del);
+                        }
+                        if (MR.TermsAr[i].Pos[j].indexElement.Count == 0)
+                        {
+                            Range del_range = new Range(MR.TermsAr[i].Pos[j].range.inf);
+                            MR.rootTermsTree.DeleteRange(del_range);
+                        }
                     }
-                    //MR.TermsAr.erase(MR.TermsAr.begin() + i);
-                    //vector<SynTerm>(MR.TermsAr).swap(MR.TermsAr);
                     MR.TermsAr.RemoveAt(i);
-                    i--;
+                    ChangeIdexesInTree(MR, i);
                     sizeMR = MR.TermsAr.Count;
+                    i--;
                 }
-            }
-            for (int i = 0; i < MR.TermsAr.Count; i++)
-            {
-                for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
-                    if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
-            }
+            }            
         }
         public Point GetRealPos(string fragment, string term, Point pos)
         {
@@ -432,5 +335,155 @@ namespace TermRules
             foreach (string str in ConstantPatterns)
                 sw.WriteLine(str);
         }
+        public void ChangeIdexesInTree(Terms MR, int del_el) // Костыль, по возможности убрать
+        {
+            List<TermTree> Changed = new List<TermTree>();
+            for (int i=0; i<MR.TermsAr.Count; i++)
+            {
+                for (int j=0; j<MR.TermsAr[i].Pos.Count; j++)
+                {
+                    if (!Changed.Contains(MR.TermsAr[i].Pos[j]))
+                    {
+                        for (int k = 0; k < MR.TermsAr[i].Pos[j].indexElement.Count; k++)
+                        {
+                            if (MR.TermsAr[i].Pos[j].indexElement[k] > del_el)
+                            {
+                                MR.TermsAr[i].Pos[j].indexElement[k]--;
+                            }
+                        }
+                        Changed.Add(MR.TermsAr[i].Pos[j]);
+                    }
+                }
+            }
+        }
+        public void ChangeIdexesInTree(SynTerms MR, int del_el) // Костыль, по возможности убрать
+        {
+            List<TermTree> Changed = new List<TermTree>();
+            for (int i = 0; i < MR.TermsAr.Count; i++)
+            {
+                for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
+                {
+                    if (!Changed.Contains(MR.TermsAr[i].Pos[j]))
+                    {
+                        for (int k = 0; k < MR.TermsAr[i].Pos[j].indexElement.Count; k++)
+                        {
+                            if (MR.TermsAr[i].Pos[j].indexElement[k] > del_el)
+                            {
+                                MR.TermsAr[i].Pos[j].indexElement[k]--;
+                            }
+                        }
+                        Changed.Add(MR.TermsAr[i].Pos[j]);
+                    }
+                }
+            }
+        }
+        public void ChangeIdexesInTree(NonDictTerms MR, int del_el) // Костыль, по возможности убрать
+        {
+            List<TermTree> Changed = new List<TermTree>();
+            for (int i = 0; i < MR.TermsAr.Count; i++)
+            {
+                for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
+                {
+                    if (!Changed.Contains(MR.TermsAr[i].Pos[j]))
+                    {
+                        for (int k = 0; k < MR.TermsAr[i].Pos[j].indexElement.Count; k++)
+                        {
+                            if (MR.TermsAr[i].Pos[j].indexElement[k] > del_el)
+                            {
+                                MR.TermsAr[i].Pos[j].indexElement[k]--;                                
+                            }
+                        }
+                        Changed.Add(MR.TermsAr[i].Pos[j]);
+                    }
+                }
+            }
+        }
+        public void ChangeIdexesInTree(CombTerms MR, int del_el) // Костыль, по возможности убрать
+        {
+            List<TermTree> Changed = new List<TermTree>();
+            for (int i = 0; i < MR.TermsAr.Count; i++)
+            {
+                for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
+                {
+                    if (!Changed.Contains(MR.TermsAr[i].Pos[j]))
+                    {
+                        for (int k = 0; k < MR.TermsAr[i].Pos[j].indexElement.Count; k++)
+                        {
+                            if (MR.TermsAr[i].Pos[j].indexElement[k] > del_el)
+                            {
+                                MR.TermsAr[i].Pos[j].indexElement[k]--;
+                            }
+                        }
+                        Changed.Add(MR.TermsAr[i].Pos[j]);
+                    }
+                }
+            }
+        }
     }
 }
+
+
+
+
+//while (MR.TermsAr[i].Pos.Count > 0)
+//                    {
+//                        for (int k = 0; k < MR.TermsAr[i].Pos[0].indexElement.Count; k++)
+//                            if (MR.TermsAr[i].Pos[0].indexElement[k] != i)
+//                            {
+//                                for (int p=0; p<MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos.Count; p++)
+//                                {
+//                                    if (MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos[p] == MR.TermsAr[i].Pos[0])
+//                                    {
+//                                        MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos.RemoveAt(p);
+//                                        p--;
+//                                    }
+//                                }
+//                            }
+//                        MR.TermsAr[i].Pos.RemoveAt(0);
+//                        MR.rootTermsTree.DeleteRange(MR.TermsAr[i].Pos[0].range);
+//                        //MR.TermsAr[i].Pos.erase(MR.TermsAr[i].Pos.begin() );
+//                        //vector<TermTree*>(MR.TermsAr[i].Pos).swap(MR.TermsAr[i].Pos);                        
+//                    }
+//                    //MR.TermsAr.erase(MR.TermsAr.begin() + i);
+//                    //vector<Term>(MR.TermsAr).swap(MR.TermsAr);
+//                    MR.TermsAr.RemoveAt(i);
+//                    i--;
+//                    sizeMR = MR.TermsAr.Count;
+
+//int sizeMR = MR.TermsAr.Count;
+//            for (int i = 0; i < sizeMR; i++)
+//            {
+//                if (MR.TermsAr[i].setToDel)
+//                {
+//                    while (MR.TermsAr[i].Pos.Count > 0)
+//                    {
+//                        for (int k = 0; k < MR.TermsAr[i].Pos[0].indexElement.Count; k++)
+//                            if (MR.TermsAr[i].Pos[0].indexElement[k] != i)
+//                            {
+//                                for (int p = 0; p < MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos.Count; p++)
+//                                {
+//                                    if (MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos[p] == MR.TermsAr[i].Pos[0])
+//                                    {
+//                                        MR.TermsAr[MR.TermsAr[i].Pos[0].indexElement[k]].Pos.RemoveAt(p);
+//                                        p--;
+//                                    }
+//                                }
+//                            }
+//                        MR.TermsAr[i].Pos.RemoveAt(0);
+//                        MR.rootTermsTree.DeleteRange(MR.TermsAr[i].Pos[0].range);
+//                        //MR.TermsAr[i].Pos.erase(MR.TermsAr[i].Pos.begin());
+//                        //vector<TermTree*>(MR.TermsAr[i].Pos).swap(MR.TermsAr[i].Pos);
+                        
+//                    }
+//                    //MR.TermsAr.erase(MR.TermsAr.begin() + i);
+//                    //vector<SynTerm>(MR.TermsAr).swap(MR.TermsAr);
+//                    MR.TermsAr.RemoveAt(i);
+//                    i--;
+//                    sizeMR = MR.TermsAr.Count;
+//                }
+//            }
+//            for (int i = 0; i < MR.TermsAr.Count; i++)
+//            {
+//                for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
+//                    if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
+//            }
