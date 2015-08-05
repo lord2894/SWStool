@@ -1,12 +1,76 @@
 ﻿<Window x:Class="SWStool.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="429.104" Width="666.791">
+        Title="SWStool" Height="512.104" Width="666.791">
     <Grid>
-        <DocumentViewer x:Name="DocViewer" VerticalAlignment="Top" Margin="0,0,219,0"/>
-        <TreeView HorizontalAlignment="Left" Height="398" Margin="445,0,0,0" VerticalAlignment="Top" Width="214">
-            <ListBox x:Name="ListBoxT" Height="100" Margin="0,258,0,-342" VerticalAlignment="Top" Width="100"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32*"/>
+            <RowDefinition Height="33*"/>
+            <RowDefinition Height="292*"/>
+            <RowDefinition Height="26*"/>
+            <RowDefinition Height="87*"/>
+            <RowDefinition Height="11*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="9*"/>
+            <ColumnDefinition Width="433*"/>
+            <ColumnDefinition Width="210"/>
+            <ColumnDefinition Width="7*"/>
+        </Grid.ColumnDefinitions>
+        <DocumentViewer x:Name="DocViewer" Margin="1,4,2,3" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2"/>
+        <TreeView Margin="0,2,3,3" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Right" Width="204">
+            <TreeViewItem Header="В" IsExpanded="True">
+                <TreeViewItem Header="Ввод-вывод 1, 32" HorizontalAlignment="Left" Width="181"/>
+            </TreeViewItem>
+            <TreeViewItem Header="Д" IsExpanded="True">
+                <TreeViewItem Header="Данные 4, 16" HorizontalAlignment="Left" Width="181"/>
+            </TreeViewItem>
+            <TreeViewItem Header="Л" IsExpanded="True">
+                <TreeViewItem Header="линия 1" HorizontalAlignment="Left" Width="181"/>
+            </TreeViewItem>
+            <TreeViewItem Header="М" IsExpanded="True">
+                <TreeViewItem Header="Микропроцессор 3, 32" HorizontalAlignment="Left" Width="181"/>
+            </TreeViewItem>
+            <TreeViewItem Header="П" IsExpanded="True">
+                <TreeViewItem Header="Переферийное устройство" HorizontalAlignment="Left" Width="181"/>
+                <TreeViewItem Header="Порт 2" HorizontalAlignment="Left" Width="181" IsExpanded="True">
+                    <TreeViewItem Header="ввода-вывода 5, 13" HorizontalAlignment="Left" Width="162"/>
+                </TreeViewItem>
+            </TreeViewItem>
+            <TreeViewItem Header="Р" IsExpanded="True">
+                <TreeViewItem Header="Регистр 6, 11" HorizontalAlignment="Left" Width="181"/>
+            </TreeViewItem>
+            <TreeViewItem Header="С" IsExpanded="True">
+                <TreeViewItem Header="Схема сопряжения 15" HorizontalAlignment="Left" Width="181"/>
+            </TreeViewItem>
+            <TreeViewItem Header="Ф" IsExpanded="True">
+                <TreeViewItem Header="Функция центрального процессора" HorizontalAlignment="Left" Width="181"/>
+            </TreeViewItem>
+            <TreeViewItem Header="Ш" IsExpanded="True">
+                <TreeViewItem Header="Мина адреса" HorizontalAlignment="Left" Width="181"/>
+            </TreeViewItem>
         </TreeView>
+        <DataGrid x:Name="GlossaryGrid" Margin="1,5,3,10" SelectionChanged="DataGrid_SelectionChanged" Grid.ColumnSpan="2" Grid.Row="4" Grid.Column="1" Grid.RowSpan="2" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Термин" Binding="{Binding Path=Term}"/>
+                <DataGridTextColumn Header="Определение" Binding="{Binding Path=Definition}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Label Content="Глоссарий" HorizontalAlignment="Left" Margin="1,0,0,0" VerticalAlignment="Top" Width="639" Grid.ColumnSpan="2" Grid.Row="3" Grid.Column="1" Height="26"/>
+        <Label Content="Предметный указатель" Margin="0,0,3,3" Grid.Column="2" Grid.Row="1" Height="26" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="204"/>
+        <Menu Height="29" VerticalAlignment="Top" Grid.ColumnSpan="4">
+            <MenuItem Header="Файл" Height="29">
+                <MenuItem x:Name="OpenMenuItem" Header="Открыйть файл" Click="OpenMenuItem_Click"/>
+                <MenuItem Header="Сохранить как"/>
+                <Separator/>
+                <MenuItem Header="Выход"/>
+            </MenuItem>
+            <MenuItem Header="Справка">
+                <MenuItem Header="Помощь"/>
+                <Separator/>
+                <MenuItem Header="О программе"/>
+            </MenuItem>
+        </Menu>
 
     </Grid>
 </Window>

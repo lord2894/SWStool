@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TermProcessingNamespace;
+using TermsNamespace;
 
-namespace TermRules
+namespace RulesNamespace
 {
-    public class Rules
+    public static class Rules
     {
         public Rules(string inputfile, DictionaryF dict) {
-            find = new FindFunctions();
-            aux = new AuxiliaryFunctions();
             proc = new TermsProcessing(inputfile, dict);
         }
-        FindFunctions find;
-        AuxiliaryFunctions aux;
         TermsProcessing proc;
-        public void Rule1_Mauth_to_M(Terms AuthTermsAr, Terms MainArrayTermsAr)
+        public static void Rule1_Mauth_to_M(Terms AuthTermsAr, Terms MainArrayTermsAr)
         {
 	        for (int i = 0; i < AuthTermsAr.TermsAr.Count; i++)
 	        {
@@ -75,7 +73,7 @@ namespace TermRules
 	        aux.DelElementsWhichSetToDel(AuthTermsAr);
 	        aux.getFrequency_(MainArrayTermsAr);
         }//Work
-        public void Rule2_Mdict_to_M(Terms DictTermsAr, NonDictTerms NonDictTermsAr, Terms MainArrayTermsAr)
+        public static void Rule2_Mdict_to_M(Terms DictTermsAr, NonDictTerms NonDictTermsAr, Terms MainArrayTermsAr)
         {
 	        int sizeDict = DictTermsAr.TermsAr.Count;
 	        for (int i = 0; i < sizeDict; i++)
@@ -158,7 +156,7 @@ namespace TermRules
 	        }*/
 	        aux.getFrequency_(MainArrayTermsAr);
         }
-        public void Rule3_Mnondict_to_M(Terms DictTermsAr, NonDictTerms NonDictTermsAr, CombTerms CombTermsAr, Terms MainArrayTermsAr)//Переписать!!!
+        public static void Rule3_Mnondict_to_M(Terms DictTermsAr, NonDictTerms NonDictTermsAr, CombTerms CombTermsAr, Terms MainArrayTermsAr)//Переписать!!!
         {            
 	        int s_ND = NonDictTermsAr.TermsAr.Count;
 	        //vector<int> DictTermsToDel;
@@ -357,14 +355,14 @@ namespace TermRules
 	        aux.DelElementsWhichSetToDel(DictTermsAr);
 	        aux.getFrequency_(MainArrayTermsAr);
         }
-        public void Rule_from_4_to_6(Terms MainTermsAr)
+        public static void Rule_from_4_to_6(Terms MainTermsAr)
         {
             //TermsProcessing proc = new TermsProcessing();
 	        SynTerms SynTermsAr = new SynTerms();
 	        proc.GetXMLSynTerms(SynTermsAr);
 	        Rule4_Msyn_to_M(MainTermsAr, SynTermsAr);
         }
-        public void Rule4_Msyn_to_M(Terms MainTermsAr, SynTerms SynTermsAr)
+        public static void Rule4_Msyn_to_M(Terms MainTermsAr, SynTerms SynTermsAr)
         {
             //FindFunctions find = new FindFunctions();
 	        for (int i = 0; i < SynTermsAr.TermsAr.Count; i++)
@@ -415,11 +413,11 @@ namespace TermRules
 	        aux.DelElementsWhichSetToDel(SynTermsAr);
 	        aux.getFrequency_(MainTermsAr);
         }
-        public void Rule5_Mconj_to_M()
+        public static void Rule5_Mconj_to_M()
         {
 
         }
-        public void ApplyRules()
+        public static void ApplyRules()
         {
             // Инициализируем массивы терминов
             proc.GetXMLAuthTerms(proc.AuthTermsAr);

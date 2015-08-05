@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace TermRules
+namespace TermTreeNamespace
 {
     public class Range
     {
-        public Range() { }
         public Range(Point inf)
         {
             this.inf = inf;
@@ -381,17 +380,5 @@ namespace TermRules
         }
 
     }
-    public class pair<T, U>
-    {
-        public pair() { }
-        public pair(T first, U second)
-        {
-            this.first = first;
-            this.second = second;
-        }
-        public T first { get; set; }
-        public U second { get; set; }
-        //public T first;
-        //public U second;
-    }
+    
 }

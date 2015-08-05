@@ -5,28 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.IO;
+using TermsNamespace;
+using TermTreeNamespace;
+using FindFunctionsNamespace;
 
-namespace TermRules
+namespace AuxiliaryFunctionsNamespace
 {
-    public class AuxiliaryFunctions
+    public static class AuxiliaryFunctions
     {
-        public List<string> ConstantPatterns;
-        public AuxiliaryFunctions() 
-        {
-            ConstantPatterns = new List<string>();
-            ConstantPatterns.Add("AP = A1 (A1) =text> A1 | Pa1 (Pa1) =text> Pa1");
-            ConstantPatterns.Add("NE = \"не\" =text> \"не\"");
-            //ConstantPatterns.Add("");
-            //ConstantPatterns.Add("");
-        }
-        public void getFrequency_(Terms MR)
+        public static List<string> ConstantPatterns = new List<string> {"AP = A1 (A1) =text> A1 | Pa1 (Pa1) =text> Pa1", "NE = \"не\" =text> \"не\""};
+        public static void getFrequency_(Terms MR)
         {
             int size = MR.TermsAr.Count;
             bool change = true;
             while (change)
             {
                 change = false;
-                for (int i = 0; i < MR.TermsAr.Count; i++)
+                                for (int i = 0; i < MR.TermsAr.Count; i++)
                 {
                     for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
                     {
@@ -35,11 +30,11 @@ namespace TermRules
                         if (e != null)
                         {
                             TermTree cur_treeEl = MR.TermsAr[i].Pos[j];
-                            for (int k = 0; k < cur_treeEl.indexElement.Count; k++)
+                            foreach (int index in cur_treeEl.indexElement)
                             {
-                                int ind_del_pos = MR.TermsAr[cur_treeEl.indexElement[k]].Pos.FindIndex(item => item == cur_treeEl);
+                                int ind_del_pos = MR.TermsAr[index].Pos.FindIndex(item => item == cur_treeEl);
                                 if (ind_del_pos != -1)
-                                    MR.TermsAr[cur_treeEl.indexElement[k]].Pos.RemoveAt(ind_del_pos);
+                                    MR.TermsAr[index].Pos.RemoveAt(ind_del_pos);
                             }                                
                             MR.rootTermsTree.DeleteRange(range);
                             j--;
@@ -56,11 +51,6 @@ namespace TermRules
                         MR.TermsAr[i].frequency = MR.TermsAr[i].Pos.Count;
                     }
                 }
-                //for (int i = 0; i < MR.TermsAr.Count; i++)
-                //{
-                //    for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
-                //        if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
-                //}
                 if (size != MR.TermsAr.Count)
                 {
                     change = true;
@@ -68,7 +58,7 @@ namespace TermRules
                 }
             }
         }
-        public void getFrequency_(NonDictTerms MR)
+        public static void getFrequency_(NonDictTerms MR)
         {
             int size = MR.TermsAr.Count;
             bool change = true;
@@ -112,7 +102,7 @@ namespace TermRules
                 }
             }
         }
-        public void getFrequency_(SynTerms MR)
+        public static void getFrequency_(SynTerms MR)
         {
             int size = MR.TermsAr.Count;
             bool change = true;
@@ -149,11 +139,6 @@ namespace TermRules
                         MR.TermsAr[i].frequency = MR.TermsAr[i].Pos.Count;
                     }
                 }
-                //for (int i = 0; i < MR.TermsAr.Count; i++)
-                //{
-                //    for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
-                //        if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
-                //}
                 if (size != MR.TermsAr.Count)
                 {
                     change = true;
@@ -161,7 +146,7 @@ namespace TermRules
                 }
             }
         }
-        public void DelElementsWhichSetToDel(Terms MR)
+        public static void DelElementsWhichSetToDel(Terms MR)
         {
             int sizeMR = MR.TermsAr.Count;
             for (int i = 0; i < sizeMR; i++)
@@ -187,13 +172,8 @@ namespace TermRules
                     i--;
                 }
             }
-            //for (int i = 0; i < MR.TermsAr.Count; i++)
-            //{
-            //    for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
-            //        if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
-            //}
         }
-        public void DelElementsWhichSetToDel(SynTerms MR)
+        public static void DelElementsWhichSetToDel(SynTerms MR)
         {
             int sizeMR = MR.TermsAr.Count;
             for (int i = 0; i < sizeMR; i++)
@@ -220,23 +200,20 @@ namespace TermRules
                 }
             }            
         }
-        public Point GetRealPos(string fragment, string term, Point pos)
+        public static Point GetRealPos(string fragment, string term, Point pos)
         {
-            FindFunctions find = new FindFunctions();
             string low_term = term;
             low_term = low_term.ToLower();
             fragment = fragment.ToLower();
-            //transform(low_term.begin(), low_term.end(), low_term.begin(), ::tolower);
-            //transform(fragment.begin(), fragment.end(), fragment.begin(), ::tolower);
             int space = term.IndexOf(' ');
             if (space != -1)
             {
                 string cur_word = term.Substring(0, space);
-                string LargestFragment = find.GetLargestCommonSubstring(cur_word, fragment);
+                string LargestFragment = FindFunctions.GetLargestCommonSubstring(cur_word, fragment);
                 int start = fragment.IndexOf(LargestFragment);
                 if (start != -1)
                 {
-                    int number_spaces = find.num_spaces(low_term);
+                    int number_spaces = FindFunctions.num_spaces(low_term);
                     int end = start;
                     while (number_spaces > -1)
                     {
@@ -255,7 +232,7 @@ namespace TermRules
             }
             else
             {
-                string LargestFragment = find.GetLargestCommonSubstring(low_term, fragment);
+                string LargestFragment = FindFunctions.GetLargestCommonSubstring(low_term, fragment);
                 int start = fragment.IndexOf(LargestFragment);
                 if (start != -1)
                 {
@@ -278,18 +255,16 @@ namespace TermRules
             }
             return pos;
         }
-        public string NormalizeNPattern(string NPattern)
+        public static string NormalizeNPattern(string NPattern)
         {
             bool change = true;
             int open_t = -1;
             int close_t = 0;
-            //int prev_close_t = 0;
             string newNP = "";
             while (change)
             {
                 change = false;
                 open_t = NPattern.IndexOf("<", open_t + 1);
-                //List<string> splitPattern = new List<string>(CombTermsAr.TermsAr[i].Components[j].NPattern.Split("<>".ToCharArray()));
                 if (open_t != -1 &&
                     (NPattern[open_t - 1] >= '0' &&
                      NPattern[open_t - 1] <= '9'))
@@ -315,7 +290,6 @@ namespace TermRules
                     {
                         open_t = p;
                         newNP = newNP + NPattern.Substring(close_t, open_t - close_t + 1);
-                        //prev_close_t = close_t;
                         close_t = NPattern.IndexOf(">", open_t + 1);
                         newNP = newNP + NPattern.Substring(open_t + 1, close_t - (open_t + 1)).Trim().ToLower().Replace(" ", "");
                         change = true;
@@ -330,12 +304,12 @@ namespace TermRules
             }
             return newNP.Replace("=TEXT>", "=text>");
         }
-        public void PrintConstantPatterns(StreamWriter sw)
+        public static void PrintConstantPatterns(StreamWriter sw)
         {
             foreach (string str in ConstantPatterns)
                 sw.WriteLine(str);
         }
-        public void ChangeIdexesInTree(Terms MR, int del_el) // Костыль, по возможности убрать
+        public static void ChangeIdexesInTree(Terms MR, int del_el) // Костыль, по возможности убрать
         {
             List<TermTree> Changed = new List<TermTree>();
             for (int i=0; i<MR.TermsAr.Count; i++)
@@ -356,7 +330,7 @@ namespace TermRules
                 }
             }
         }
-        public void ChangeIdexesInTree(SynTerms MR, int del_el) // Костыль, по возможности убрать
+        public static void ChangeIdexesInTree(SynTerms MR, int del_el) // Костыль, по возможности убрать
         {
             List<TermTree> Changed = new List<TermTree>();
             for (int i = 0; i < MR.TermsAr.Count; i++)
@@ -377,7 +351,7 @@ namespace TermRules
                 }
             }
         }
-        public void ChangeIdexesInTree(NonDictTerms MR, int del_el) // Костыль, по возможности убрать
+        public static void ChangeIdexesInTree(NonDictTerms MR, int del_el) // Костыль, по возможности убрать
         {
             List<TermTree> Changed = new List<TermTree>();
             for (int i = 0; i < MR.TermsAr.Count; i++)
@@ -398,7 +372,7 @@ namespace TermRules
                 }
             }
         }
-        public void ChangeIdexesInTree(CombTerms MR, int del_el) // Костыль, по возможности убрать
+        public static void ChangeIdexesInTree(CombTerms MR, int del_el) // Костыль, по возможности убрать
         {
             List<TermTree> Changed = new List<TermTree>();
             for (int i = 0; i < MR.TermsAr.Count; i++)

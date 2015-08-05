@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using TermsNamespace;
 
-namespace TermRules
+namespace FindFunctionsNamespace
 {
-    public class FindFunctions
+    public static class FindFunctions
     {
-        public FindFunctions() { }
-        public int findINList(List<pair<string,string>> v, string str, int alt)
+        public static int findINList(List<pair<string, string>> v, string str, int alt)
         {
             if (v == null || str == null) return -1;
             for (int i = 0; i < v.Count; i++)
@@ -20,7 +20,7 @@ namespace TermRules
             }
             return -1;
         }
-        public int findINList(List<pair<string, string>> v, pair<string, string> str)
+        public static int findINList(List<pair<string, string>> v, pair<string, string> str)
         {
             if (v == null || str == null) return -1;
             for (int i = 0; i < v.Count; i++)
@@ -30,7 +30,7 @@ namespace TermRules
             }
             return -1;
         }
-        public int findINList(List<Term> v, string str)
+        public static int findINList(List<Term> v, string str)
         {
             if (v == null || str == null) return -1;
 	        for (int i=0; i<v.Count;i++)
@@ -40,7 +40,7 @@ namespace TermRules
 	        }
 	        return -1;
         }
-        public int findINList(List<NonDictTerm> v, string str)
+        public static int findINList(List<NonDictTerm> v, string str)
         {
             if (v == null || str == null) return -1;
             for (int i = 0; i < v.Count; i++)
@@ -50,7 +50,7 @@ namespace TermRules
             }
             return -1;
         }
-        public int findINList(List<CombTerm> v, string str)
+        public static int findINList(List<CombTerm> v, string str)
         {
             if (v == null || str == null) return -1;
 	        for (int i=0; i<v.Count;i++)
@@ -60,7 +60,7 @@ namespace TermRules
 	        }
 	        return -1;
         }
-        public int findINList(List<CombComponent> v, string str)
+        public static int findINList(List<CombComponent> v, string str)
         {
             if (v == null || str == null) return -1;
 	        for (int i = 0; i<v.Count; i++)
@@ -70,7 +70,7 @@ namespace TermRules
 	        }
 	        return -1;
         }
-        public int findINList(List<SynTerm> v, pair<SynTermAlternative, SynTermAlternative> str)
+        public static int findINList(List<SynTerm> v, pair<SynTermAlternative, SynTermAlternative> str)
         {
             if (v == null || str == null) return -1;
 	        for (int i = 0; i<v.Count; i++)
@@ -83,7 +83,7 @@ namespace TermRules
 	        }
 	        return -1;
         }
-        public int findPattern(List<Term> v, List<int> ind, string str)
+        public static int findPattern(List<Term> v, List<int> ind, string str)
         {
              if (v == null || ind == null || str == null) return -1;
             for (int i=0; i<ind.Count;i++)
@@ -92,7 +92,7 @@ namespace TermRules
             }
             return -1;
         }
-        public int findPattern(List<NonDictTerm> v, List<int> ind, string str)
+        public static int findPattern(List<NonDictTerm> v, List<int> ind, string str)
         {
             if (v == null || ind == null || str == null) return -1;
             for (int i = 0; i < ind.Count; i++)
@@ -101,7 +101,7 @@ namespace TermRules
             }
             return -1;
         }
-        public int findPattern(List<CombTerm> v, List<int> ind, string str)
+        public static int findPattern(List<CombTerm> v, List<int> ind, string str)
         {
             if (v == null || ind == null || str == null) return -1;
             for (int i = 0; i < ind.Count; i++)
@@ -110,7 +110,7 @@ namespace TermRules
             }
             return -1;
         }
-        public int findPattern(List<SynTerm> v, List<int> ind, string str)
+        public static int findPattern(List<SynTerm> v, List<int> ind, string str)
         {
             if (v == null || ind == null || str == null) return -1;
             for (int i = 0; i < ind.Count; i++)
@@ -119,7 +119,7 @@ namespace TermRules
             }
             return -1;
         }
-        public int findPattern(List<CombComponent> v, string str)
+        public static int findPattern(List<CombComponent> v, string str)
         {
             if (v == null || str == null) return -1;
             for (int i = 0; i < v.Count; i++)
@@ -128,7 +128,7 @@ namespace TermRules
             }
             return -1;
         }
-        public int findPattern(List<NonDictComponent> v, string str)
+        public static int findPattern(List<NonDictComponent> v, string str)
         {
             if (v == null || str == null) return -1;
             for (int i = 0; i < v.Count; i++)
@@ -137,7 +137,7 @@ namespace TermRules
             }
             return -1;
         }
-        public int findBlock(List<NonDictBlock> v, string str)
+        public static int findBlock(List<NonDictBlock> v, string str)
         {
             for (int i=0; i<v.Count; i++)
             {
@@ -145,7 +145,7 @@ namespace TermRules
             }
             return -1;
         }
-        public int findFragmentINList(List<Term> v, string str)
+        public static int findFragmentINList(List<Term> v, string str)
         {
             if (v == null || str == null) return -1;
             for (int i = 0; i < v.Count; i++)
@@ -155,7 +155,7 @@ namespace TermRules
             }
             return -1;
         }
-        public int findFragmentINList(List<NonDictTerm> v, string str)
+        public static int findFragmentINList(List<NonDictTerm> v, string str)
         {
             if (v == null || str == null) return -1;
             for (int i = 0; i < v.Count; i++)
@@ -165,7 +165,7 @@ namespace TermRules
             }
             return -1;
         }
-        public int findFragmentINList(List<CombTerm> v, string str)
+        public static int findFragmentINList(List<CombTerm> v, string str)
         {
             if (v == null || str == null) return -1;
             for (int i = 0; i < v.Count; i++)
@@ -175,7 +175,7 @@ namespace TermRules
             }
             return -1;
         }
-        public int findFragmentINList(List<CombComponent> v, string str)
+        public static int findFragmentINList(List<CombComponent> v, string str)
         {
             if (v == null || str == null) return -1;
             for (int i = 0; i < v.Count; i++)
@@ -185,7 +185,7 @@ namespace TermRules
             }
             return -1;
         }
-        public int findFragmentINListPos(List<Term> v, Point p)
+        public static int findFragmentINListPos(List<Term> v, Point p)
         {
             if (v == null || p == null) return -1;
 	        int sizeV=v.Count;
@@ -200,7 +200,7 @@ namespace TermRules
 	        }
 	        return -1;
         }
-        public int findFragmentINListPos(List<NonDictTerm> v, Point p)
+        public static int findFragmentINListPos(List<NonDictTerm> v, Point p)
         {
             if (v == null || p == null) return -1;
 	        int sizeV=v.Count;
@@ -215,7 +215,7 @@ namespace TermRules
 	        }
 	        return -1;
         }
-        public int findFragmentINListPos(List<CombTerm> v, Point p)
+        public static int findFragmentINListPos(List<CombTerm> v, Point p)
         {
             if (v == null || p == null) return -1;
 	        int sizeV=v.Count;
@@ -230,7 +230,7 @@ namespace TermRules
 	        }
 	        return -1;
         }
-        public ComponentInElement findINListComponents(List<NonDictTerm> v, string str)
+        public static ComponentInElement findINListComponents(List<NonDictTerm> v, string str)
         {
             if (v == null || str == null) return null;
 	        ComponentInElement result  = new ComponentInElement();	        
@@ -256,7 +256,7 @@ namespace TermRules
 	        }	
 	        return result;
         }
-        public ComponentInElement findINListComponents(List<CombTerm> v, string str)
+        public static ComponentInElement findINListComponents(List<CombTerm> v, string str)
         {
             if (v == null || str == null) return null;
 	        ComponentInElement result = new ComponentInElement();
@@ -278,7 +278,7 @@ namespace TermRules
 	        }
 	        return result;
         }
-        public int findEqualVariants(NonDictTerm v, List<string> var)
+        public static int findEqualVariants(NonDictTerm v, List<string> var)
         {
             if (v == null || var == null) return -1;
 	        for (int i=0 ; i<v.Blocks.Count ; i++)
@@ -297,7 +297,7 @@ namespace TermRules
 	        }
 	        return -1;
         }
-        public int findEqualVariants(NonDictTerm v, List<NonDictComponent> var)
+        public static int findEqualVariants(NonDictTerm v, List<NonDictComponent> var)
         {
             if (v == null || var == null) return -1;
             for (int i = 0; i < v.Blocks.Count; i++)
@@ -316,7 +316,7 @@ namespace TermRules
             }
             return -1;
         }
-        public int findINListStr(List<string> v, string str)
+        public static int findINListStr(List<string> v, string str)
         {
             if (v == null || str == null) return -1;
 	        for (int i=0; i<v.Count;i++)
@@ -326,7 +326,7 @@ namespace TermRules
 	        }
 	        return -1;
         }
-        public int findINListStr(List<NonDictComponent> v, string str)
+        public static int findINListStr(List<NonDictComponent> v, string str)
         {
             if (v == null || str == null) return -1;
             for (int i = 0; i < v.Count; i++)
@@ -336,7 +336,7 @@ namespace TermRules
             }
             return -1;
         }
-        public int findPOS(List<Point> pos, Point p)
+        public static int findPOS(List<Point> pos, Point p)
         {
             if (pos == null || p == null) return -1;
 	        int size=pos.Count;
@@ -345,7 +345,7 @@ namespace TermRules
 			        return i;
 	        return -1;
         }
-        public string GetLargestCommonSubstring(string s1, string s2)
+        public static string GetLargestCommonSubstring(string s1, string s2)
         {
             if (s1 == null || s2 == null) return null;
             var a = new int[s1.Length + 1, s2.Length + 1];
@@ -365,7 +365,7 @@ namespace TermRules
 
             return s1.Substring(u - a[u, v], a[u, v]);
         }
-        public int num_spaces(string str)
+        public static int num_spaces(string str)
         {
             if (str == null) return -1;
 	        int res = 0;

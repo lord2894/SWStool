@@ -7,8 +7,12 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using System.Drawing;
-namespace TermRules
+using TermsNamespace;
+using AuxiliaryFunctionsNamespace;
+
+namespace TermProcessingNamespace
 {
+    
     public enum DictionaryF
     {
         IT_TERM,
@@ -16,26 +20,21 @@ namespace TermRules
     }
     public class TermsProcessing
     {
-        
-        public Terms MainTermsAr;
-        public Terms AuthTermsAr;
-        public Terms DictTermsAr;
-        public NonDictTerms NonDictTermsAr;
-        public CombTerms CombTermsAr;
-        public List<pair<string, string>> PatternsModel;
-        public List<pair<string, string>> DictPatterns;
-        public string tmpPath;
-        public string programmPath;
-        public string folderPath;
-        public string inputFile;
-        public string outputFile;
-        FindFunctions find;
-        AuxiliaryFunctions aux;
+        public Terms MainTermsAr { get; set; }
+        public Terms AuthTermsAr { get; set; }
+        public Terms DictTermsAr { get; set; }
+        public NonDictTerms NonDictTermsAr { get; set; }
+        public CombTerms CombTermsAr { get; set; }
+        public List<pair<string, string>> PatternsModel { get; set; }
+        public List<pair<string, string>> DictPatterns { get; set; }
+        public string tmpPath { get; set; }
+        public string programmPath { get; set; }
+        public string folderPath { get; set; }
+        public string inputFile { get; set; }
+        public string outputFile { get; set; }
         DictionaryF dictionary;
         public TermsProcessing(string inputfile, DictionaryF dict)
         {
-            find = new FindFunctions();
-            aux = new AuxiliaryFunctions();
             folderPath = "TermsProcessingF";
             outputFile = "";
             inputFile = inputfile;
@@ -53,7 +52,7 @@ namespace TermRules
         }
        
         //AuthTerms
-        public void GetXMLAuthTerms(Terms AuthTermsAr)
+        public static void GetXMLAuthTerms(Terms AuthTermsAr)
         {
             string BAT_output = tmpPath + "\\" + folderPath + "\\AuthTerms.bat";
             string patternsName = "";
@@ -133,7 +132,7 @@ namespace TermRules
             }
             return;
         }
-        public bool GetAuthTerms(Terms AuthTermsAr)
+        public static bool GetAuthTerms(Terms AuthTermsAr)
         {
             Point cur_pos = new Point();
             string cur_pat = "";
@@ -328,7 +327,7 @@ namespace TermRules
         }
 
         //CombTerms        
-        public void GetXMLCombTerms(CombTerms CombTermsAr)
+        public static void GetXMLCombTerms(CombTerms CombTermsAr)
         {
             string patternsName = "";
             string curPattern = "";
@@ -395,7 +394,7 @@ namespace TermRules
             }
             return;
         }
-        public string FormCombComponentsPatterns(CombTerms CombTermsAr)
+        public static string FormCombComponentsPatterns(CombTerms CombTermsAr)
         {
             string CombComponentsPatterns = tmpPath + "\\" + folderPath + "\\COMP_COMB_TERM.txt";
             string patterns = "";
@@ -417,7 +416,7 @@ namespace TermRules
             return patterns;
             
         }
-        public void GetXMLCombComponentsTerms(CombTerms CombTermsAr, string patterns)
+        public static void GetXMLCombComponentsTerms(CombTerms CombTermsAr, string patterns)
         {
             //--------------------------------
             string LSPL_exe = programmPath + "\\bin\\lspl-find.exe";
@@ -436,7 +435,7 @@ namespace TermRules
             //---------------------------------
             return;
         }
-        public bool GetCombComponentsTerms(CombTerms CombTermsAr)
+        public static bool GetCombComponentsTerms(CombTerms CombTermsAr)
         {
             Point cur_pos = new Point();
             string cur_pat = "";
@@ -559,7 +558,7 @@ namespace TermRules
             }
             return true;
         }
-        public bool GetCombTerms(CombTerms CombTermsAr)
+        public static bool GetCombTerms(CombTerms CombTermsAr)
         {
             Point cur_pos = new Point();
             string cur_pat = "";
@@ -730,7 +729,7 @@ namespace TermRules
         }
 
         //DictTerms
-        public void GetXMLDictTerms(Terms DictTermsAr)
+        public static void GetXMLDictTerms(Terms DictTermsAr)
         {
             string LSPL_patterns = "";
             StreamReader fs = null;
@@ -820,7 +819,7 @@ namespace TermRules
             //---------------------------------
             return;
         }
-        public bool GetDictTerms(Terms DictTermsAr)
+        public static bool GetDictTerms(Terms DictTermsAr)
         {            
             Point cur_pos = new Point();
             string cur_pat = "";
@@ -936,7 +935,7 @@ namespace TermRules
         }
 
         //NonDictTerms
-        public void GetXMLNonDictTerms(NonDictTerms NonDictTermsAr)
+        public static void GetXMLNonDictTerms(NonDictTerms NonDictTermsAr)
         {
             string LSPL_patterns = programmPath + "\\Patterns\\NONDICT_TERM.txt";
             StreamReader fs = new StreamReader(LSPL_patterns, Encoding.GetEncoding("Windows-1251"));
@@ -996,7 +995,7 @@ namespace TermRules
             //---------------------------------
             return;
         }
-        public bool GetNonDictTerms(NonDictTerms NonDictTermsAr)
+        public static bool GetNonDictTerms(NonDictTerms NonDictTermsAr)
         {
             Point cur_pos = new Point();
             string cur_pat = "";
@@ -1193,7 +1192,7 @@ namespace TermRules
         }
 
         //SynTerms
-        public void GetXMLSynTerms(SynTerms SynTermsAr)
+        public static void GetXMLSynTerms(SynTerms SynTermsAr)
         {
             string LSPL_patterns = programmPath + "\\Patterns\\SYN_TERM.txt";
             string patternsName = "";
@@ -1239,7 +1238,7 @@ namespace TermRules
             //---------------------------------
             return;
         }
-        public bool GetSynTerms(SynTerms SynTermsAr)
+        public static bool GetSynTerms(SynTerms SynTermsAr)
         {
             Point cur_pos = new Point();
             string cur_pat = "";
