@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TermRules;
+using RulesNamespace;
+using TermProcessingNamespace;
 
 namespace TestDllApp
 {
@@ -12,8 +13,9 @@ namespace TestDllApp
         static void Main(string[] args)
         {
             string inputFile = "TextA.txt";
-            TermRules.Rules rules = new Rules(inputFile, DictionaryF.IT_TERM);
+            Rules rules = new Rules(inputFile, DictionaryF.IT_TERM);
             rules.ApplyRules();
+            
         }
     }
 }

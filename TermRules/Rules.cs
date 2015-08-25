@@ -5,20 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using TermProcessingNamespace;
 using TermsNamespace;
+using FindFunctionsNamespace;
+using TermTreeNamespace;
+using AuxiliaryFunctionsNamespace;
 
 namespace RulesNamespace
 {
-    public static class Rules
+    public class Rules
     {
         public Rules(string inputfile, DictionaryF dict) {
             proc = new TermsProcessing(inputfile, dict);
         }
         TermsProcessing proc;
-        public static void Rule1_Mauth_to_M(Terms AuthTermsAr, Terms MainArrayTermsAr)
+        public void Rule1_Mauth_to_M(Terms AuthTermsAr, Terms MainArrayTermsAr)
         {
 	        for (int i = 0; i < AuthTermsAr.TermsAr.Count; i++)
 	        {
-		        int k = find.findINList(MainArrayTermsAr.TermsAr, AuthTermsAr.TermsAr[i].TermWord);
+                int k = FindFunctions.findINList(MainArrayTermsAr.TermsAr, AuthTermsAr.TermsAr[i].TermWord);
 		        if (k == -1)
 		        {
 			        if (AuthTermsAr.TermsAr[i].Pos.Count>0)
@@ -70,15 +73,15 @@ namespace RulesNamespace
 			        }
 		        }
 	        }
-	        aux.DelElementsWhichSetToDel(AuthTermsAr);
-	        aux.getFrequency_(MainArrayTermsAr);
+            AuxiliaryFunctions.DelElementsWhichSetToDel(AuthTermsAr);
+            AuxiliaryFunctions.getFrequency_(MainArrayTermsAr);
         }//Work
-        public static void Rule2_Mdict_to_M(Terms DictTermsAr, NonDictTerms NonDictTermsAr, Terms MainArrayTermsAr)
+        public void Rule2_Mdict_to_M(Terms DictTermsAr, NonDictTerms NonDictTermsAr, Terms MainArrayTermsAr)
         {
 	        int sizeDict = DictTermsAr.TermsAr.Count;
 	        for (int i = 0; i < sizeDict; i++)
 	        {
-		        int k = find.findINList(MainArrayTermsAr.TermsAr, DictTermsAr.TermsAr[i].TermWord);
+		        int k = FindFunctions.findINList(MainArrayTermsAr.TermsAr, DictTermsAr.TermsAr[i].TermWord);
 		        if (k == -1)
 		        {
 			        bool NoComp = false;
@@ -142,27 +145,27 @@ namespace RulesNamespace
 	        /*for(int i=0; i<sizeDict; i++)
 	        {
 	        string str=DictTermsAr.TermsAr[i].TermWord;
-	        ComponentInElement find=find.findINListComponents(NonDictTermsAr.TermsAr, str);
-	        if (find.Component != -1)
+	        ComponentInElement find=FindFunctions.findINListComponents(NonDictTermsAr.TermsAr, str);
+	        if (FindFunctions.Component != -1)
 	        {
-	        if (find.findINList(MainArrayTermsAr.TermsAr,DictTermsAr.TermsAr[i].TermWord) == -1)
+	        if (FindFunctions.findINList(MainArrayTermsAr.TermsAr,DictTermsAr.TermsAr[i].TermWord) == -1)
 	        MainArrayTermsAr.TermsAr.Add(DictTermsAr.TermsAr[i]);
 	        }
-	        else if (find.findINList(NonDictTermsAr.TermsAr,str) != -1)
+	        else if (FindFunctions.findINList(NonDictTermsAr.TermsAr,str) != -1)
 	        {
-	        if (find.findINList(MainArrayTermsAr.TermsAr,DictTermsAr.TermsAr[i].TermWord) == -1)
+	        if (FindFunctions.findINList(MainArrayTermsAr.TermsAr,DictTermsAr.TermsAr[i].TermWord) == -1)
 	        MainArrayTermsAr.TermsAr.Add(DictTermsAr.TermsAr[i]);
 	        }
 	        }*/
-	        aux.getFrequency_(MainArrayTermsAr);
+	        AuxiliaryFunctions.getFrequency_(MainArrayTermsAr);
         }
-        public static void Rule3_Mnondict_to_M(Terms DictTermsAr, NonDictTerms NonDictTermsAr, CombTerms CombTermsAr, Terms MainArrayTermsAr)//Переписать!!!
+        public void Rule3_Mnondict_to_M(Terms DictTermsAr, NonDictTerms NonDictTermsAr, CombTerms CombTermsAr, Terms MainArrayTermsAr)//Переписать!!!
         {            
 	        int s_ND = NonDictTermsAr.TermsAr.Count;
 	        //vector<int> DictTermsToDel;
 	        for (int i = 0; i < s_ND; i++)
 	        {
-		        int res = find.findINList(CombTermsAr.TermsAr, NonDictTermsAr.TermsAr[i].TermWord);
+		        int res = FindFunctions.findINList(CombTermsAr.TermsAr, NonDictTermsAr.TermsAr[i].TermWord);
 		        if (res != -1)
 		        {
 			        bool del = false;
@@ -173,7 +176,7 @@ namespace RulesNamespace
 				        for (int k = 0; k < NonDictTermsAr.TermsAr[i].Blocks[j].Components.Count; k++)
 				        {
 					        isDictComponents = false;
-					        int r = find.findINList(DictTermsAr.TermsAr, NonDictTermsAr.TermsAr[i].Blocks[j].Components[k].Component);
+					        int r = FindFunctions.findINList(DictTermsAr.TermsAr, NonDictTermsAr.TermsAr[i].Blocks[j].Components[k].Component);
 					        if (r != -1)
 					        {
 						        //isDictComponents = true;
@@ -189,7 +192,7 @@ namespace RulesNamespace
 					        {
 						        DictTermsAr.TermsAr[countDictComponents[0]].setToDel = true;
 						        //DictTermsToDel.insert(DictTermsToDel.end(), countDictComponents.begin(), countDictComponents.end());
-						        if (find.findINList(MainArrayTermsAr.TermsAr, DictTermsAr.TermsAr[countDictComponents[0]].TermWord) == -1)
+						        if (FindFunctions.findINList(MainArrayTermsAr.TermsAr, DictTermsAr.TermsAr[countDictComponents[0]].TermWord) == -1)
 						        {
                                     Term newEl = new Term();
 							        newEl.frequency = DictTermsAr.TermsAr[countDictComponents[0]].frequency;
@@ -258,7 +261,7 @@ namespace RulesNamespace
 					        {
 						        DictTermsAr.TermsAr[countDictComponents[0]].setToDel = true;
 						        //DictTermsToDel.Add(countDictComponents[0]);
-						        if (find.findINList(MainArrayTermsAr.TermsAr, NonDictTermsAr.TermsAr[i].TermWord) == -1)
+						        if (FindFunctions.findINList(MainArrayTermsAr.TermsAr, NonDictTermsAr.TermsAr[i].TermWord) == -1)
 						        {
 							        Term newEl = new Term();
 							        newEl.frequency = NonDictTermsAr.TermsAr[i].frequency;
@@ -320,7 +323,7 @@ namespace RulesNamespace
 					        NonDictTermsAr.TermsAr[i].Pos.RemoveAt(0);
 				        }
 				        NonDictTermsAr.TermsAr.RemoveAt(i);
-                        aux.ChangeIdexesInTree(NonDictTermsAr, i);
+                        AuxiliaryFunctions.ChangeIdexesInTree(NonDictTermsAr, i);
 				        i--;
 				        s_ND = NonDictTermsAr.TermsAr.Count;
 				        while(CombTermsAr.TermsAr[res].Pos.Count>0)
@@ -335,7 +338,7 @@ namespace RulesNamespace
 					        CombTermsAr.TermsAr[res].Pos.RemoveAt(0);
 				        }
 				        CombTermsAr.TermsAr.RemoveAt(res);
-                        aux.ChangeIdexesInTree(CombTermsAr, res);
+                        AuxiliaryFunctions.ChangeIdexesInTree(CombTermsAr, res);
 				        //===========Заглушка============
                         //for (int p = 0; p < NonDictTermsAr.TermsAr.Count; p++)
                         //{
@@ -352,23 +355,23 @@ namespace RulesNamespace
 		        }
 
 	        }
-	        aux.DelElementsWhichSetToDel(DictTermsAr);
-	        aux.getFrequency_(MainArrayTermsAr);
+	        AuxiliaryFunctions.DelElementsWhichSetToDel(DictTermsAr);
+	        AuxiliaryFunctions.getFrequency_(MainArrayTermsAr);
         }
-        public static void Rule_from_4_to_6(Terms MainTermsAr)
+        public void Rule_from_4_to_6(Terms MainTermsAr)
         {
             //TermsProcessing proc = new TermsProcessing();
 	        SynTerms SynTermsAr = new SynTerms();
 	        proc.GetXMLSynTerms(SynTermsAr);
 	        Rule4_Msyn_to_M(MainTermsAr, SynTermsAr);
         }
-        public static void Rule4_Msyn_to_M(Terms MainTermsAr, SynTerms SynTermsAr)
+        public void Rule4_Msyn_to_M(Terms MainTermsAr, SynTerms SynTermsAr)
         {
             //FindFunctions find = new FindFunctions();
 	        for (int i = 0; i < SynTermsAr.TermsAr.Count; i++)
 	        {
-		        int first_alt = find.findINList(MainTermsAr.TermsAr, SynTermsAr.TermsAr[i].alternatives.first.alternative);
-		        int second_alt = find.findINList(MainTermsAr.TermsAr, SynTermsAr.TermsAr[i].alternatives.second.alternative);
+		        int first_alt = FindFunctions.findINList(MainTermsAr.TermsAr, SynTermsAr.TermsAr[i].alternatives.first.alternative);
+		        int second_alt = FindFunctions.findINList(MainTermsAr.TermsAr, SynTermsAr.TermsAr[i].alternatives.second.alternative);
 		        if (first_alt != -1 && second_alt == -1)
 		        {
 			        SynTermsAr.TermsAr[i].setToDel = true;
@@ -410,14 +413,14 @@ namespace RulesNamespace
 			        }
 		        }
 	        }
-	        aux.DelElementsWhichSetToDel(SynTermsAr);
-	        aux.getFrequency_(MainTermsAr);
+	        AuxiliaryFunctions.DelElementsWhichSetToDel(SynTermsAr);
+	        AuxiliaryFunctions.getFrequency_(MainTermsAr);
         }
-        public static void Rule5_Mconj_to_M()
+        public void Rule5_Mconj_to_M()
         {
 
         }
-        public static void ApplyRules()
+        public void ApplyRules()
         {
             // Инициализируем массивы терминов
             proc.GetXMLAuthTerms(proc.AuthTermsAr);

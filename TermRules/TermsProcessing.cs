@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Drawing;
 using TermsNamespace;
+using FindFunctionsNamespace;
+using TermTreeNamespace;
 using AuxiliaryFunctionsNamespace;
 
 namespace TermProcessingNamespace
@@ -52,7 +54,7 @@ namespace TermProcessingNamespace
         }
        
         //AuthTerms
-        public static void GetXMLAuthTerms(Terms AuthTermsAr)
+        public void GetXMLAuthTerms(Terms AuthTermsAr)
         {
             string BAT_output = tmpPath + "\\" + folderPath + "\\AuthTerms.bat";
             string patternsName = "";
@@ -72,7 +74,7 @@ namespace TermProcessingNamespace
                     }
                     if (len > 0)
                     {
-                        int k = find.findINList(PatternsModel, curPattern, 1);
+                        int k = FindFunctions.findINList(PatternsModel, curPattern, 1);
                         if (k == -1)
                         {
                             pair<string, string> new_p = new pair<string, string>();
@@ -101,7 +103,7 @@ namespace TermProcessingNamespace
                             }
                             if (len > 0)
                             {
-                                int k = find.findINList(PatternsModel, curPattern, 1);
+                                int k = FindFunctions.findINList(PatternsModel, curPattern, 1);
                                 if (k == -1)
                                 {
                                     pair<string, string> new_p = new pair<string, string>();
@@ -115,7 +117,7 @@ namespace TermProcessingNamespace
                         }
                     }
                 }
-                string LSPL_exe = programmPath + "\\bin\\lspl-find.exe";
+                string LSPL_exe = programmPath + "\\bin\\lspl-FindFunctions.exe";
                 string LSPL_patterns = programmPath + "\\Patterns\\AUTH_TERM.txt";
                 string LSPL_output = tmpPath + "\\" + folderPath + "\\AuthTermsOutput.xml";                
                 StreamWriter sw = new StreamWriter(BAT_output, false, Encoding.GetEncoding("cp866"));
@@ -132,7 +134,7 @@ namespace TermProcessingNamespace
             }
             return;
         }
-        public static bool GetAuthTerms(Terms AuthTermsAr)
+        public bool GetAuthTerms(Terms AuthTermsAr)
         {
             Point cur_pos = new Point();
             string cur_pat = "";
@@ -198,10 +200,10 @@ namespace TermProcessingNamespace
                                     if (cur_pat.IndexOf("Def") == 0)
                                     {
                                         string word = xml.Value.Trim();
-                                        int k = find.findINList(AuthTermsAr.TermsAr, word);
+                                        int k = FindFunctions.findINList(AuthTermsAr.TermsAr, word);
                                         if (k == -1)
                                         {
-                                            cur_pos = aux.GetRealPos(cur_fragment, word, cur_pos);
+                                            cur_pos = AuxiliaryFunctions.GetRealPos(cur_fragment, word, cur_pos);
                                             Range cur_range = new Range(cur_pos);
                                             TermTree e = AuthTermsAr.rootTermsTree.FindRange(cur_range);
                                             Term newEl = new Term();
@@ -229,7 +231,7 @@ namespace TermProcessingNamespace
                                         }
                                         else
                                         {
-                                            cur_pos = aux.GetRealPos(cur_fragment, word, cur_pos);
+                                            cur_pos = AuxiliaryFunctions.GetRealPos(cur_fragment, word, cur_pos);
                                             Range cur_range = new Range(cur_pos);
                                             if (AuthTermsAr.rootTermsTree.FindRange(cur_range) == null)
                                             {
@@ -244,7 +246,7 @@ namespace TermProcessingNamespace
                                     else if (cur_pat.IndexOf("SDef") == 0)
                                     {
                                         string word = xml.Value.Trim();
-                                        int k = find.findINList(AuthTermsAr.TermsAr, word);
+                                        int k = FindFunctions.findINList(AuthTermsAr.TermsAr, word);
                                         if (k == -1)
                                         {
                                             Range cur_range = new Range(cur_pos);
@@ -295,12 +297,12 @@ namespace TermProcessingNamespace
                                         //if (e != null)
                                         //{
                                         //    //int k = e.indexElement;
-                                        //    int k = find.findPattern(AuthTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPDef".Length).Trim());
-                                        //    AuthTermsAr.TermsAr[k].NPattern = aux.NormalizeNPattern(word);
+                                        //    int k = FindFunctions.findPattern(AuthTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPDef".Length).Trim());
+                                        //    AuthTermsAr.TermsAr[k].NPattern = AuxiliaryFunctions.NormalizeNPattern(word);
                                         //}
-                                        int f = find.findFragmentINList(AuthTermsAr.TermsAr, cur_fragment);
+                                        int f = FindFunctions.findFragmentINList(AuthTermsAr.TermsAr, cur_fragment);
                                         if (f != -1)
-                                            AuthTermsAr.TermsAr[f].NPattern = aux.NormalizeNPattern(word);
+                                            AuthTermsAr.TermsAr[f].NPattern = AuxiliaryFunctions.NormalizeNPattern(word);
                                     }
                                     else if (cur_pat.IndexOf("NPSDef") == 0)
                                     {
@@ -312,8 +314,8 @@ namespace TermProcessingNamespace
                                         if (e != null)
                                         {
                                             //int k = e.indexElement;
-                                            int k = find.findPattern(AuthTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPSDef".Length).Trim());
-                                            AuthTermsAr.TermsAr[k].NPattern = aux.NormalizeNPattern(word);
+                                            int k = FindFunctions.findPattern(AuthTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPSDef".Length).Trim());
+                                            AuthTermsAr.TermsAr[k].NPattern = AuxiliaryFunctions.NormalizeNPattern(word);
                                         }
                                     }
                                  }
@@ -322,12 +324,12 @@ namespace TermProcessingNamespace
                     }
                 }
             }
-            aux.getFrequency_(AuthTermsAr);
+            AuxiliaryFunctions.getFrequency_(AuthTermsAr);
             return true;
         }
 
         //CombTerms        
-        public static void GetXMLCombTerms(CombTerms CombTermsAr)
+        public void GetXMLCombTerms(CombTerms CombTermsAr)
         {
             string patternsName = "";
             string curPattern = "";
@@ -340,7 +342,7 @@ namespace TermProcessingNamespace
                 if (curPattern.IndexOf("CT") != -1)
                 {
                     int len = curPattern.IndexOf("CT") + "CT".Length;
-                    int k = find.findINList(PatternsModel, curPattern, 1);
+                    int k = FindFunctions.findINList(PatternsModel, curPattern, 1);
                     if (k == -1)
                     {
                         pair<string, string> new_p = new pair<string, string>();
@@ -362,7 +364,7 @@ namespace TermProcessingNamespace
                         if (curPattern.IndexOf("CT") != -1)
                         {
                             int len = curPattern.IndexOf("CT") + "CT".Length;
-                            int k = find.findINList(PatternsModel, curPattern, 1);
+                            int k = FindFunctions.findINList(PatternsModel, curPattern, 1);
                             if (k == -1)
                             {
                                 pair<string, string> new_p = new pair<string, string>();
@@ -375,7 +377,7 @@ namespace TermProcessingNamespace
                         }
                     }
                 }
-                string LSPL_exe = programmPath + "\\bin\\lspl-find.exe";
+                string LSPL_exe = programmPath + "\\bin\\lspl-FindFunctions.exe";
                 string LSPL_patterns = programmPath + "\\Patterns\\COMBNS_TERM.txt";
                 string LSPL_output = tmpPath + "\\" + folderPath + "\\CombTermsOutput.xml";
                 string BAT_output = tmpPath + "\\" + folderPath + "\\CombTerms.bat";
@@ -394,17 +396,17 @@ namespace TermProcessingNamespace
             }
             return;
         }
-        public static string FormCombComponentsPatterns(CombTerms CombTermsAr)
+        public string FormCombComponentsPatterns(CombTerms CombTermsAr)
         {
             string CombComponentsPatterns = tmpPath + "\\" + folderPath + "\\COMP_COMB_TERM.txt";
             string patterns = "";
             StreamWriter sw = new StreamWriter(CombComponentsPatterns, false, Encoding.GetEncoding("Windows-1251"));
-            //aux.PrintConstantPatterns(sw);
+            //AuxiliaryFunctions.PrintConstantPatterns(sw);
             for (int i = 0; i < CombTermsAr.TermsAr.Count; i++)
             {
                 for (int j = 0; j < CombTermsAr.TermsAr[i].Components.Count; j++)
                 {
-                    //CombTermsAr.TermsAr[i].Components[j].NPattern = aux.NormalizeNPattern(CombTermsAr.TermsAr[i].Components[j].NPattern);
+                    //CombTermsAr.TermsAr[i].Components[j].NPattern = AuxiliaryFunctions.NormalizeNPattern(CombTermsAr.TermsAr[i].Components[j].NPattern);
                     sw.WriteLine("CCP" +
                         CombTermsAr.TermsAr[i].Components[j].Pattern + "-" +
                         CombTermsAr.TermsAr[i].Pattern + " = " +
@@ -416,10 +418,10 @@ namespace TermProcessingNamespace
             return patterns;
             
         }
-        public static void GetXMLCombComponentsTerms(CombTerms CombTermsAr, string patterns)
+        public void GetXMLCombComponentsTerms(CombTerms CombTermsAr, string patterns)
         {
             //--------------------------------
-            string LSPL_exe = programmPath + "\\bin\\lspl-find.exe";
+            string LSPL_exe = programmPath + "\\bin\\lspl-FindFunctions.exe";
             string LSPL_patterns = tmpPath + "\\" + folderPath + "\\COMP_COMB_TERM.txt";
             string LSPL_output = tmpPath + "\\" + folderPath + "\\CombComponentsTermsOutput.xml";
             string BAT_output = tmpPath + "\\" + folderPath + "\\CombComponentsTerms.bat";
@@ -435,7 +437,7 @@ namespace TermProcessingNamespace
             //---------------------------------
             return;
         }
-        public static bool GetCombComponentsTerms(CombTerms CombTermsAr)
+        public bool GetCombComponentsTerms(CombTerms CombTermsAr)
         {
             Point cur_pos = new Point();
             string cur_pat = "";
@@ -501,7 +503,7 @@ namespace TermProcessingNamespace
                                     if (cur_pat == "CompCombPat")
                                     {
                                         string word = xml.Value.Trim();
-                                        int k = find.findINList(CompV, word);
+                                        int k = FindFunctions.findINList(CompV, word);
                                         if (k == -1)
                                         {
                                             CombComponent newEl = new CombComponent();
@@ -514,7 +516,7 @@ namespace TermProcessingNamespace
                                         }
                                         else
                                         {
-                                            if (find.findPOS(CompV[k].Pos, cur_pos) == -1)
+                                            if (FindFunctions.findPOS(CompV[k].Pos, cur_pos) == -1)
                                             {
                                                 CompV[k].Pos.Add(cur_pos);
                                             }
@@ -534,9 +536,9 @@ namespace TermProcessingNamespace
                     TermTree e = CombTermsAr.rootTermsTree.FindRangeExtension(cur_range);
                     while (e != null)
                     {
-                        int curTerm = find.findPattern(CombTermsAr.TermsAr, e.indexElement, CompV[0].Pattern.Substring(0, CompV[0].Pattern.IndexOf('-')).Trim());
-                        int curComp = find.findPattern(CombTermsAr.TermsAr[curTerm].Components, CompV[0].Pattern.Substring(CompV[0].Pattern.IndexOf('-') + 1).Trim());
-                        //int curComp = find.findINList(CombTermsAr.TermsAr[curTerm].Components, CompV[0].TermWord);
+                        int curTerm = FindFunctions.findPattern(CombTermsAr.TermsAr, e.indexElement, CompV[0].Pattern.Substring(0, CompV[0].Pattern.IndexOf('-')).Trim());
+                        int curComp = FindFunctions.findPattern(CombTermsAr.TermsAr[curTerm].Components, CompV[0].Pattern.Substring(CompV[0].Pattern.IndexOf('-') + 1).Trim());
+                        //int curComp = FindFunctions.findINList(CombTermsAr.TermsAr[curTerm].Components, CompV[0].TermWord);
                         if (curComp != -1)
                         {
                             //CombTermsAr.TermsAr[curTerm].Components[curComp].Pos.insert(CombTermsAr.TermsAr[curTerm].Components[curComp].Pos.end(), CompV[0].Pos.begin(), CompV[0].Pos.end());
@@ -558,7 +560,7 @@ namespace TermProcessingNamespace
             }
             return true;
         }
-        public static bool GetCombTerms(CombTerms CombTermsAr)
+        public bool GetCombTerms(CombTerms CombTermsAr)
         {
             Point cur_pos = new Point();
             string cur_pat = "";
@@ -624,7 +626,7 @@ namespace TermProcessingNamespace
                                     if (cur_pat.IndexOf("FCT") == 0)
                                     {
                                         string word = xml.Value.Trim();
-                                        int k = find.findINList(CombTermsAr.TermsAr, word);
+                                        int k = FindFunctions.findINList(CombTermsAr.TermsAr, word);
                                         if (k == -1)
                                         {
                                             Range cur_range = new Range(cur_pos);
@@ -673,8 +675,8 @@ namespace TermProcessingNamespace
                                         TermTree e = CombTermsAr.rootTermsTree.FindRange(cur_range);
                                         if (e != null)
                                         {
-                                            int cur_Term = find.findPattern(CombTermsAr.TermsAr, e.indexElement, cur_main_pat);
-                                            if (find.findINList(CombTermsAr.TermsAr[cur_Term].Components, word) == -1)
+                                            int cur_Term = FindFunctions.findPattern(CombTermsAr.TermsAr, e.indexElement, cur_main_pat);
+                                            if (FindFunctions.findINList(CombTermsAr.TermsAr[cur_Term].Components, word) == -1)
                                             {
                                                 CombComponent newEl = new CombComponent();
                                                 newEl.TermWord = word;
@@ -694,9 +696,9 @@ namespace TermProcessingNamespace
                                         TermTree e = CombTermsAr.rootTermsTree.FindRange(cur_range);
                                         if (e != null)
                                         {
-                                            int k = find.findPattern(CombTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPFCT".Length).Trim());
+                                            int k = FindFunctions.findPattern(CombTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPFCT".Length).Trim());
                                             if (k != -1)
-                                                CombTermsAr.TermsAr[k].NPattern = aux.NormalizeNPattern(word);
+                                                CombTermsAr.TermsAr[k].NPattern = AuxiliaryFunctions.NormalizeNPattern(word);
                                         }
                                     }
                                     else if (cur_pat.IndexOf("NPCT") == 0)
@@ -709,12 +711,12 @@ namespace TermProcessingNamespace
                                         TermTree e = CombTermsAr.rootTermsTree.FindRange(cur_range);
                                         if (e != null)
                                         {
-                                            int k = find.findPattern(CombTermsAr.TermsAr, e.indexElement, cur_main_pat);
+                                            int k = FindFunctions.findPattern(CombTermsAr.TermsAr, e.indexElement, cur_main_pat);
                                             if (k != -1)
                                             {
-                                                int a = find.findPattern(CombTermsAr.TermsAr[k].Components, cur_pat.Substring(cur_pat.IndexOf('-') + 1).Trim());
+                                                int a = FindFunctions.findPattern(CombTermsAr.TermsAr[k].Components, cur_pat.Substring(cur_pat.IndexOf('-') + 1).Trim());
                                                 if (a != -1)
-                                                    CombTermsAr.TermsAr[k].Components[a].NPattern = aux.NormalizeNPattern(word);
+                                                    CombTermsAr.TermsAr[k].Components[a].NPattern = AuxiliaryFunctions.NormalizeNPattern(word);
                                             }
                                         }                                        
                                     }
@@ -729,7 +731,7 @@ namespace TermProcessingNamespace
         }
 
         //DictTerms
-        public static void GetXMLDictTerms(Terms DictTermsAr)
+        public void GetXMLDictTerms(Terms DictTermsAr)
         {
             string LSPL_patterns = "";
             StreamReader fs = null;
@@ -799,12 +801,12 @@ namespace TermProcessingNamespace
             //    //if (curPattern != "" && curPattern.Substring(0, curPattern.IndexOf('=')) != prevPattern)
             //    if (curPattern != "")
             //    {
-            //        int k = find.findINList(DictPatterns, curPattern.Substring("NP".Length, curPattern.IndexOf('=') - "NP".Length), 1);
+            //        int k = FindFunctions.findINList(DictPatterns, curPattern.Substring("NP".Length, curPattern.IndexOf('=') - "NP".Length), 1);
             //        DictPatterns[k].second = curPattern.Substring(curPattern.IndexOf('=')); 
             //    }
             //}
             //--------------------------------
-            string LSPL_exe = programmPath + "\\bin\\lspl-find.exe";          
+            string LSPL_exe = programmPath + "\\bin\\lspl-FindFunctions.exe";          
             string LSPL_output = tmpPath + "\\" + folderPath + "\\DictTermsOutput.xml";
             string BAT_output = tmpPath + "\\" + folderPath + "\\DictTerms.bat";
             StreamWriter sw = new StreamWriter(BAT_output, false, Encoding.GetEncoding("cp866"));
@@ -819,7 +821,7 @@ namespace TermProcessingNamespace
             //---------------------------------
             return;
         }
-        public static bool GetDictTerms(Terms DictTermsAr)
+        public bool GetDictTerms(Terms DictTermsAr)
         {            
             Point cur_pos = new Point();
             string cur_pat = "";
@@ -882,14 +884,14 @@ namespace TermProcessingNamespace
                                 if (lastNodeName == "result")
                                 {
                                     string word = xml.Value.Trim();
-                                    int k = find.findINList(DictTermsAr.TermsAr, word);
+                                    int k = FindFunctions.findINList(DictTermsAr.TermsAr, word);
                                     if (k == -1)
                                     {
                                         Range cur_range = new Range(cur_pos);
                                         Term newEl = new Term();
                                         newEl.frequency = 0;
                                         newEl.kind = KindOfTerm.DictTerm;                                        
-                                        newEl.NPattern = DictPatterns[find.findINList(DictPatterns, cur_pat, 1)].second; ;//<-------
+                                        newEl.NPattern = DictPatterns[FindFunctions.findINList(DictPatterns, cur_pat, 1)].second; ;//<-------
                                         newEl.PatCounter = 1;
                                         newEl.Pattern = cur_pat;
                                         newEl.Pos.Add(null);
@@ -930,12 +932,12 @@ namespace TermProcessingNamespace
                     }
                 }
             }
-            aux.getFrequency_(DictTermsAr);
+            AuxiliaryFunctions.getFrequency_(DictTermsAr);
             return true;
         }
 
         //NonDictTerms
-        public static void GetXMLNonDictTerms(NonDictTerms NonDictTermsAr)
+        public void GetXMLNonDictTerms(NonDictTerms NonDictTermsAr)
         {
             string LSPL_patterns = programmPath + "\\Patterns\\NONDICT_TERM.txt";
             StreamReader fs = new StreamReader(LSPL_patterns, Encoding.GetEncoding("Windows-1251"));
@@ -968,7 +970,7 @@ namespace TermProcessingNamespace
                                 break;
                             }
                     }
-                    int k = find.findINList(PatternsModel, curPattern, 1);
+                    int k = FindFunctions.findINList(PatternsModel, curPattern, 1);
                     if (k == -1 && len != 0)
                     {
                         pair<string, string> new_p = new pair<string, string>();
@@ -980,7 +982,7 @@ namespace TermProcessingNamespace
                 }
             }
             //--------------------------------
-            string LSPL_exe = programmPath + "\\bin\\lspl-find.exe";            
+            string LSPL_exe = programmPath + "\\bin\\lspl-FindFunctions.exe";            
             string LSPL_output = tmpPath + "\\" + folderPath + "\\NontDictTermsOutput.xml";
             string BAT_output = tmpPath + "\\" + folderPath + "\\NontDictTerms.bat";
             StreamWriter sw = new StreamWriter(BAT_output, false, Encoding.GetEncoding("cp866"));
@@ -995,7 +997,7 @@ namespace TermProcessingNamespace
             //---------------------------------
             return;
         }
-        public static bool GetNonDictTerms(NonDictTerms NonDictTermsAr)
+        public bool GetNonDictTerms(NonDictTerms NonDictTermsAr)
         {
             Point cur_pos = new Point();
             string cur_pat = "";
@@ -1062,7 +1064,7 @@ namespace TermProcessingNamespace
                                         case 'F':
                                             {
                                                 string word = xml.Value.Trim();
-                                                int k = find.findINList(NonDictTermsAr.TermsAr, word);
+                                                int k = FindFunctions.findINList(NonDictTermsAr.TermsAr, word);
                                                 if (k == -1)
                                                 {
                                                     Range cur_range = new Range(cur_pos);
@@ -1111,13 +1113,13 @@ namespace TermProcessingNamespace
                                                 TermTree e = NonDictTermsAr.rootTermsTree.FindRange(cur_range);
                                                 if (e != null)
                                                 {
-                                                    int cur_term = find.findPattern(NonDictTermsAr.TermsAr, e.indexElement, cur_pat.Substring("Ca".Length, cur_pat.IndexOf('-') - "Ca".Length).Trim());
+                                                    int cur_term = FindFunctions.findPattern(NonDictTermsAr.TermsAr, e.indexElement, cur_pat.Substring("Ca".Length, cur_pat.IndexOf('-') - "Ca".Length).Trim());
                                                     if (cur_term != -1)
                                                     {
-                                                        int block = find.findBlock(NonDictTermsAr.TermsAr[cur_term].Blocks, cur_pat[1].ToString());
+                                                        int block = FindFunctions.findBlock(NonDictTermsAr.TermsAr[cur_term].Blocks, cur_pat[1].ToString());
                                                         if (block != -1)
                                                         {
-                                                            int cur_comp = find.findPattern(NonDictTermsAr.TermsAr[cur_term].Blocks[block].Components, cur_pat.Substring(cur_pat.IndexOf('-') + 1).Trim());
+                                                            int cur_comp = FindFunctions.findPattern(NonDictTermsAr.TermsAr[cur_term].Blocks[block].Components, cur_pat.Substring(cur_pat.IndexOf('-') + 1).Trim());
                                                             if (cur_comp == -1)
                                                             {
                                                                 NonDictComponent newEl = new NonDictComponent();
@@ -1151,25 +1153,25 @@ namespace TermProcessingNamespace
                                                     {
                                                         case 'F':
                                                             {
-                                                                int k = find.findPattern(NonDictTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPF".Length).Trim());
+                                                                int k = FindFunctions.findPattern(NonDictTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPF".Length).Trim());
                                                                 if (k!=-1)
                                                                 {
-                                                                    NonDictTermsAr.TermsAr[k].NPattern = aux.NormalizeNPattern(word);
+                                                                    NonDictTermsAr.TermsAr[k].NPattern = AuxiliaryFunctions.NormalizeNPattern(word);
                                                                 }
                                                                 break;
                                                             }
                                                         case 'C':
                                                             {
-                                                                int cur_term = find.findPattern(NonDictTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPCa".Length, cur_pat.IndexOf('-') - "NPCa".Length).Trim());
+                                                                int cur_term = FindFunctions.findPattern(NonDictTermsAr.TermsAr, e.indexElement, cur_pat.Substring("NPCa".Length, cur_pat.IndexOf('-') - "NPCa".Length).Trim());
                                                                 if (cur_term != -1)
                                                                 {
-                                                                    int block = find.findBlock(NonDictTermsAr.TermsAr[cur_term].Blocks, cur_pat[4].ToString());
+                                                                    int block = FindFunctions.findBlock(NonDictTermsAr.TermsAr[cur_term].Blocks, cur_pat[4].ToString());
                                                                     if (block != -1)
                                                                     {
-                                                                        int cur_comp = find.findPattern(NonDictTermsAr.TermsAr[cur_term].Blocks[block].Components, cur_pat.Substring(cur_pat.IndexOf('-') + 1).Trim());
+                                                                        int cur_comp = FindFunctions.findPattern(NonDictTermsAr.TermsAr[cur_term].Blocks[block].Components, cur_pat.Substring(cur_pat.IndexOf('-') + 1).Trim());
                                                                         if (cur_comp != -1)
                                                                         {
-                                                                            NonDictTermsAr.TermsAr[cur_term].Blocks[block].Components[cur_comp].NPattern = aux.NormalizeNPattern(word);
+                                                                            NonDictTermsAr.TermsAr[cur_term].Blocks[block].Components[cur_comp].NPattern = AuxiliaryFunctions.NormalizeNPattern(word);
                                                                         }
                                                                     }                                                                    
                                                                 }
@@ -1187,12 +1189,12 @@ namespace TermProcessingNamespace
                     }
                 }
             }
-            aux.getFrequency_(NonDictTermsAr);
+            AuxiliaryFunctions.getFrequency_(NonDictTermsAr);
             return true;
         }
 
         //SynTerms
-        public static void GetXMLSynTerms(SynTerms SynTermsAr)
+        public void GetXMLSynTerms(SynTerms SynTermsAr)
         {
             string LSPL_patterns = programmPath + "\\Patterns\\SYN_TERM.txt";
             string patternsName = "";
@@ -1209,7 +1211,7 @@ namespace TermProcessingNamespace
                     if (curPattern.IndexOf("SYN") != -1)
                     {
                         int len = curPattern.IndexOf("SYN") + "SYN".Length;
-                        int k = find.findINList(PatternsModel, curPattern, 1);
+                        int k = FindFunctions.findINList(PatternsModel, curPattern, 1);
                         if (k == -1)
                         {
                             pair<string, string> new_p = new pair<string, string>();
@@ -1223,7 +1225,7 @@ namespace TermProcessingNamespace
                 }
             }
             //--------------------------------
-            string LSPL_exe = programmPath + "\\bin\\lspl-find.exe";            
+            string LSPL_exe = programmPath + "\\bin\\lspl-FindFunctions.exe";            
             string LSPL_output = tmpPath + "\\" + folderPath + "\\SynTermsOutput.xml";
             string BAT_output = tmpPath + "\\" + folderPath + "\\SynTerms.bat";
             StreamWriter sw = new StreamWriter(BAT_output, false, Encoding.GetEncoding("cp866"));
@@ -1238,7 +1240,7 @@ namespace TermProcessingNamespace
             //---------------------------------
             return;
         }
-        public static bool GetSynTerms(SynTerms SynTermsAr)
+        public bool GetSynTerms(SynTerms SynTermsAr)
         {
             Point cur_pos = new Point();
             string cur_pat = "";
@@ -1318,7 +1320,7 @@ namespace TermProcessingNamespace
                                             alt.second.PatternPart = "B";
                                             alt.second.Pattern = PartsPatterns.Substring(PartsPatterns.IndexOf('-') + 1).Trim();
                                             
-                                            int k = find.findINList(SynTermsAr.TermsAr, alt);
+                                            int k = FindFunctions.findINList(SynTermsAr.TermsAr, alt);
                                             if (k == -1)
                                             {
                                                 SynTerm newEl = new SynTerm();
@@ -1372,18 +1374,18 @@ namespace TermProcessingNamespace
                                         {
                                             int last_def = cur_pat.LastIndexOf('-');
                                             string main_pat = cur_pat.Substring(cur_pat.IndexOf('-') + 1, last_def - (cur_pat.IndexOf('-') + 1)).Trim();
-                                            int main_syn = find.findPattern(SynTermsAr.TermsAr, e.indexElement, main_pat);
+                                            int main_syn = FindFunctions.findPattern(SynTermsAr.TermsAr, e.indexElement, main_pat);
                                             string pattern_part = cur_pat.Substring(last_def + 1).Trim();
                                             switch(pattern_part)
                                             {
                                                 case "A":
                                                     {
-                                                        SynTermsAr.TermsAr[main_syn].alternatives.first.NPattern = aux.NormalizeNPattern(word);
+                                                        SynTermsAr.TermsAr[main_syn].alternatives.first.NPattern = AuxiliaryFunctions.NormalizeNPattern(word);
                                                         break;
                                                     }
                                                 case "B":
                                                     {
-                                                        SynTermsAr.TermsAr[main_syn].alternatives.second.NPattern = aux.NormalizeNPattern(word);
+                                                        SynTermsAr.TermsAr[main_syn].alternatives.second.NPattern = AuxiliaryFunctions.NormalizeNPattern(word);
                                                         break;
                                                     }
                                             }
@@ -1395,7 +1397,7 @@ namespace TermProcessingNamespace
                     }
                 }
             }
-            aux.getFrequency_(SynTermsAr);
+            AuxiliaryFunctions.getFrequency_(SynTermsAr);
             return true;
 
         }

@@ -15,6 +15,7 @@ namespace TermsNamespace
             this.first = first;
             this.second = second;
         }
+        public pair() {}
         public T first { get; set; }
         public U second { get; set; }
     }
