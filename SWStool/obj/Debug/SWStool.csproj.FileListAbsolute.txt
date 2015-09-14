@@ -12,3 +12,6 @@ C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\obj\Debug\SWS
 C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\obj\Debug\SWStool.csproj.GenerateResource.Cache
 C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\obj\Debug\SWStool.exe
 C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\obj\Debug\SWStool.pdb
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\bin\Debug\TermRules.dll
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\bin\Debug\TermRules.pdb
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\bin\Debug\ICSharpCode.SharpZipLib.dll

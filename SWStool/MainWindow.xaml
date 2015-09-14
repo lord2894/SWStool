@@ -4,21 +4,22 @@
         Title="SWStool" Height="512.104" Width="666.791">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="32*"/>
-            <RowDefinition Height="33*"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="33"/>
             <RowDefinition Height="292*"/>
-            <RowDefinition Height="26*"/>
+            <RowDefinition Height="26"/>
             <RowDefinition Height="87*"/>
             <RowDefinition Height="11*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="9*"/>
-            <ColumnDefinition Width="433*"/>
-            <ColumnDefinition Width="210"/>
+            <ColumnDefinition Width="115"/>
+            <ColumnDefinition Width="318*"/>
+            <ColumnDefinition Width="210*"/>
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
-        <DocumentViewer x:Name="DocViewer" Margin="1,4,2,3" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2"/>
-        <TreeView Margin="0,2,3,3" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Right" Width="204">
+        <DocumentViewer x:Name="DocViewer" Margin="0" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
+        <TreeView x:Name="IdexTreeView" Margin="6,0,0,0" Grid.Column="3" Grid.Row="2">
             <TreeViewItem Header="В" IsExpanded="True">
                 <TreeViewItem Header="Ввод-вывод 1, 32" HorizontalAlignment="Left" Width="181"/>
             </TreeViewItem>
@@ -37,7 +38,7 @@
                     <TreeViewItem Header="ввода-вывода 5, 13" HorizontalAlignment="Left" Width="162"/>
                 </TreeViewItem>
             </TreeViewItem>
-            <TreeViewItem Header="Р" IsExpanded="True">
+            <TreeViewItem x:Name="___Без_имени_" Header="Р" IsExpanded="True">
                 <TreeViewItem Header="Регистр 6, 11" HorizontalAlignment="Left" Width="181"/>
             </TreeViewItem>
             <TreeViewItem Header="С" IsExpanded="True">
@@ -50,27 +51,30 @@
                 <TreeViewItem Header="Мина адреса" HorizontalAlignment="Left" Width="181"/>
             </TreeViewItem>
         </TreeView>
-        <DataGrid x:Name="GlossaryGrid" Margin="1,5,3,10" SelectionChanged="DataGrid_SelectionChanged" Grid.ColumnSpan="2" Grid.Row="4" Grid.Column="1" Grid.RowSpan="2" AutoGenerateColumns="False">
+        <DataGrid x:Name="GlossaryGrid" Margin="0" SelectionChanged="DataGrid_SelectionChanged" Grid.ColumnSpan="2" Grid.Row="4" Grid.Column="2" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Термин" Binding="{Binding Path=Term}"/>
                 <DataGridTextColumn Header="Определение" Binding="{Binding Path=Definition}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Label Content="Глоссарий" HorizontalAlignment="Left" Margin="1,0,0,0" VerticalAlignment="Top" Width="639" Grid.ColumnSpan="2" Grid.Row="3" Grid.Column="1" Height="26"/>
-        <Label Content="Предметный указатель" Margin="0,0,3,3" Grid.Column="2" Grid.Row="1" Height="26" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="204"/>
-        <Menu Height="29" VerticalAlignment="Top" Grid.ColumnSpan="4">
+        <Label Content="Глоссарий" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="528" Grid.ColumnSpan="2" Grid.Row="3" Grid.Column="2" Height="26"/>
+        <Label Content="Предметный указатель" Margin="6,0,0,0" Grid.Column="3" Grid.Row="1" Height="26" VerticalAlignment="Bottom"/>
+        <Menu Height="29" VerticalAlignment="Top" Grid.ColumnSpan="5">
             <MenuItem Header="Файл" Height="29">
                 <MenuItem x:Name="OpenMenuItem" Header="Открыйть файл" Click="OpenMenuItem_Click"/>
-                <MenuItem Header="Сохранить как"/>
+                <MenuItem x:Name="SaveAsMenuItem" Header="Сохранить как"/>
+                <Separator HorizontalAlignment="Left" Height="1" Width="169"/>
+                <MenuItem x:Name="OptionsMenuItem" Header="Настройки" HorizontalAlignment="Left" Width="169"/>
                 <Separator/>
-                <MenuItem Header="Выход"/>
+                <MenuItem x:Name="QuitMenuItem" Header="Выход"/>
             </MenuItem>
             <MenuItem Header="Справка">
-                <MenuItem Header="Помощь"/>
+                <MenuItem x:Name="HelpMenuIten" Header="Помощь"/>
                 <Separator/>
-                <MenuItem Header="О программе"/>
+                <MenuItem x:Name="AboutMenuItem" Header="О программе"/>
             </MenuItem>
         </Menu>
+        <Button x:Name="StartButton" Content="Старт" Grid.Column="1" Margin="0" Grid.Row="3" Grid.RowSpan="2" Click="StartButton_Click" HorizontalAlignment="Left" Width="115"/>
 
     </Grid>
 </Window>

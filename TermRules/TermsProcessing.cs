@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ using TermsNamespace;
 using FindFunctionsNamespace;
 using TermTreeNamespace;
 using AuxiliaryFunctionsNamespace;
+using System.Diagnostics;
 
 namespace TermProcessingNamespace
 {
@@ -22,6 +24,7 @@ namespace TermProcessingNamespace
     }
     public class TermsProcessing
     {
+        private const int MAX_COMMAND = 8000;
         public Terms MainTermsAr { get; set; }
         public Terms AuthTermsAr { get; set; }
         public Terms DictTermsAr { get; set; }
@@ -117,13 +120,15 @@ namespace TermProcessingNamespace
                         }
                     }
                 }
-                string LSPL_exe = programmPath + "\\bin\\lspl-FindFunctions.exe";
+                string LSPL_exe = programmPath + "\\bin\\lspl-find.exe";
                 string LSPL_patterns = programmPath + "\\Patterns\\AUTH_TERM.txt";
                 string LSPL_output = tmpPath + "\\" + folderPath + "\\AuthTermsOutput.xml";                
                 StreamWriter sw = new StreamWriter(BAT_output, false, Encoding.GetEncoding("cp866"));
                 sw.WriteLine("\"" + LSPL_exe + "\" -i \"" + inputFile + "\" -p \"" + LSPL_patterns + "\" -o \"" + LSPL_output + "\" " + patternsName);
                 sw.Close();
-                System.Diagnostics.Process.Start(BAT_output).WaitForExit();
+                ProcessStartInfo startInfo = new ProcessStartInfo(BAT_output);
+                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                System.Diagnostics.Process.Start(startInfo).WaitForExit();
                 GetAuthTerms(AuthTermsAr);
                 
             }
@@ -377,14 +382,16 @@ namespace TermProcessingNamespace
                         }
                     }
                 }
-                string LSPL_exe = programmPath + "\\bin\\lspl-FindFunctions.exe";
+                string LSPL_exe = programmPath + "\\bin\\lspl-find.exe";
                 string LSPL_patterns = programmPath + "\\Patterns\\COMBNS_TERM.txt";
                 string LSPL_output = tmpPath + "\\" + folderPath + "\\CombTermsOutput.xml";
                 string BAT_output = tmpPath + "\\" + folderPath + "\\CombTerms.bat";
                 StreamWriter sw = new StreamWriter(BAT_output, false, Encoding.GetEncoding("cp866"));
                 sw.WriteLine("\"" + LSPL_exe + "\" -i \"" + inputFile + "\" -p \"" + LSPL_patterns + "\" -o \"" + LSPL_output + "\" "+patternsName);
                 sw.Close();
-                System.Diagnostics.Process.Start(BAT_output).WaitForExit();
+                ProcessStartInfo startInfo = new ProcessStartInfo(BAT_output);
+                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                System.Diagnostics.Process.Start(startInfo).WaitForExit();
                 GetCombTerms(CombTermsAr);
                 patternsName = FormCombComponentsPatterns(CombTermsAr);
                 GetXMLCombComponentsTerms(CombTermsAr, patternsName);                
@@ -421,7 +428,7 @@ namespace TermProcessingNamespace
         public void GetXMLCombComponentsTerms(CombTerms CombTermsAr, string patterns)
         {
             //--------------------------------
-            string LSPL_exe = programmPath + "\\bin\\lspl-FindFunctions.exe";
+            string LSPL_exe = programmPath + "\\bin\\lspl-find.exe";
             string LSPL_patterns = tmpPath + "\\" + folderPath + "\\COMP_COMB_TERM.txt";
             string LSPL_output = tmpPath + "\\" + folderPath + "\\CombComponentsTermsOutput.xml";
             string BAT_output = tmpPath + "\\" + folderPath + "\\CombComponentsTerms.bat";
@@ -432,7 +439,9 @@ namespace TermProcessingNamespace
             sw.WriteLine("\"" + LSPL_exe + "\" -i \"" + inputFile + "\" -p \"" + LSPL_patterns + "\" -o \"" + LSPL_output + "\" "+patterns);
             //Close the file
             sw.Close();
-            System.Diagnostics.Process.Start(BAT_output).WaitForExit();
+            ProcessStartInfo startInfo = new ProcessStartInfo(BAT_output);
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            System.Diagnostics.Process.Start(startInfo).WaitForExit();
             GetCombComponentsTerms(CombTermsAr);
             //---------------------------------
             return;
@@ -740,18 +749,23 @@ namespace TermProcessingNamespace
                 case DictionaryF.IT_TERM:
                     {
                         LSPL_patterns = programmPath + "\\Patterns\\IT_TERM.txt";
-                        fs = new StreamReader(LSPL_patterns, Encoding.GetEncoding("Windows-1251"));
+                        fs = new StreamReader(LSPL_patterns, Encoding.GetEncoding(1251));
                         break;
                     }
                 case DictionaryF.F_TERM:
                     {
                         LSPL_patterns = programmPath + "\\Patterns\\F_TERM.txt";
-                        fs = new StreamReader(LSPL_patterns, Encoding.GetEncoding("Windows-1251"));
+                        fs = new StreamReader(LSPL_patterns, Encoding.GetEncoding(1251));
                         break;
                     }
             }
             string patternsName = "";
             string curPattern = "";
+            string LSPL_exe = programmPath + "\\bin\\lspl-find.exe";
+            string LSPL_output = tmpPath + "\\" + folderPath + "\\DictTermsOutput.xml";
+            string BAT_output = tmpPath + "\\" + folderPath + "\\DictTerms.bat";
+            string BAT_command = "\"" + LSPL_exe + "\" -i \"" + inputFile + "\" -p \"" + LSPL_patterns + "\" -o \"" + LSPL_output + "\" ";
+            bool callUtilit = false;
             curPattern = fs.ReadLine();
             if (curPattern != "")
             {
@@ -770,14 +784,45 @@ namespace TermProcessingNamespace
                 //if (curPattern != "" && curPattern.Substring(0, curPattern.IndexOf('=')) != prevPattern)
                 if (curPattern != "")
                 {
-                    patternsName = patternsName + " " + curPattern.Substring(0, curPattern.IndexOf('=')).Trim();
-                    pair<string, string> cur_pat = new pair<string, string>();
-                    cur_pat.first = curPattern.Substring(0, curPattern.IndexOf('=')).Trim();
-                    cur_pat.second = curPattern.Substring(curPattern.IndexOf("=") + 1).Trim();
-                    DictPatterns.Add(cur_pat);
+                    string curPatternName = curPattern.Substring(0, curPattern.IndexOf('=')).Trim();
+                    if (BAT_command.Length + patternsName.Length + curPatternName.Length < MAX_COMMAND)
+                    {
+                        patternsName = patternsName + " " + curPatternName;
+                        pair<string, string> cur_pat = new pair<string, string>();
+                        cur_pat.first = curPattern.Substring(0, curPattern.IndexOf('=')).Trim();
+                        cur_pat.second = curPattern.Substring(curPattern.IndexOf("=") + 1).Trim();
+                        DictPatterns.Add(cur_pat);
+                        callUtilit = false;
+                    }
+                    else
+                    {
+                        StreamWriter sw = new StreamWriter(BAT_output, false, Encoding.GetEncoding("cp866"));
+                        sw.WriteLine(BAT_command + patternsName);
+                        sw.Close();
+                        ProcessStartInfo startInfo = new ProcessStartInfo(BAT_output);
+                        //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        System.Diagnostics.Process.Start(startInfo).WaitForExit();
+                        GetDictTerms(DictTermsAr);
+                        patternsName = curPatternName;
+                        pair<string, string> cur_pat = new pair<string, string>();
+                        cur_pat.first = curPattern.Substring(0, curPattern.IndexOf('=')).Trim();
+                        cur_pat.second = curPattern.Substring(curPattern.IndexOf("=") + 1).Trim();
+                        DictPatterns.Add(cur_pat);
+                        callUtilit = true;
+                    }
                 }
             }
-            //switch (dictionary)
+            if (!callUtilit)
+            {
+                StreamWriter sw = new StreamWriter(BAT_output, false, Encoding.GetEncoding("cp866"));
+                sw.WriteLine(BAT_command + patternsName);
+                sw.Close();
+                ProcessStartInfo startInfo = new ProcessStartInfo(BAT_output);
+                //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                System.Diagnostics.Process.Start(startInfo).WaitForExit();
+                GetDictTerms(DictTermsAr);
+            }
+            /*switch (dictionary)
             //{
             //    case DictionaryF.IT_TERM:
             //        {
@@ -805,20 +850,7 @@ namespace TermProcessingNamespace
             //        DictPatterns[k].second = curPattern.Substring(curPattern.IndexOf('=')); 
             //    }
             //}
-            //--------------------------------
-            string LSPL_exe = programmPath + "\\bin\\lspl-FindFunctions.exe";          
-            string LSPL_output = tmpPath + "\\" + folderPath + "\\DictTermsOutput.xml";
-            string BAT_output = tmpPath + "\\" + folderPath + "\\DictTerms.bat";
-            StreamWriter sw = new StreamWriter(BAT_output, false, Encoding.GetEncoding("cp866"));
-            //Write a line of text
-            //sw.WriteLine("cd \"" + programmPath + "\"");
-            //Write a second line of text
-            sw.WriteLine("\"" + LSPL_exe + "\" -i \"" + inputFile + "\" -p \"" + LSPL_patterns + "\" -o \"" + LSPL_output + "\" " + patternsName);
-            //Close the file
-            sw.Close();
-            System.Diagnostics.Process.Start(BAT_output).WaitForExit();
-            GetDictTerms(DictTermsAr);
-            //---------------------------------
+            //--------------------------------*/
             return;
         }
         public bool GetDictTerms(Terms DictTermsAr)
@@ -890,8 +922,9 @@ namespace TermProcessingNamespace
                                         Range cur_range = new Range(cur_pos);
                                         Term newEl = new Term();
                                         newEl.frequency = 0;
-                                        newEl.kind = KindOfTerm.DictTerm;                                        
-                                        newEl.NPattern = DictPatterns[FindFunctions.findINList(DictPatterns, cur_pat, 1)].second; ;//<-------
+                                        newEl.kind = KindOfTerm.DictTerm;
+                                        int element = FindFunctions.findINList(DictPatterns, cur_pat, 1);
+                                        newEl.NPattern = DictPatterns[element].second;//<-------
                                         newEl.PatCounter = 1;
                                         newEl.Pattern = cur_pat;
                                         newEl.Pos.Add(null);
@@ -982,7 +1015,7 @@ namespace TermProcessingNamespace
                 }
             }
             //--------------------------------
-            string LSPL_exe = programmPath + "\\bin\\lspl-FindFunctions.exe";            
+            string LSPL_exe = programmPath + "\\bin\\lspl-find.exe";            
             string LSPL_output = tmpPath + "\\" + folderPath + "\\NontDictTermsOutput.xml";
             string BAT_output = tmpPath + "\\" + folderPath + "\\NontDictTerms.bat";
             StreamWriter sw = new StreamWriter(BAT_output, false, Encoding.GetEncoding("cp866"));
@@ -992,7 +1025,9 @@ namespace TermProcessingNamespace
             sw.WriteLine("\"" + LSPL_exe + "\" -i \"" + inputFile + "\" -p \"" + LSPL_patterns + "\" -o \"" + LSPL_output + "\" " + patternsName);
             //Close the file
             sw.Close();
-            System.Diagnostics.Process.Start(BAT_output).WaitForExit();
+            ProcessStartInfo startInfo = new ProcessStartInfo(BAT_output);
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            System.Diagnostics.Process.Start(startInfo).WaitForExit();
             GetNonDictTerms(NonDictTermsAr);
             //---------------------------------
             return;
@@ -1225,7 +1260,7 @@ namespace TermProcessingNamespace
                 }
             }
             //--------------------------------
-            string LSPL_exe = programmPath + "\\bin\\lspl-FindFunctions.exe";            
+            string LSPL_exe = programmPath + "\\bin\\lspl-find.exe";            
             string LSPL_output = tmpPath + "\\" + folderPath + "\\SynTermsOutput.xml";
             string BAT_output = tmpPath + "\\" + folderPath + "\\SynTerms.bat";
             StreamWriter sw = new StreamWriter(BAT_output, false, Encoding.GetEncoding("cp866"));
@@ -1235,7 +1270,9 @@ namespace TermProcessingNamespace
             sw.WriteLine("\"" + LSPL_exe + "\" -i \"" + inputFile + "\" -p \"" + LSPL_patterns + "\" -o \"" + LSPL_output + "\" "+patternsName);
             //Close the file
             sw.Close();
-            System.Diagnostics.Process.Start(BAT_output).WaitForExit();
+            ProcessStartInfo startInfo = new ProcessStartInfo(BAT_output);
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            System.Diagnostics.Process.Start(startInfo).WaitForExit();
             GetSynTerms(SynTermsAr);
             //---------------------------------
             return;

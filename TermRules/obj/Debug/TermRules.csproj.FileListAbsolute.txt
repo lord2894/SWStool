@@ -6,3 +6,4 @@ C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\TermRules\bin\Debug\T
 C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\TermRules\bin\Debug\TermRules.pdb
 C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\TermRules\obj\Debug\TermRules.dll
 C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\TermRules\obj\Debug\TermRules.pdb
+C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\TermRules\obj\Debug\TermRules.csprojResolveAssemblyReference.cache

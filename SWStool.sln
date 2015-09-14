@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TermRules", "TermRules\Term
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckPatterns", "CheckPatterns\CheckPatterns.csproj", "{633A07D0-CD8F-4659-8C62-F94791FA2AE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWStoolV2", "SWStoolV2\SWStoolV2.csproj", "{D7026533-7067-4EC0-BCDF-5A68A705476C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TermRulesV2", "TermRulesV2\TermRulesV2.csproj", "{F6D6BCCB-94FA-455A-998B-16F96AFBD6E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{633A07D0-CD8F-4659-8C62-F94791FA2AE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{633A07D0-CD8F-4659-8C62-F94791FA2AE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{633A07D0-CD8F-4659-8C62-F94791FA2AE0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D7026533-7067-4EC0-BCDF-5A68A705476C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7026533-7067-4EC0-BCDF-5A68A705476C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7026533-7067-4EC0-BCDF-5A68A705476C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7026533-7067-4EC0-BCDF-5A68A705476C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6D6BCCB-94FA-455A-998B-16F96AFBD6E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6D6BCCB-94FA-455A-998B-16F96AFBD6E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6D6BCCB-94FA-455A-998B-16F96AFBD6E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6D6BCCB-94FA-455A-998B-16F96AFBD6E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

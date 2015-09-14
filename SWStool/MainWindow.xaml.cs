@@ -12,12 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+//using System.Windows.Forms;
 using Novacode;
 using System.IO;
 using Microsoft.Office.Interop.Word;
 using Microsoft.Win32;
 using System.Windows.Xps.Packaging;
 using System.Collections.ObjectModel;
+using RulesNamespace;
+using TermProcessingNamespace;
 
 namespace SWStool
 {
@@ -28,74 +31,45 @@ namespace SWStool
     {
         public MainWindow()
         {
-            InitializeComponent();           
-
+            InitializeComponent();
+            tmpPath = System.IO.Path.GetTempPath();
+            Directory.CreateDirectory(tmpPath + "\\" + folderPath);
+            ProgrammTmpPath = tmpPath + "\\" + folderPath;
+            StartButton.IsEnabled = false;
         }
 
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
+        public string tmpPath = "";
+        public string folderPath = "SWStoolTmp";
+        public string ProgrammTmpPath = "";
+        // Открытие документа в DocumentView-----------------------------------------------------
+        public string textFileName = "";
         private void OpenMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            //// Create OpenFileDialog
-            //Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-
-            //// Set filter for file extension and default file extension
-            //dlg.DefaultExt = ".docx";
-            //dlg.Filter = "Microsoft Word (.docx)|*.docx";
-
-            //// Display OpenFileDialog by calling ShowDialog method
-            //Nullable<bool> result = dlg.ShowDialog();
-
-            //// Get the selected file name and display in a TextBox
-            //if (result == true)
-            //{
-            //    // Open document
-            //    string filename = dlg.FileName;
-            //    //var doc = DocX.Load(filename);
-            //    //DocViewer.Document = null;
-            //    //ListBoxT.Items.IndexOf(ListBoxT.SelectedItems[i]);
-            //    var document = DocumentModel.Load("Document.docx", LoadOptions.DocxDefault);
-
-            //    // Convert DOCX to PDF.
-            //    document.Save("Document.pdf");
-
-            //    // View document in WPF's DocumentViewer.
-            //    documentViewer.Document = document.ConvertToXpsDocument(SaveOptions.XpsDefault).GetFixedDocumentSequence();
-
-            //}
-
             // Create OpenFileDialog
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 
             // Set filter for file extension and default file extension
-            dlg.DefaultExt = ".doc";
+            dlg.DefaultExt = ".docx";
             dlg.Filter = "Word documents (.docx)|*.docx";
 
             // Display OpenFileDialog by calling ShowDialog method
             Nullable<bool> result = dlg.ShowDialog();
 
-            // Get the selected file name and display in a TextBox
+            // Get the selected file name and display in a DocumentView
             if (result == true)
             {
                 if (dlg.FileName.Length > 0)
                 {
+                    textFileName = dlg.FileName;
                     //SelectedFileTextBox.Text = dlg.FileName;
-                    string newXPSDocumentName = String.Concat(System.IO.Path.GetDirectoryName(dlg.FileName), "\\",
-                                   System.IO.Path.GetFileNameWithoutExtension(dlg.FileName), ".xps");
-
+                    //string newXPSDocumentName = String.Concat(System.IO.Path.GetDirectoryName(dlg.FileName), "\\",
+                    //               System.IO.Path.GetFileNameWithoutExtension(dlg.FileName), ".xps");
+                    string newXPSDocumentName = String.Concat(ProgrammTmpPath, "\\", System.IO.Path.GetFileNameWithoutExtension(dlg.FileName), ".xps");
                     // Set DocumentViewer.Document to XPS document
-                    DocViewer.Document =
-                        ConvertWordDocToXPSDoc(dlg.FileName, newXPSDocumentName).GetFixedDocumentSequence();
+                    DocViewer.Document = ConvertWordDocToXPSDoc(dlg.FileName, newXPSDocumentName).GetFixedDocumentSequence();
                 }
             }
-            ObservableCollection<GlossaryItem> coll = new ObservableCollection<GlossaryItem>();
-            coll.Add(new GlossaryItem() { Term = "Порт", Definition = "Порт – это некая схема сопряжения." });
-            coll.Add(new GlossaryItem() { Term = "Перефирийное устройство", Definition = "Устройство, совершающее по отношению к микропроцессору операции ввода-вывода, можно назвать периферийным." });
-            GlossaryGrid.ItemsSource = coll;
-            GlossaryGrid.Items.Refresh();
+            StartButton.IsEnabled = true;
         }
         private XpsDocument ConvertWordDocToXPSDoc(string wordDocName, string xpsDocName)
         {
@@ -122,10 +96,48 @@ namespace SWStool
             }
             return null;
         }
+        //---------------------------------------------------------------------------------------
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+
         public class GlossaryItem
         {
             public string Term { get; set; }
             public string Definition { get; set; }
+        }
+
+        private void StartButton_Click(object sender, RoutedEventArgs e)
+        {            
+            DocxToText dtt = new DocxToText(textFileName);
+            string text = dtt.ExtractText();
+            string inputFile = ProgrammTmpPath + "\\TextA.txt";
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(inputFile, false, System.Text.Encoding.GetEncoding("Windows-1251")))
+                {
+                    sw.WriteLine(text);
+                    sw.Close();
+                }
+            }
+            catch (Exception exp)
+            {
+                using (StreamWriter sw = new StreamWriter(ProgrammTmpPath + "\\ExeptionLog.txt", false, System.Text.Encoding.GetEncoding("Windows-1251")))
+                {
+                    sw.WriteLine(exp.Message);
+                    sw.Close();
+                }
+            }
+            Rules rules = new Rules(inputFile, DictionaryF.F_TERM);            
+            rules.ApplyRules();
+
+            ObservableCollection<GlossaryItem> coll = new ObservableCollection<GlossaryItem>();
+            coll.Add(new GlossaryItem() { Term = "Порт", Definition = "Порт – это некая схема сопряжения." });
+            coll.Add(new GlossaryItem() { Term = "Перефирийное устройство", Definition = "Устройство, совершающее по отношению к микропроцессору операции ввода-вывода, можно назвать периферийным." });
+            GlossaryGrid.ItemsSource = coll;
+            GlossaryGrid.Items.Refresh();
         }
     }
 }
