@@ -15,12 +15,14 @@ using System.Windows.Shapes;
 //using System.Windows.Forms;
 using Novacode;
 using System.IO;
-using Microsoft.Office.Interop.Word;
 using Microsoft.Win32;
 using System.Windows.Xps.Packaging;
 using System.Collections.ObjectModel;
 using RulesNamespace;
 using TermProcessingNamespace;
+using Word = Microsoft.Office.Interop.Word;
+using Microsoft.Office.Interop;
+using Microsoft.Office.Interop.Word;
 
 namespace SWStool
 {
@@ -35,7 +37,7 @@ namespace SWStool
             tmpPath = System.IO.Path.GetTempPath();
             Directory.CreateDirectory(tmpPath + "\\" + folderPath);
             ProgrammTmpPath = tmpPath + "\\" + folderPath;
-            StartButton.IsEnabled = false;
+            //StartButton.IsEnabled = false;
         }
 
         public string tmpPath = "";
@@ -97,12 +99,36 @@ namespace SWStool
             return null;
         }
         //---------------------------------------------------------------------------------------
+
+        // Постраничное извлечение текста из Docx документа -------------------------------------
+        private void ReadTextFromDocxByPage(string PathToFile)
+        {
+            List<string> pages = new List<string>();
+            object path = PathToFile;
+            Microsoft.Office.Interop.Word.Application word = new Microsoft.Office.Interop.Word.Application();
+            object miss = System.Reflection.Missing.Value;
+            object readOnly = false;
+            Microsoft.Office.Interop.Word.Document docs = word.Documents.Open(ref path, ref miss, ref readOnly, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss);
+            string totaltext = "";
+            object obj = "\\page";
+            var numberOfPages = docs.ComputeStatistics(Microsoft.Office.Interop.Word.WdStatistic.wdStatisticPages, false);
+            Word.Range rng = word.Selection.Bookmarks.get_Item(ref obj).Range;
+            for (int i = 1; i <= numberOfPages; i++)
+            {
+                pages.Add(rng.Text); 
+                word.Selection.GoToNext(Microsoft.Office.Interop.Word.WdGoToItem.wdGoToPage);
+                rng = word.Selection.Bookmarks.get_Item(ref obj).Range;
+            }
+            docs.Close();
+            word.Quit();
+        }
+
+        //---------------------------------------------------------------------------------------
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
-
-
+        
         public class GlossaryItem
         {
             public string Term { get; set; }
@@ -111,8 +137,9 @@ namespace SWStool
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {            
-            DocxToText dtt = new DocxToText(textFileName);
-            string text = dtt.ExtractText();
+            StringBuilder text = new StringBuilder();
+            ReadTextFromDocxByPage(@"C:\Users\Kir\Desktop\Документы\Отчет Иванов.docx");
+
             string inputFile = ProgrammTmpPath + "\\TextA.txt";
             try
             {
@@ -130,8 +157,8 @@ namespace SWStool
                     sw.Close();
                 }
             }
-            Rules rules = new Rules(inputFile, DictionaryF.F_TERM);            
-            rules.ApplyRules();
+            Rules rules = new Rules(inputFile, DictionaryF.IT_TERM);            
+            //rules.ApplyRules();
 
             ObservableCollection<GlossaryItem> coll = new ObservableCollection<GlossaryItem>();
             coll.Add(new GlossaryItem() { Term = "Порт", Definition = "Порт – это некая схема сопряжения." });

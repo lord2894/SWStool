@@ -36,7 +36,8 @@ namespace SWStool
         /// Extracts text from the Docx file.
         /// </summary>
         /// <returns>Extracted text.</returns>
-        public string ExtractText()
+        //public string ExtractText()
+        public void ExtractText()
         {
             if (string.IsNullOrEmpty(docxFile))
                 throw new Exception("Input file not specified.");
@@ -47,8 +48,9 @@ namespace SWStool
 
             if (string.IsNullOrEmpty(docxFileLocation))
                 throw new Exception("It is not a valid Docx file.");
+            ReadDocumentXml();
 
-            return ReadDocumentXml();
+            return; 
         }
         #endregion
 
@@ -100,7 +102,8 @@ namespace SWStool
         /// Reads "document.xml" zip entry.
         /// </summary>
         /// <returns>Text containing in the document.</returns>
-        private string ReadDocumentXml()
+        //private string ReadDocumentXml()
+        private void ReadDocumentXml()
         {
             StringBuilder sb = new StringBuilder();
 
@@ -110,6 +113,8 @@ namespace SWStool
                 if (string.Compare(entry.Name, docxFileLocation, true) == 0)
                 {
                     Stream documentXml = zip.GetInputStream(entry);
+
+                    ReadXml(documentXml);
 
                     XmlDocument xmlDoc = new XmlDocument();
                     xmlDoc.PreserveWhitespace = true;
@@ -122,7 +127,8 @@ namespace SWStool
                     XmlNode node = xmlDoc.DocumentElement.SelectSingleNode(BodyXPath, nsmgr);
 
                     if (node == null)
-                        return string.Empty;
+                        //return string.Empty;
+                        return;
 
                     sb.Append(ReadNode(node));
 
@@ -130,7 +136,8 @@ namespace SWStool
                 }
             }
             zip.Close();
-            return sb.ToString();
+            //return sb.ToString();
+            return;
         }
         #endregion
 
@@ -140,24 +147,117 @@ namespace SWStool
         /// </summary>
         /// <param name="node">XmlNode.</param>
         /// <returns>Text containing in the node.</returns>
+        private void ReadXml(Stream xmlStream)
+        {
+            string pageText = null;
+            List<string> pages = new List<string>();
+            string lastNodeName = "";
+            string space = null;
+            using (XmlReader xml = XmlReader.Create(xmlStream))
+            {
+                XmlNamespaceManager nsmgr = new XmlNamespaceManager(xml.NameTable);
+                nsmgr.AddNamespace("w", WordprocessingMlNamespace);
+                while (xml.Read())
+                {
+                    switch (xml.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            {
+                                if (xml.Name == "w:t")
+                                {
+                                    lastNodeName = xml.Name;
+                                    if (xml.HasAttributes)
+                                    {
+                                        while (xml.MoveToNextAttribute())
+                                        {
+                                            if (xml.Name == "xml:space")
+                                            {
+                                                space = xml.Value;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (xml.Name == "w:br")
+                                {
+                                    lastNodeName = xml.Name;
+                                    while (xml.MoveToNextAttribute())
+                                    {
+                                        if (xml.Name == "w:type")
+                                        {
+                                            if (xml.Value == "page")
+                                                if (!string.IsNullOrEmpty(pageText))
+                                                {
+                                                    pages.Add(pageText);
+                                                    pageText = null;
+                                                    break;
+                                                }
+                                        }
+                                    }
+                                }
+                                else if (xml.Name == "w:lastRenderedPageBreak")
+                                {
+                                    lastNodeName = xml.Name;
+                                    if (!string.IsNullOrEmpty(pageText))
+                                    {
+                                        pages.Add(pageText);                                    
+                                        pageText = null;
+                                    }
+                                }
+                                else if (xml.Name == "w:tab")
+                                {
+                                    lastNodeName = xml.Name;
+                                }
+                                else if (xml.Name == "w:p")
+                                {
+                                    pageText += Environment.NewLine;
+                                    pageText += Environment.NewLine;
+                                }
+                                break;
+                            }
+                        case XmlNodeType.Text:
+                            {
+                                if (lastNodeName == "w:t")
+                                {
+                                    pageText += xml.Value.Trim();
+                                    if (!string.IsNullOrEmpty(space) && space == "preserve")
+                                    {
+                                        pageText += ' ';
+                                        space = null;
+                                    }                                    
+                                }
+                                else if (lastNodeName == "w:tab")
+                                {
+                                    pageText += "\t";
+                                }
+                                break;
+                            }
+                    }
+                }
+                if (!string.IsNullOrEmpty(pageText))
+                    pages.Add(pageText);
+                pageText = null;
+            }
+        }
         private string ReadNode(XmlNode node)
         {
             if (node == null || node.NodeType != XmlNodeType.Element)
                 return string.Empty;
-
+            List<string> pages = new List<string>();
+            string pageText = "";
             StringBuilder sb = new StringBuilder();
             foreach (XmlNode child in node.ChildNodes)
             {
                 if (child.NodeType != XmlNodeType.Element) continue;
-
                 switch (child.LocalName)
                 {
                     case "t":                           // Text
-                        sb.Append(child.InnerText.TrimEnd());
-
+                        //sb.Append(child.InnerText.TrimEnd());
+                        pageText += child.InnerText.TrimEnd();
                         string space = ((XmlElement)child).GetAttribute("xml:space");
                         if (!string.IsNullOrEmpty(space) && space == "preserve")
-                            sb.Append(' ');
+                            //sb.Append(' ');
+                            pageText += ' ';
 
                         break;
 
@@ -167,13 +267,15 @@ namespace SWStool
                         break;
 
                     case "tab":                         // Tab
-                        sb.Append("\t");
+                        //sb.Append("\t");
+                        pageText += "\t";
                         break;
 
                     case "p":                           // Paragraph
-                        sb.Append(ReadNode(child));
-                        sb.Append(Environment.NewLine);
-                        sb.Append(Environment.NewLine);
+                        //sb.Append(ReadNode(child));
+                        //sb.Append(Environment.NewLine);
+                        //sb.Append(Environment.NewLine);
+                        //pageText += ReadNode(child)
                         break;
 
                     default:
