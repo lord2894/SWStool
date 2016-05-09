@@ -30,15 +30,35 @@ namespace FindFunctionsNamespace
             }
             return -1;
         }
-        public static int findINList(List<Term> v, string str)
+        public static int findINList(List<Term> v, string str, string pos)
         {
-            if (v == null || str == null) return -1;
+            if (v == null || str == null || pos == null) return -1;
 	        for (int i=0; i<v.Count;i++)
 	        {
-		        if (v[i].TermWord==str)
+		        if (v[i].TermWord==str && v[i].POSstr == pos)
 			        return i;
 	        }
 	        return -1;
+        }
+        public static int findINList(List<Term> v, string str)
+        {
+            if (v == null || str == null) return -1;
+            for (int i = 0; i < v.Count; i++)
+            {
+                if (v[i].TermWord == str)
+                    return i;
+            }
+            return -1;
+        }
+        public static int findINList(List<NonDictTerm> v, string word, string pos)
+        {
+            if (v == null || word == null || pos == null) return -1;
+            for (int i = 0; i < v.Count; i++)
+            {
+                if (v[i].TermWord == word && v[i].POSstr == pos)
+                    return i;
+            }
+            return -1;
         }
         public static int findINList(List<NonDictTerm> v, string str)
         {
@@ -50,16 +70,27 @@ namespace FindFunctionsNamespace
             }
             return -1;
         }
-        public static int findINList(List<CombTerm> v, string str)
+        public static int findINList(List<CombTerm> v, string word, string pos)
         {
-            if (v == null || str == null) return -1;
+            if (v == null || word == null || pos == null) return -1;
 	        for (int i=0; i<v.Count;i++)
 	        {
-		        if (v[i].TermWord==str)
+		        if (v[i].TermWord==word && v[i].POSstr == pos)
 			        return i;
 	        }
 	        return -1;
         }
+        public static int findINList(List<CombTerm> v, string str)
+        {
+            if (v == null || str == null) return -1;
+            for (int i = 0; i < v.Count; i++)
+            {
+                if (v[i].TermWord == str)
+                    return i;
+            }
+            return -1;
+        }
+
         public static int findINList(List<CombComponent> v, string str)
         {
             if (v == null || str == null) return -1;
@@ -82,6 +113,29 @@ namespace FindFunctionsNamespace
 			        return i;
 	        }
 	        return -1;
+        }
+        public static int findINListPos(List<SynTerm> v, pair<SynTermAlternative, SynTermAlternative> str)
+        {
+            if (v == null || str == null) return -1;
+            return v.FindIndex(item => 
+                (item.alternatives.first.alternative == str.first.alternative && item.alternatives.second.alternative == str.second.alternative &&
+                 item.alternatives.first.POSstr == str.first.POSstr && item.alternatives.second.POSstr == str.second.POSstr) ||
+                (item.alternatives.first.alternative == str.second.alternative && item.alternatives.second.alternative == str.first.alternative &&
+                 item.alternatives.first.POSstr == str.second.POSstr && item.alternatives.second.POSstr == str.first.POSstr));
+            //if (v == null || str == null) return -1;
+            //for (int i = 0; i < v.Count; i++)
+            //{
+            //    if ((v[i].alternatives.first.alternative == str.first.alternative &&
+            //        v[i].alternatives.second.alternative == str.second.alternative &&
+            //        v[i].alternatives.first.POSstr == str.first.POSstr &&
+            //        v[i].alternatives.second.POSstr == str.second.POSstr) ||
+            //        (v[i].alternatives.first.alternative == str.second.alternative &&
+            //        v[i].alternatives.second.alternative == str.first.alternative &&
+            //        v[i].alternatives.first.POSstr == str.second.POSstr &&
+            //        v[i].alternatives.second.POSstr == str.first.POSstr))
+            //        return i;
+            //}
+            //return -1;
         }
         public static int findPattern(List<Term> v, List<int> ind, string str)
         {
@@ -122,20 +176,22 @@ namespace FindFunctionsNamespace
         public static int findPattern(List<CombComponent> v, string str)
         {
             if (v == null || str == null) return -1;
-            for (int i = 0; i < v.Count; i++)
-            {
-                if (v[i].Pattern == str) return i;
-            }
-            return -1;
+            return v.FindIndex(item => item.Pattern == str);
+            //for (int i = 0; i < v.Count; i++)
+            //{
+            //    if (v[i].Pattern == str) return i;
+            //}
+            //return -1;
         }
         public static int findPattern(List<NonDictComponent> v, string str)
         {
             if (v == null || str == null) return -1;
-            for (int i = 0; i < v.Count; i++)
-            {
-                if (v[i].Pattern == str) return i;
-            }
-            return -1;
+            return v.FindIndex(item => item.Pattern == str);
+            //for (int i = 0; i < v.Count; i++)
+            //{
+            //    if (v[i].Pattern == str) return i;
+            //}
+            //return -1;
         }
         public static int findBlock(List<NonDictBlock> v, string str)
         {
@@ -339,11 +395,12 @@ namespace FindFunctionsNamespace
         public static int findPOS(List<Point> pos, Point p)
         {
             if (pos == null || p == null) return -1;
-	        int size=pos.Count;
-	        for (int i=0; i<size; i++)
-		        if (pos[i].X == p.X && pos[i].Y == p.Y)
-			        return i;
-	        return -1;
+            return pos.FindIndex(item => item.X == p.X && item.Y == p.Y);
+            //int size=pos.Count;
+            //for (int i=0; i<size; i++)
+            //    if (pos[i].X == p.X && pos[i].Y == p.Y)
+            //        return i;
+            //return -1;
         }
         public static string GetLargestCommonSubstring(string s1, string s2)
         {

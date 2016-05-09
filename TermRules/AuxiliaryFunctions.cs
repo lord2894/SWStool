@@ -8,6 +8,7 @@ using System.IO;
 using TermsNamespace;
 using TermTreeNamespace;
 using FindFunctionsNamespace;
+using System.Text.RegularExpressions;
 
 namespace AuxiliaryFunctionsNamespace
 {
@@ -255,54 +256,41 @@ namespace AuxiliaryFunctionsNamespace
             }
             return pos;
         }
+
         public static string NormalizeNPattern(string NPattern)
         {
-            bool change = true;
-            int open_t = -1;
-            int close_t = 0;
-            string newNP = "";
-            while (change)
+            NPattern = NPattern.Replace('[', '<');
+            NPattern = NPattern.Replace(']', '>');
+            string newPattern = Normalization(NPattern);
+            while(newPattern != NPattern)
             {
-                change = false;
-                open_t = NPattern.IndexOf("<", open_t + 1);
-                if (open_t != -1 &&
-                    (NPattern[open_t - 1] >= '0' &&
-                     NPattern[open_t - 1] <= '9'))
-                {
-                    newNP = newNP + NPattern.Substring(close_t, open_t - close_t + 1);
-                    //prev_close_t = close_t;
-                    close_t = NPattern.IndexOf(">", open_t + 1);
-                    newNP = newNP + NPattern.Substring(open_t + 1, close_t - (open_t + 1)).Trim().ToLower().Replace(" ", "");
-                    change = true;
-                }
-                else
-                {
-                    int p = open_t;
-                    while (p != -1) // Костыль, можно изящнее
-                    {
-                        p = NPattern.IndexOf("<", p + 1);
-                        if (p != -1 &&
-                            (NPattern[p - 1] >= '0' &&
-                             NPattern[p - 1] <= '9'))
-                            break;
-                    }
-                    if (p != -1)
-                    {
-                        open_t = p;
-                        newNP = newNP + NPattern.Substring(close_t, open_t - close_t + 1);
-                        close_t = NPattern.IndexOf(">", open_t + 1);
-                        newNP = newNP + NPattern.Substring(open_t + 1, close_t - (open_t + 1)).Trim().ToLower().Replace(" ", "");
-                        change = true;
-                    }
-                    else
-                    {
-                        newNP = newNP + NPattern.Substring(close_t);
-                    }
-
-                }
-
+                NPattern = newPattern;
+                newPattern = Normalization(NPattern);
             }
-            return newNP.Replace("=TEXT>", "=text>");
+            return NPattern.Replace("=TEXT>", "=text>").Replace("PA","Pa");//.Replace("ё","е");
+        }
+        private static string Normalization(string NPattern)//Костыль, разобраться позже
+        {
+            string pattern = @"(<\s+)";
+            foreach (Match match in Regex.Matches(NPattern, pattern, RegexOptions.IgnoreCase))
+                NPattern = NPattern.Replace(match.Groups[1].Value, match.Groups[1].Value.Replace(" ", ""));
+            pattern = @"(\s+>)";
+            foreach (Match match in Regex.Matches(NPattern, pattern, RegexOptions.IgnoreCase))
+                NPattern = NPattern.Replace(match.Groups[1].Value, match.Groups[1].Value.Replace(" ", ""));
+            pattern = @"(\s*,\s*)";
+            foreach (Match match in Regex.Matches(NPattern, pattern, RegexOptions.IgnoreCase))
+                NPattern = NPattern.Replace(match.Groups[1].Value, match.Groups[1].Value.Replace(" ", ""));
+            pattern = @"(\.\w[=,>])";
+            foreach (Match match in Regex.Matches(NPattern, pattern, RegexOptions.IgnoreCase))
+                NPattern = NPattern.Replace(match.Groups[1].Value, match.Groups[1].Value.ToLower());
+            pattern = @"([,<](C|N|G|DOC|T|A|F|M|P|R)=\w*[,>])";
+            //MatchCollection matches = Regex.Matches(NPattern, pattern);
+            foreach (Match match in Regex.Matches(NPattern, pattern))
+                NPattern = NPattern.Replace(match.Groups[1].Value, match.Groups[1].Value.ToLower());
+            pattern = @"([0-9]<[\w-0-9]*[,>])";
+            foreach (Match match in Regex.Matches(NPattern, pattern))
+                NPattern = NPattern.Replace(match.Groups[1].Value, match.Groups[1].Value.ToLower());
+            return NPattern;
         }
         public static void PrintConstantPatterns(StreamWriter sw)
         {
@@ -461,3 +449,56 @@ namespace AuxiliaryFunctionsNamespace
 //                for (int j = 0; j < MR.TermsAr[i].Pos.Count; j++)
 //                    if (!MR.TermsAr[i].Pos[j].indexElement.Contains(i)) MR.TermsAr[i].Pos[j].indexElement.Add(i);
 //            }
+
+
+
+
+
+
+// List<string> atributes = new List<string>({ "c", "n", "g", "doc", "t", "a", "f", "m", "p", "r" });            
+//bool change = true;
+//int open_t = -1;
+//int close_t = 0;
+//string newNP = "";
+//while (change)
+//{
+//    change = false;
+//    open_t = NPattern.IndexOf("<", open_t + 1);
+//    if (open_t != -1 &&
+//        (NPattern[open_t - 1] >= '0' &&
+//         NPattern[open_t - 1] <= '9'))
+//    {
+//        newNP = newNP + NPattern.Substring(close_t, open_t - close_t + 1);
+//        //newNP = newNP + NPattern.Substring(close_t, close_t - open_t + 1);
+//        //prev_close_t = close_t;
+//        close_t = NPattern.IndexOf(">", open_t + 1);
+//        newNP = newNP + NPattern.Substring(open_t + 1, close_t - (open_t + 1)).Trim().ToLower().Replace(" ", "");
+//        change = true;
+//    }
+//    else
+//    {
+//        int p = open_t;
+//        while (p != -1) // Костыль, можно изящнее
+//        {
+//            p = NPattern.IndexOf("<", p + 1);
+//            if (p != -1 &&
+//                (NPattern[p - 1] >= '0' &&
+//                 NPattern[p - 1] <= '9'))
+//                break;
+//        }
+//        if (p != -1)
+//        {
+//            open_t = p;
+//            newNP = newNP + NPattern.Substring(close_t, open_t - close_t + 1);
+//            close_t = NPattern.IndexOf(">", open_t + 1);
+//            newNP = newNP + NPattern.Substring(open_t + 1, close_t - (open_t + 1)).Trim().ToLower().Replace(" ", "");
+//            change = true;
+//        }
+//        else
+//        {
+//            newNP = newNP + NPattern.Substring(close_t);
+//        }
+
+//    }
+
+//}

@@ -27,7 +27,9 @@ namespace TermTreeNamespace
         public static bool operator <=(Range l, Range r)
         {
             if (l == null || r == null) return false;
-            return (((r.inf.X > l.inf.X) && (r.inf.Y <= l.inf.Y)) || ((r.inf.X >= l.inf.X) && (r.inf.Y < l.inf.Y))) || (l.inf.X == r.inf.X && l.inf.Y == r.inf.Y);
+            return (((r.inf.X > l.inf.X) && (r.inf.Y <= l.inf.Y)) 
+                || ((r.inf.X >= l.inf.X) && (r.inf.Y < l.inf.Y))) 
+                || (l.inf.X == r.inf.X && l.inf.Y == r.inf.Y);
         }
         public static bool operator >=(Range l, Range r)
         {
@@ -84,6 +86,8 @@ namespace TermTreeNamespace
         /// <returns></returns>
         public void AddRange(Range new_range)
         {
+            TermTree node = null;
+            TermTree parent = null;
             if (Range.Equals(range, null) || Range.Equals(range,new_range))
             {
                 range = new_range;
@@ -91,13 +95,43 @@ namespace TermTreeNamespace
             }
             if (new_range <= range)
             {
+                //if (left == null) left = new TermTree();
                 if (left == null) left = new TermTree();
-                AddRange(new_range, left, this);
+                parent = this;
+                node = left;
+                //return AddRange(new_range, left, this);
             }
             else
             {
-                if (right == null) right = new TermTree();
-                AddRange(new_range, right, this);
+                //if (right == null) right = new TermTree();
+                if (right == null) right = new TermTree();                
+                parent = this;
+                node = right;
+                //return AddRange(new_range, right, this);
+            }
+            while(true)
+            {
+                //if (node.range == null || node.range == new_range)
+                if (Range.Equals(node.range, null) || Range.Equals(node.range, new_range))
+                {
+                    node.range = new_range;
+                    node.parent = parent;
+                    return;
+                }
+                if (new_range <= node.range)
+                {
+                    if (node.left == null) node.left = new TermTree();
+                    parent = node;
+                    node = node.left;
+                    //return AddRange(new_range, node.left, node);
+                }
+                else
+                {
+                    if (node.right == null) node.right = new TermTree();
+                    parent = node;
+                    node = node.right;
+                    //return AddRange(new_range, node.right, node);
+                }
             }
         }
         /// <summary>
@@ -106,27 +140,26 @@ namespace TermTreeNamespace
         /// <param name="new_range">Интервал</param>
         /// <param name="node">Целевой узел для вставки</param>
         /// <param name="parent">Родительский узел</param>
-        private void AddRange(Range new_range, TermTree node, TermTree parent)
-        {
-
-            //if (node.range == null || node.range == new_range)
-            if (Range.Equals(node.range, null) || Range.Equals(node.range, new_range))
-            {
-                node.range = new_range;
-                node.parent = parent;
-                return;
-            }
-            if (new_range <= node.range)
-            {
-                if (node.left == null) node.left = new TermTree();
-                AddRange(new_range, node.left, node);
-            }
-            else
-            {
-                if (node.right == null) node.right = new TermTree();
-                AddRange(new_range, node.right, node);
-            }
-        }
+        //private int AddRange(Range new_range, TermTree node, TermTree parent)
+        //{
+        //    //if (node.range == null || node.range == new_range)
+        //    if (Range.Equals(node.range, null) || Range.Equals(node.range, new_range))
+        //    {
+        //        node.range = new_range;
+        //        node.parent = parent;
+        //        return 0;
+        //    }
+        //    if (new_range <= node.range)
+        //    {
+        //        if (node.left == null) node.left = new TermTree();
+        //        return AddRange(new_range, node.left, node);
+        //    }
+        //    else
+        //    {
+        //        if (node.right == null) node.right = new TermTree();
+        //        return AddRange(new_range, node.right, node);
+        //    }
+        //}
         /// <summary>
         /// Уставляет узел в определённый узел дерева
         /// </summary>
@@ -135,25 +168,31 @@ namespace TermTreeNamespace
         /// <param name="parent">Родительский узел</param>
         private void AddRange(TermTree new_range, TermTree node, TermTree parent)
         {
-
-            //if (node.range == null || node.range == new_range.range)
-            if (Range.Equals(node.range, null) || Range.Equals(node.range, new_range))
+            while (true)
             {
-                node.range = new_range.range;
-                node.left = new_range.left;
-                node.right = new_range.right;
-                node.parent = parent;
-                return;
-            }
-            if (new_range.range <= node.range)
-            {
-                if (node.left == null) node.left = new TermTree();
-                AddRange(new_range, node.left, node);
-            }
-            else
-            {
-                if (node.right == null) node.right = new TermTree();
-                AddRange(new_range, node.right, node);
+                //if (node.range == null || node.range == new_range.range)
+                if (Range.Equals(node.range, null) || Range.Equals(node.range, new_range))
+                {
+                    node.range = new_range.range;
+                    node.left = new_range.left;
+                    node.right = new_range.right;
+                    node.parent = parent;
+                    return;
+                }
+                if (new_range.range <= node.range)
+                {
+                    if (node.left == null) node.left = new TermTree();
+                    parent = node;
+                    node = node.left;
+                    //return AddRange(new_range, node.left, node);
+                }
+                else
+                {
+                    if (node.right == null) node.right = new TermTree();
+                    parent = node;
+                    node = node.right;
+                    //return AddRange(new_range, node.right, node);
+                }
             }
         }
         //___________________________________________________________________________________________________________________
@@ -288,14 +327,28 @@ namespace TermTreeNamespace
         /// <returns></returns>
         public TermTree FindRange(Range find_range)
         {
+            if (this == null || this.range == null) return null;
+            TermTree node = null;
             if (Range.Equals(range, find_range)) return this;
-
-            //if (range == find_range) return this;
             if (find_range <= range)
             {
-                return FindRange(find_range, left);
+                node = left;
             }
-            return FindRange(find_range, right);
+            else
+                node = right;
+            //if (range == find_range) return this;
+            while (true)
+            {
+                if (node == null) return null;
+                if (Range.Equals(node.range, find_range)) return node;
+                //if (node.range == find_range) return node;
+                if (find_range <= node.range)
+                {
+                    node = node.left;
+                }
+                else
+                    node = node.right;
+            }
         }
         /// <summary>
         /// Ищет значение в определённом узле
@@ -303,18 +356,18 @@ namespace TermTreeNamespace
         /// <param name="find_range">Значение для поиска</param>
         /// <param name="node">Узел для поиска</param>
         /// <returns></returns>
-        public TermTree FindRange(Range find_range, TermTree node)
-        {
-            if (node == null) return null;
+        //public TermTree FindRange(Range find_range, TermTree node)
+        //{
+        //    if (node == null) return null;
 
-            if (Range.Equals(node.range, find_range)) return node;
-            //if (node.range == find_range) return node;
-            if (find_range <= node.range)
-            {
-                return FindRange(find_range, node.left);
-            }
-            return FindRange(find_range, node.right);
-        }
+        //    if (Range.Equals(node.range, find_range)) return node;
+        //    //if (node.range == find_range) return node;
+        //    if (find_range <= node.range)
+        //    {
+        //        return FindRange(find_range, node.left);
+        //    }
+        //    return FindRange(find_range, node.right);
+        //}
         /// <summary>
         /// Ищет узел с заданным значением
         /// </summary>
@@ -322,12 +375,30 @@ namespace TermTreeNamespace
         /// <returns></returns>
         public TermTree FindRangeExtension(Range find_range)
         {
+            if (this == null || this.range == null) return null;
+            TermTree node = null;
             if (range.include_range(find_range)) return this;
             if (find_range <= range)
             {
-                return FindRangeExtension(find_range, left);
+                //return FindRangeExtension(find_range, left);
+                node = left;
             }
-            return FindRangeExtension(find_range, right);
+            else
+                node = right;
+            while (true)
+            {
+                if (node == null) return null;
+                if (node.range.include_range(find_range)) return node;
+                if (find_range <= node.range)
+                {
+                    //return FindRangeExtension(find_range, node.left);
+                    node = node.left;
+                }
+                else
+                    node = node.right;
+                //return FindRangeExtension(find_range, node.right);
+            }
+            //return FindRangeExtension(find_range, right);
         }
         /// <summary>
         /// Ищет значение в определённом узле
@@ -335,17 +406,17 @@ namespace TermTreeNamespace
         /// <param name="find_range">Значение для поиска</param>
         /// <param name="node">Узел для поиска</param>
         /// <returns></returns>
-        public TermTree FindRangeExtension(Range find_range, TermTree node)
-        {
-            if (node == null) return null;
+        //public TermTree FindRangeExtension(Range find_range, TermTree node)
+        //{
+        //    if (node == null) return null;
 
-            if (node.range.include_range(find_range)) return node;
-            if (find_range <= node.range)
-            {
-                return FindRangeExtension(find_range, node.left);
-            }
-            return FindRangeExtension(find_range, node.right);
-        } 
+        //    if (node.range.include_range(find_range)) return node;
+        //    if (find_range <= node.range)
+        //    {
+        //        return FindRangeExtension(find_range, node.left);
+        //    }
+        //    return FindRangeExtension(find_range, node.right);
+        //} 
         //___________________________________________________________________________________________________________________
         //___________________________________________________________________________________________________________________
 

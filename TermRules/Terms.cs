@@ -32,6 +32,7 @@ namespace TermsNamespace
     {        
         //public List<Point> Positions; //необходимо, особенно для словарных терминов
         public KindOfTerm kind { get; set;}
+        public string POSstr {get; set;}
         public string TermWord { get; set; }
         public string TermFragment { get; set; }
         public string Pattern { get; set; }
@@ -67,6 +68,7 @@ namespace TermsNamespace
     public class NonDictComponent
     {
         public string Component { get; set; }
+        public string POSstr { get; set; }
         public string Pattern { get; set; }
         public string NPattern { get; set; }
         public NonDictComponent()
@@ -94,6 +96,7 @@ namespace TermsNamespace
         public string NPattern { get; set; }
         public int PatCounter { get; set; }
         public int frequency { get; set; }
+        public string POSstr { get; set; }
         public List<Point> Pos { get; set; }	    
 	    public CombComponent() 
         {
@@ -120,6 +123,7 @@ namespace TermsNamespace
     public class SynTermAlternative
     {
         public string alternative { get; set; }
+        public string POSstr { get; set; }
         public string PatternPart { get; set; }
         public string NPattern { get; set; }
         public string Pattern { get; set; }

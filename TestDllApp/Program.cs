@@ -15,7 +15,6 @@ namespace TestDllApp
             string inputFile = "TextA.txt";
             Rules rules = new Rules(inputFile, DictionaryF.IT_TERM);
             rules.ApplyRules();
-            
         }
     }
 }

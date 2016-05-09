@@ -19,38 +19,7 @@
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
         <DocumentViewer x:Name="DocViewer" Margin="0" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
-        <TreeView x:Name="IdexTreeView" Margin="6,0,0,0" Grid.Column="3" Grid.Row="2">
-            <TreeViewItem Header="В" IsExpanded="True">
-                <TreeViewItem Header="Ввод-вывод 1, 32" HorizontalAlignment="Left" Width="181"/>
-            </TreeViewItem>
-            <TreeViewItem Header="Д" IsExpanded="True">
-                <TreeViewItem Header="Данные 4, 16" HorizontalAlignment="Left" Width="181"/>
-            </TreeViewItem>
-            <TreeViewItem Header="Л" IsExpanded="True">
-                <TreeViewItem Header="линия 1" HorizontalAlignment="Left" Width="181"/>
-            </TreeViewItem>
-            <TreeViewItem Header="М" IsExpanded="True">
-                <TreeViewItem Header="Микропроцессор 3, 32" HorizontalAlignment="Left" Width="181"/>
-            </TreeViewItem>
-            <TreeViewItem Header="П" IsExpanded="True">
-                <TreeViewItem Header="Переферийное устройство" HorizontalAlignment="Left" Width="181"/>
-                <TreeViewItem Header="Порт 2" HorizontalAlignment="Left" Width="181" IsExpanded="True">
-                    <TreeViewItem Header="ввода-вывода 5, 13" HorizontalAlignment="Left" Width="162"/>
-                </TreeViewItem>
-            </TreeViewItem>
-            <TreeViewItem x:Name="___Без_имени_" Header="Р" IsExpanded="True">
-                <TreeViewItem Header="Регистр 6, 11" HorizontalAlignment="Left" Width="181"/>
-            </TreeViewItem>
-            <TreeViewItem Header="С" IsExpanded="True">
-                <TreeViewItem Header="Схема сопряжения 15" HorizontalAlignment="Left" Width="181"/>
-            </TreeViewItem>
-            <TreeViewItem Header="Ф" IsExpanded="True">
-                <TreeViewItem Header="Функция центрального процессора" HorizontalAlignment="Left" Width="181"/>
-            </TreeViewItem>
-            <TreeViewItem Header="Ш" IsExpanded="True">
-                <TreeViewItem Header="Мина адреса" HorizontalAlignment="Left" Width="181"/>
-            </TreeViewItem>
-        </TreeView>
+        <TreeView x:Name="IdexTreeView" Margin="6,0,0,0" Grid.Column="3" Grid.Row="2"/>
         <DataGrid x:Name="GlossaryGrid" Margin="0" SelectionChanged="DataGrid_SelectionChanged" Grid.ColumnSpan="2" Grid.Row="4" Grid.Column="2" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Термин" Binding="{Binding Path=Term}"/>

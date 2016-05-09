@@ -2,7 +2,6 @@ C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\bin\Debug\Ter
 C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\bin\Debug\TermRules.pdb
 C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\obj\Debug\TermRules.dll
 C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\SWStool\obj\Debug\TermRules.pdb
-C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\TermRules\bin\Debug\TermRules.dll
 C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\TermRules\bin\Debug\TermRules.pdb
 C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\TermRules\obj\Debug\TermRules.dll
 C:\Users\Kir\documents\visual studio 2013\Projects\SWStool\TermRules\obj\Debug\TermRules.pdb
