@@ -175,6 +175,31 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="Patterns\AUTHAAN_TEMP" />
+    <None Include="Patterns\AUTHANN_TEMP" />
+    <None Include="Patterns\AUTHAN_TEMP" />
+    <None Include="Patterns\AUTHNAN_TEMP" />
+    <None Include="Patterns\AUTHNNN_TEMP" />
+    <None Include="Patterns\AUTHNN_TEMP" />
+    <None Include="Patterns\AUTHN_TEMP" />
+    <None Include="Patterns\AUTH_TEMP" />
+    <None Include="Patterns\AUTH_TERM.pat" />
+    <None Include="Patterns\COMBNS_TEMP" />
+    <None Include="Patterns\COMP_TEMP" />
+    <None Include="Patterns\F_TERM.pat" />
+    <None Include="Patterns\NPAUTH_TEMP" />
+    <None Include="Patterns\patterns.pat" />
+    <None Include="Patterns\SYNAAN_TEMP" />
+    <None Include="Patterns\SYNANN_TEMP" />
+    <None Include="Patterns\SYNAN_TEMP" />
+    <None Include="Patterns\SYNNAN_TEMP" />
+    <None Include="Patterns\SYNNNN_TEMP" />
+    <None Include="Patterns\SYNNN_TEMP" />
+    <None Include="Patterns\SYNN_TEMP" />
+    <None Include="Patterns\SYN_CLEAR_TEMP" />
+    <None Include="Patterns\SYN_CLEAR_TEMP2" />
+    <None Include="Patterns\SYN_TEMP" />
+    <None Include="Patterns\Temp" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -183,6 +208,30 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Patterns\AUTH_FULL.txt" />
+    <Resource Include="Patterns\AUTH_FULL_BAC.txt" />
+    <Resource Include="Patterns\AUTH_N_ONLY_PATTERN.txt" />
+    <Resource Include="Patterns\AUTH_TERM.txt" />
+    <Resource Include="Patterns\AUTH_TERM_NEW.txt" />
+    <Resource Include="Patterns\COMBNS_TERM.txt" />
+    <Resource Include="Patterns\COMBNS_TERM_NEW.txt" />
+    <Resource Include="Patterns\COMP_COMB_PAT.txt" />
+    <Resource Include="Patterns\F_TERM.txt" />
+    <Resource Include="Patterns\IT_TERM.txt" />
+    <Resource Include="Patterns\IT_TERMNP.txt" />
+    <Resource Include="Patterns\LSV_PAT.txt" />
+    <Resource Include="Patterns\NONDICT_TERM.txt" />
+    <Resource Include="Patterns\NONDICT_TERM_NEW.txt" />
+    <Resource Include="Patterns\patterns.txt" />
+    <Resource Include="Patterns\SYN_TERM.txt" />
+    <Resource Include="Patterns\SYN_TERM_NEW.txt" />
+    <Resource Include="Patterns\S_COMB_PAT.txt" />
+    <Resource Include="Patterns\TERM_F.txt" />
+    <Resource Include="Patterns\TERM_F2.txt" />
+    <Resource Include="Patterns\TERM_F3.txt" />
+    <Resource Include="Patterns\TERM_IT.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
